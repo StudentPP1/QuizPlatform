@@ -1,35 +1,123 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { FC, useState } from "react"
+import styles from "./scss/App.module.scss"
+import { AuthService } from "./api/AuthService";
 
-function App() {
-  const [count, setCount] = useState(0)
+// TODO: validation & scss styles
+export const App: FC = () => {
+  const [isLogin, setIsLogin] = useState<boolean>();
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const login = () => {
+    AuthService.login(email, password)
+  }
+
+  const register = () => {
+    AuthService.register(username, email, password)
+  }
+
+  const google = () => {
+    AuthService.google()
+  }
+
+  const clearForm = () => {
+    setUsername("")
+    setEmail("")
+    setPassword("")
+    setShowPassword(false)
+  }
 
   return (
-    <>
+    <div className={styles.app}>
+
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <span onClick={() => {
+          clearForm()
+          setIsLogin(false)
+        }}>
+          Register
+        </span>
+
+        <span onClick={() => {
+          clearForm()
+          setIsLogin(true)
+        }}>
+          Login
+        </span>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+
+      <form>
+        {!isLogin
+          ?
+          <div>
+            <label>Username</label>
+            <input
+              type="text"
+              value={username}
+              onChange={event => setUsername(event.target.value)}
+            />
+          </div>
+          :
+          <div></div>
+        }
+
+        <div>
+          <label>Email</label>
+          <input
+            required
+            type="email"
+            value={email}
+            onChange={event => setEmail(event.target.value)}
+          />
+        </div>
+
+        <div>
+          <label>Password</label>
+          <input
+            required
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={event => setPassword(event.target.value)}
+          />
+          <button
+            onClick={(event) => {
+              event.preventDefault()
+              setShowPassword(!showPassword)
+            }}
+            className={styles.password_button}
+          >
+            <img
+              className={styles.img}
+              alt="" src="../public/eye.svg"
+            />
+          </button>
+        </div>
+
+        <div>
+          <button
+            onClick={(event) => {
+              event.preventDefault()
+              if (isLogin) {
+                login()
+              } else {
+                register()
+              }
+            }}
+          >
+            {isLogin ? "Login" : "Register"}
+          </button>
+        </div>
+      </form>
+
+      <div className={styles.google_box} onClick={() => google()}>
+        <img
+          className={styles.img}
+          alt="" src="../public/google.png"
+        />
+        <span>Continue with Google</span>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
-
-export default App
