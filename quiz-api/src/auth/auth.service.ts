@@ -4,6 +4,8 @@ import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { User } from '../users/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
+import { Tokens } from './interfaces/tokens.interface';
+import { Payload } from './interfaces/payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +21,7 @@ export class AuthService {
     return hashedPassword;
   }
 
-  private async createPayload(user: User) {
+  private async createPayload(user: User): Promise<Payload> {
     const payload = {
       sub: user.id,
       username: user.username,
@@ -29,7 +31,7 @@ export class AuthService {
     return payload;
   }
 
-  private async generateTokens(payload) {
+  private async generateTokens(payload: Payload): Promise<Tokens> {
     const accessToken = this.jwtService.sign(payload, {
       secret: process.env.JWT_ACCESS_SECRET,
       expiresIn: '15m',
