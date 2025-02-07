@@ -1,4 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
@@ -7,6 +12,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Tokens } from './interfaces/tokens.interface';
 import { Payload } from './interfaces/payload.interface';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -65,6 +71,25 @@ export class AuthService {
 
     const payload = await this.createPayload(user);
 
+    const tokens = await this.generateTokens(payload);
+
+    return tokens;
+  }
+
+  async login(loginDto: LoginDto) {
+    const user = await this.usersService.findUserByEmail(loginDto.email);
+
+    if (!user)
+      throw new NotFoundException('User with this email does not exists');
+
+    const isPasswordValid = await bcrypt.compare(
+      loginDto.password,
+      user.password,
+    );
+
+    if (!isPasswordValid) throw new UnauthorizedException('Invalid password');
+
+    const payload = await this.createPayload(user);
     const tokens = await this.generateTokens(payload);
 
     return tokens;
