@@ -1,0 +1,167 @@
+@use "../../scss/variables" as v;
+
+.container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    align-items: center;
+    justify-content: center;
+    background: v.$second_background;
+    font-family: "Arial", sans-serif;
+}
+
+.left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, v.$yellow, v.$background);
+    height: 100%;
+    text-align: center;
+    color: #fff;
+    h1 {
+        font-size: 28px;
+        font-weight: bold;
+        max-width: 300px;
+    }
+}
+
+.image {
+    width: 250px;
+    height: 250px;
+    background-image: url("https://via.placeholder.com/250");
+    background-size: cover;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+.close_button_container {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.close_button {
+    background-color: transparent;
+    width: 20px;
+    padding-right: 8%;
+    font-size: 20px;
+    height: 20px;
+    text-align: center;
+    color: v.$orange;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.2);
+        transition: all 0.1s ease;
+    }
+}
+.right {
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.login_buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+
+    span {
+        font-size: 25px;
+        padding: 10px;
+        cursor: pointer;
+    }
+}
+.password_container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    input {
+        height: 100%;
+        display: block;
+        width: 80%;
+    }
+    div {
+        height: 100%;
+        width: 10%;
+        display: block;
+        cursor: pointer;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+.img {
+    width: 20px;
+    height: 20px;
+}
+.google {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid v.$background;
+    border-radius: 10px;
+    color: v.$background;
+    background-color: v.$white;
+    width: 100%;
+    height: 50px;
+    cursor: pointer;
+
+    span {
+        padding-left: 10px;
+    }
+}
+.social_container {
+    padding-bottom: 20px;
+    border-bottom: 1px solid v.$orange;
+}
+.form_container {
+    padding-top: 20px;
+    border-top: 1px solid v.$orange;
+}
+.right_content {
+    width: 80%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .login {
+        background: #4caf50;
+        color: white;
+    }
+}
