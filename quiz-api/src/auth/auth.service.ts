@@ -44,11 +44,11 @@ export class AuthService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    const isEmailUnique = await this.usersService.isEmailUnique(
+    const isUserExist = await this.usersService.findUserByEmail(
       createUserDto.email,
     );
 
-    if (!isEmailUnique)
+    if (isUserExist)
       throw new ConflictException('User with this email already exists');
 
     const hashedPassword = await this.hashPassword(createUserDto.password);

@@ -11,9 +11,8 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
-  async isEmailUnique(email: string): Promise<boolean> {
-    const user = await this.usersRepository.findOne({ where: { email } });
-    return !user;
+  async findUserByEmail(email: string): Promise<User> {
+    return await this.usersRepository.findOne({ where: { email } });
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
