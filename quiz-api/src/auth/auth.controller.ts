@@ -1,20 +1,33 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Res, HttpCode } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { Tokens } from './interfaces/tokens.interface';
 import { LoginDto } from './dto/login.dto';
+import { Response } from 'express';
+import { TokenService } from '../token/token.service';
 
 @Controller('api/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly tokenService: TokenService,
+  ) {}
 
   @Post('signup')
-  async create(@Body() createUserDto: CreateUserDto) {
-    return await this.authService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
+    const { accessToken, refreshToken } =
+      await this.authService.create(createUserDto);
+
+    this.tokenService.setRefreshTokenCookie(res, refreshToken);
+    return res.json({ accessToken });
   }
 
+  @HttpCode(200)
   @Post('login')
-  async login(@Body() loginDto: LoginDto) {
-    return await this.authService.login(loginDto);
+  async login(@Body() loginDto: LoginDto, @Res() res: Response) {
+    const { accessToken, refreshToken } =
+      await this.authService.login(loginDto);
+
+    this.tokenService.setRefreshTokenCookie(res, refreshToken);
+    return res.json({ accessToken });
   }
 }
