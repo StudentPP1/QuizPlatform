@@ -1,26 +1,68 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { UsersService } from '../users/users.service';
+import * as bcrypt from 'bcrypt';
+import { User } from '../users/entities/user.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+  ) {}
+
+  private async hashPassword(password: string): Promise<string> {
+    const saltRound = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRound);
+
+    return hashedPassword;
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  private async createPayload(user: User) {
+    const payload = {
+      sub: user.id,
+      username: user.username,
+      email: user.email,
+    };
+
+    return payload;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
+  private async generateTokens(payload) {
+    const accessToken = this.jwtService.sign(payload, {
+      secret: process.env.JWT_ACCESS_SECRET,
+      expiresIn: '15m',
+    });
+
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: process.env.JWT_REFRESH_SECRET,
+      expiresIn: '7d',
+    });
+
+    return { accessToken, refreshToken };
   }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+  async create(createUserDto: CreateUserDto) {
+    const isEmailUnique = await this.usersService.isEmailUnique(
+      createUserDto.email,
+    );
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    if (!isEmailUnique)
+      throw new ConflictException('User with this email already exists');
+
+    const hashedPassword = await this.hashPassword(createUserDto.password);
+
+    const user = await this.usersService.createUser({
+      email: createUserDto.email,
+      username: createUserDto.username,
+      password: hashedPassword,
+    });
+
+    const payload = await this.createPayload(user);
+
+    const tokens = await this.generateTokens(payload);
+
+    return tokens;
   }
 }
