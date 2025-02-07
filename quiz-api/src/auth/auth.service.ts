@@ -40,12 +40,12 @@ export class AuthService {
   }
 
   private async generateTokens(payload: Payload): Promise<Tokens> {
-    const accessToken = this.jwtService.sign(payload, {
+    const accessToken = await this.jwtService.signAsync(payload, {
       secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
       expiresIn: '15m',
     });
 
-    const refreshToken = this.jwtService.sign(payload, {
+    const refreshToken = await this.jwtService.signAsync(payload, {
       secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
       expiresIn: '7d',
     });
@@ -70,7 +70,6 @@ export class AuthService {
     });
 
     const payload = await this.createPayload(user);
-
     const tokens = await this.generateTokens(payload);
 
     return tokens;
