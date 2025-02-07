@@ -8,18 +8,15 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { User } from '../users/entities/user.entity';
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
-import { Tokens } from './interfaces/tokens.interface';
 import { Payload } from './interfaces/payload.interface';
 import { LoginDto } from './dto/login.dto';
+import { TokenService } from '../token/token.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
+    private readonly tokenService: TokenService,
   ) {}
 
   private async hashPassword(password: string): Promise<string> {
@@ -39,20 +36,6 @@ export class AuthService {
     return payload;
   }
 
-  private async generateTokens(payload: Payload): Promise<Tokens> {
-    const accessToken = await this.jwtService.signAsync(payload, {
-      secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
-      expiresIn: '15m',
-    });
-
-    const refreshToken = await this.jwtService.signAsync(payload, {
-      secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-      expiresIn: '7d',
-    });
-
-    return { accessToken, refreshToken };
-  }
-
   async create(createUserDto: CreateUserDto) {
     const isUserExist = await this.usersService.findUserByEmail(
       createUserDto.email,
@@ -70,7 +53,7 @@ export class AuthService {
     });
 
     const payload = await this.createPayload(user);
-    const tokens = await this.generateTokens(payload);
+    const tokens = await this.tokenService.generateTokens(payload);
 
     return tokens;
   }
@@ -89,7 +72,7 @@ export class AuthService {
     if (!isPasswordValid) throw new UnauthorizedException('Invalid password');
 
     const payload = await this.createPayload(user);
-    const tokens = await this.generateTokens(payload);
+    const tokens = await this.tokenService.generateTokens(payload);
 
     return tokens;
   }
