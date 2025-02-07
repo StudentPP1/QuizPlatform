@@ -1,26 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+  ) {}
+
+  private async isEmailUnique(email: string): Promise<boolean> {
+    const user = await this.usersRepository.findOne({ where: { email } });
+    return !user;
   }
 
-  findAll() {
-    return `This action returns all users`;
-  }
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
+    const isEmailUnique = await this.isEmailUnique(createUserDto.email);
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+    if (!isEmailUnique)
+      throw new ConflictException('User with this email already exists');
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+    const user = new User();
+    user.username = createUserDto.username;
+    user.email = createUserDto.email;
+    user.password = createUserDto.password;
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.usersRepository.save(user);
   }
 }
