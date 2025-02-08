@@ -14,10 +14,10 @@ const modules = [
 
 export const MainPage: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
+  
   return (
     <div className={styles.container}>
-      
+
       <header className={styles.header}>
         <span className={styles.logo}>QuizPlatform</span>
         <div className={styles.actions} onClick={() => setIsOpen(true)}>
@@ -25,7 +25,7 @@ export const MainPage: FC = () => {
         </div>
       </header>
 
-      <Modal isOpen={isOpen} children={<LoginPage setIsOpen={setIsOpen}/>} />
+      <Modal isOpen={isOpen} children={<LoginPage setIsOpen={setIsOpen} />} />
 
       <main className={styles.main}>
         {/* Title */}
@@ -35,7 +35,9 @@ export const MainPage: FC = () => {
             <p>
               Master any material with interactive flashcards, practice tests, and study sessions on QuizPlatform.
             </p>
-            <button className={styles.register}>Register free</button>
+            <button className={styles.register} onClick={() => setIsOpen(true)}>
+              <span>Register free</span>
+            </button>
           </div>
         </div>
 
@@ -66,7 +68,9 @@ export const MainPage: FC = () => {
                 volutpat est. Sapien in etiam vitae nibh nunc mattis imperdiet sed nullam. Vitae et, tortor pulvinar risus
                 pulvinar sit amet.
               </p>
-              <button className={styles.register}>Start</button>
+              <button className={styles.register} onClick={() => setIsOpen(true)}>
+                <span>Start</span>
+              </button>
             </div>
           </div>
 
@@ -78,7 +82,9 @@ export const MainPage: FC = () => {
                 volutpat est. Sapien in etiam vitae nibh nunc mattis imperdiet sed nullam. Vitae et, tortor pulvinar risus
                 pulvinar sit amet.
               </p>
-              <button className={styles.register}>Start</button>
+              <button className={styles.register} onClick={() => setIsOpen(true)}>
+                <span>Start</span>
+              </button>
             </div>
             <div className={styles.roadmap__picture}>
               <img src="https://images.prismic.io/quizlet-web/ZuOCD7VsGrYSvUW5_UKUA1Flashcards.png?auto=format,compress" alt="picture roadmap" />
@@ -99,7 +105,7 @@ export const MainPage: FC = () => {
                 <span className={styles.terms}>{module.terms} question</span>
 
                 <div className={styles.user_info}>
-                  <img className={styles.icon} src="../../../public/google.png" />
+                  <img className={styles.icon} src="https://i.pravatar.cc/40" />
                   <div>{module.user}</div>
                 </div>
 

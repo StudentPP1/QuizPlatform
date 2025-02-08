@@ -61,69 +61,81 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
               <div className={styles.google} onClick={() => google()}>
                 <img
                   className={styles.img}
-                  alt="" src="../public/google.png"
+                  alt="" src="../google.png"
                 />
                 <span>Continue with Google</span>
               </div>
             </div>
 
             <div className={styles.form_container}>
+
               {!isLogin
                 ?
-                <input
-                  placeholder="Enter username"
-                  type="text"
-                  value={username}
-                  onChange={event => setUsername(event.target.value)}
-                />
+                <div className={styles.input_container}>
+                  <input
+                    placeholder="Enter username"
+                    type="text"
+                    value={username}
+                    onChange={event => setUsername(event.target.value)}
+                  />
+                </div>
                 : <></>}
-              <input
-                type="email"
-                placeholder="Enter email"
-                value={email}
-                onChange={event => setEmail(event.target.value)}
-              />
 
-              <div className={styles.password_container}>
-                <input 
-                type={showPassword ? "text" : "password"} 
-                placeholder="Enter password" 
-                value={password}
-                onChange={event => setPassword(event.target.value)}
+              <div className={styles.input_container}>
+                <input
+                  type="email"
+                  placeholder="Enter email"
+                  value={email}
+                  onChange={event => setEmail(event.target.value)}
                 />
-                <div>
-                  <button
-                    onClick={(event) => {
-                      event.preventDefault()
-                      setShowPassword(!showPassword)
-                    }}
-                  >
-                    <img
-                      className={styles.img}
-                      alt="" src="../public/eye.svg"
-                    />
-                  </button>
+              </div>
+
+              <div className={styles.input_container}>
+                <div className={styles.password_container}>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter password"
+                    value={password}
+                    onChange={event => setPassword(event.target.value)}
+                  />
+                  <div>
+                    <button
+                      onClick={(event) => {
+                        event.preventDefault()
+                        setShowPassword(!showPassword)
+                      }}
+                    >
+                      <img
+                        className={styles.img}
+                        alt="" src={showPassword ? "../public/close-eye.svg" : "../public/eye.svg"}
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
-              <button
-                className={styles.login}
-                onClick={(event) => {
-                  event.preventDefault()
-                  if (isLogin) {
-                    login()
-                  } else {
-                    register()
-                  }
-                }}
-              >
-                {isLogin ? "Login" : "Register"}
-              </button>
+
+              <div className={styles.input_container}>
+                <button
+                  className={styles.login}
+                  onClick={(event) => {
+                    event.preventDefault()
+                    if (isLogin) {
+                      login()
+                    } else {
+                      register()
+                    }
+                  }}
+                >
+                  {isLogin ? "Login" : "Register"}
+                </button>
+              </div>
+
             </div>
           </div>
         </div>
       </div>
 
-    </div>
+    </div >
   );
 }
 

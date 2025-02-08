@@ -9,7 +9,6 @@
     background: v.$second_background;
     font-family: "Arial", sans-serif;
 }
-
 .left {
     flex: 1;
     display: flex;
@@ -26,7 +25,6 @@
         max-width: 300px;
     }
 }
-
 .image {
     width: 250px;
     height: 250px;
@@ -75,6 +73,12 @@
         font-size: 25px;
         padding: 10px;
         cursor: pointer;
+
+        &:hover {
+            transform: scale(1.1);
+            transition: all 0.1s ease;
+            color: v.$orange;
+        }
     }
 }
 .password_container {
@@ -88,12 +92,17 @@
         width: 80%;
     }
     div {
-        height: 100%;
+        border-radius: 5px;
         width: 10%;
         display: block;
         cursor: pointer;
 
+        button {
+            background-color: v.$orange;
+        }
+
         img {
+            background-color: v.$orange;
             width: 100%;
             height: 100%;
         }
@@ -110,14 +119,19 @@
     align-items: center;
     border: 3px solid v.$background;
     border-radius: 10px;
-    color: v.$background;
-    background-color: v.$white;
+    background-color: v.$background;
+    color: v.$yellow;
     width: 100%;
     height: 50px;
     cursor: pointer;
 
     span {
         padding-left: 10px;
+    }
+
+    &:hover {
+        transform: scale(1.1);
+        transition: all 0.1s ease;
     }
 }
 .social_container {
@@ -127,6 +141,19 @@
 .form_container {
     padding-top: 20px;
     border-top: 1px solid v.$orange;
+
+    input {
+        background-color: v.$background;
+        color: v.$yellow;
+    }
+    input:focus {
+        outline: none !important;
+        border-color: v.$yellow;
+        box-shadow: 0 0 10px v.$yellow;
+    }
+}
+.input_container {
+    padding-top: 10px;
 }
 .right_content {
     width: 80%;
@@ -156,12 +183,18 @@
         width: 100%;
         padding: 12px;
         margin-bottom: 10px;
-        border: 1px solid #ccc;
+        border: 1px solid v.$white;
         border-radius: 5px;
     }
 
     .login {
-        background: #4caf50;
-        color: white;
+        border: 1px solid v.$white;
+        background: v.$background;
+        color: v.$white;
+
+        &:hover {
+            transform: scale(1.1);
+            transition: all 0.1s ease;
+        }
     }
 }
