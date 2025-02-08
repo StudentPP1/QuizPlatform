@@ -11,8 +11,10 @@ import * as bcrypt from 'bcrypt';
 import { User } from '../users/entities/user.entity';
 import { Payload } from './interfaces/payload.interface';
 import { LoginDto } from './dto/login.dto';
+import { Request } from 'express';
 import { TokenService } from '../token/token.service';
 import { Tokens } from './interfaces/tokens.interface';
+import { CreateGoogleUserDto } from 'src/users/dto/create-google-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -66,6 +68,9 @@ export class AuthService {
     if (!user)
       throw new NotFoundException('User with this email does not exists');
 
+    if (!user.email || !user.password)
+      throw new UnauthorizedException('Invalid email or password');
+
     const isPasswordValid = await bcrypt.compare(
       loginDto.password,
       user.password,
@@ -77,6 +82,23 @@ export class AuthService {
     const tokens = await this.tokenService.generateTokens(payload);
 
     return tokens;
+  }
+
+  async googleLogin(req: Request & { user: User }) {
+    const googleUser = await this.validateGoogleUser(req.user);
+
+    const payload = await this.createPayload(googleUser);
+    const tokens = await this.tokenService.generateTokens(payload);
+
+    return tokens;
+  }
+
+  async validateGoogleUser(createGoogleUserDto: CreateGoogleUserDto) {
+    const user = await this.usersService.findUserByEmail(
+      createGoogleUserDto.email,
+    );
+    if (user) return user;
+    return await this.usersService.createGoogleUser(createGoogleUserDto);
   }
 
   async refreshTokens(refreshToken: string): Promise<Tokens> {
