@@ -6,6 +6,7 @@ import {
   HttpCode,
   Req,
   ForbiddenException,
+  Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
@@ -49,5 +50,11 @@ export class AuthController {
 
     this.tokenService.setRefreshTokenCookie(res, newRefreshToken);
     return res.json({ accessToken });
+  }
+
+  @Get('logout')
+  async logout(@Res() res: Response) {
+    this.tokenService.clearCookie(res);
+    return res.json({ message: 'Logged out successfully' });
   }
 }
