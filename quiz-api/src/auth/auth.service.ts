@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -11,6 +12,7 @@ import { User } from '../users/entities/user.entity';
 import { Payload } from './interfaces/payload.interface';
 import { LoginDto } from './dto/login.dto';
 import { TokenService } from '../token/token.service';
+import { Tokens } from './interfaces/tokens.interface';
 
 @Injectable()
 export class AuthService {
@@ -75,5 +77,17 @@ export class AuthService {
     const tokens = await this.tokenService.generateTokens(payload);
 
     return tokens;
+  }
+
+  async refreshTokens(refreshToken: string): Promise<Tokens> {
+    try {
+      const decoded = await this.tokenService.verifyRefreshToken(refreshToken);
+      const payload = await this.createPayload(decoded);
+      const tokens = await this.tokenService.generateTokens(payload);
+
+      return tokens;
+    } catch (error) {
+      throw new ForbiddenException('Invalid refresh token');
+    }
   }
 }

@@ -1,8 +1,16 @@
-import { Controller, Post, Body, Res, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  HttpCode,
+  Req,
+  ForbiddenException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { TokenService } from '../token/token.service';
 
 @Controller('api/auth')
@@ -28,6 +36,18 @@ export class AuthController {
       await this.authService.login(loginDto);
 
     this.tokenService.setRefreshTokenCookie(res, refreshToken);
+    return res.json({ accessToken });
+  }
+
+  @Post('refresh')
+  async refresh(@Req() req: Request, @Res() res: Response) {
+    const refreshToken = req.cookies['refreshToken'];
+    if (!refreshToken) throw new ForbiddenException('Refresh token is missing');
+
+    const { accessToken, refreshToken: newRefreshToken } =
+      await this.authService.refreshTokens(refreshToken);
+
+    this.tokenService.setRefreshTokenCookie(res, newRefreshToken);
     return res.json({ accessToken });
   }
 }
