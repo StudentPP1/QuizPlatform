@@ -1,0 +1,91 @@
+@use "../../scss/variables" as v;
+
+.page_container {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: v.$second_background;
+    color: v.$white;
+    min-width: 320px;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: v.$second_background;
+    color: v.$white;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+
+    .logo {
+        font-size: 22px;
+        font-weight: bold;
+        color: #f39c12;
+    }
+
+    .search_box {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+
+        input {
+            width: 40%;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+        }
+    }
+
+    .user_avatar {
+        img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid white;
+            transition: transform 0.2s;
+
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+    }
+}
+.container {
+    padding-top: 50px;
+    display: flex;
+}
+.content {
+    margin-left: 80px;
+    padding: 20px;
+    width: 100%;
+    background: #0d0d1a;
+    color: white;
+
+    h2 {
+        margin-bottom: 15px;
+    }
+
+    .card {
+        background: #1a1a2e;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+    }
+
+    .card_grid {
+        display: flex;
+        gap: 10px;
+
+        .card {
+            flex: 1;
+            text-align: center;
+        }
+    }
+}
