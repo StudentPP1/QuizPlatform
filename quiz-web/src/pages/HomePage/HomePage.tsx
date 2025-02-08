@@ -1,8 +1,14 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import styles from "./HomePage.module.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 
 const HomePage: FC = () => {
+    // TODO: зробити перевірку на токен в куках => useIsAuth(true)
+    useEffect(() => {
+        // if token in cookie => useIsAuth(true)
+        document.cookie
+    })
+    // TODO: зробити верстку
     return (
         <div className={styles.page_container}>
             {/* Header */}

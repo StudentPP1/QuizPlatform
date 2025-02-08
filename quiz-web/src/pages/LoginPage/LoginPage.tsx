@@ -1,7 +1,9 @@
 import { FC, useState } from "react";
 import { AuthService } from "../../api/AuthService";
 import styles from "./LoginPage.module.scss";
+import { Link } from "react-router-dom";
 
+// TODO: 63 винести api в файл для констант
 const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const [isLogin, setIsLogin] = useState<boolean>();
   const [username, setUsername] = useState<string>("");
@@ -58,13 +60,13 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
             </div>
 
             <div className={styles.social_container}>
-              <div className={styles.google} onClick={() => google()}>
+              <Link className={styles.google} to="http://localhost:3000/api/auth/google">
                 <img
                   className={styles.img}
                   alt="" src="../google.png"
                 />
                 <span>Continue with Google</span>
-              </div>
+              </Link>
             </div>
 
             <div className={styles.form_container}>
