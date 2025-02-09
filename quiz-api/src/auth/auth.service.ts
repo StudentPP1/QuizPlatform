@@ -98,15 +98,20 @@ export class AuthService {
     return await this.usersService.createGoogleUser(createGoogleUserDto);
   }
 
-  async refreshTokens(refreshToken: string): Promise<Tokens> {
+  async validateRefreshToken(refreshToken: string) {
     try {
       const decoded = await this.tokenService.verifyRefreshToken(refreshToken);
-      const payload = await this.createPayload(decoded);
-      const tokens = await this.tokenService.generateTokens(payload);
-
-      return tokens;
+      return decoded;
     } catch (error) {
       throw new ForbiddenException('Invalid refresh token');
     }
+  }
+
+  async refreshTokens(refreshToken: string): Promise<Tokens> {
+    const decoded = await this.validateRefreshToken(refreshToken);
+    const payload = await this.createPayload(decoded);
+    const tokens = await this.tokenService.generateTokens(payload);
+
+    return tokens;
   }
 }
