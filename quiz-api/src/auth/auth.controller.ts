@@ -15,7 +15,7 @@ import { LoginDto } from './dto/login.dto';
 import { Request, Response } from 'express';
 import { TokenService } from '../token/token.service';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
 @Controller('api/auth')
 export class AuthController {

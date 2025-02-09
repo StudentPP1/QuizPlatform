@@ -14,7 +14,7 @@ import { LoginDto } from './dto/login.dto';
 import { Request } from 'express';
 import { TokenService } from '../token/token.service';
 import { Tokens } from './interfaces/tokens.interface';
-import { CreateGoogleUserDto } from 'src/users/dto/create-google-user.dto';
+import { CreateGoogleUserDto } from '../users/dto/create-google-user.dto';
 
 @Injectable()
 export class AuthService {
