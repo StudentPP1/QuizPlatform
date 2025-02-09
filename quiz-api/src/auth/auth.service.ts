@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
-import * as bcrypt from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { User } from '../users/entities/user.entity';
 import { Payload } from './interfaces/payload.interface';
 import { LoginDto } from './dto/login.dto';
@@ -25,7 +25,7 @@ export class AuthService {
 
   private async hashPassword(password: string): Promise<string> {
     const saltRound = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRound);
+    const hashedPassword = await hash(password, saltRound);
 
     return hashedPassword;
   }
@@ -71,10 +71,7 @@ export class AuthService {
     if (!user.email || !user.password)
       throw new UnauthorizedException('Invalid email or password');
 
-    const isPasswordValid = await bcrypt.compare(
-      loginDto.password,
-      user.password,
-    );
+    const isPasswordValid = await compare(loginDto.password, user.password);
 
     if (!isPasswordValid) throw new UnauthorizedException('Invalid password');
 
