@@ -5,7 +5,6 @@ import {
   Res,
   HttpCode,
   Req,
-  ForbiddenException,
   Get,
   UseGuards,
 } from '@nestjs/common';
@@ -16,6 +15,7 @@ import { Request, Response } from 'express';
 import { TokenService } from '../token/token.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '../users/entities/user.entity';
+import { RefreshTokenGuard } from './guards/refresh-token.guard';
 
 @Controller('api/auth')
 export class AuthController {
@@ -63,9 +63,9 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @UseGuards(RefreshTokenGuard)
   async refresh(@Req() req: Request, @Res() res: Response) {
     const refreshToken = req.cookies['refreshToken'];
-    if (!refreshToken) throw new ForbiddenException('Refresh token is missing');
 
     const { accessToken, refreshToken: newRefreshToken } =
       await this.authService.refreshTokens(refreshToken);
@@ -75,6 +75,7 @@ export class AuthController {
   }
 
   @Get('logout')
+  @UseGuards(AuthGuard('jwt'))
   async logout(@Res() res: Response) {
     this.tokenService.clearCookie(res);
     return res.json({ message: 'Logged out successfully' });
