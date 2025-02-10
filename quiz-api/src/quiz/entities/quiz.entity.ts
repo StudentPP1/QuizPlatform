@@ -4,8 +4,14 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
+  ManyToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+  JoinTable,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { Task } from './task.entity';
 
 @Entity()
 export class Quiz {
@@ -26,5 +32,18 @@ export class Quiz {
 
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: 'creatorId' })
-  creator: User;
+  creator: string;
+
+  @OneToMany(() => Task, (task) => task.quiz)
+  tasks: Task[];
+
+  @ManyToMany(() => User, (user) => user.participatedQuizzes)
+  @JoinTable()
+  participants: User[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

@@ -1,9 +1,13 @@
+import { Quiz } from 'src/quiz/entities/quiz.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 @Entity()
@@ -25,6 +29,13 @@ export class User {
 
   @Column({ type: 'varchar', length: 10 })
   authProvider: string;
+
+  @OneToMany(() => Quiz, (quiz) => quiz.creator)
+  createdQuizzes: Quiz[];
+
+  @ManyToMany(() => Quiz, (quiz) => quiz.participants)
+  @JoinTable()
+  participatedQuizzes: Quiz[];
 
   @CreateDateColumn()
   createdAt: Date;
