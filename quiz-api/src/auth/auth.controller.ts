@@ -59,7 +59,7 @@ export class AuthController {
       await this.authService.googleLogin(req);
 
     this.tokenService.setRefreshTokenCookie(res, refreshToken);
-    return res.json({ accessToken });
+    return res.redirect('http://localhost:5173/home');
   }
 
   @Post('refresh')
