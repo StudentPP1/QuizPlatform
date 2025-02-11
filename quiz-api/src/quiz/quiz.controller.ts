@@ -1,4 +1,12 @@
-import { Controller, Post, Body, UseGuards, Req, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Req,
+  Param,
+  Get,
+} from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -29,5 +37,10 @@ export class QuizController {
     @Req() req: Request,
   ): Promise<QuizResult> {
     return this.quizService.saveResult(quizId, req, saveQuizResultDto);
+  }
+
+  @Get(':id')
+  async getQuizWithRelations(@Param('id') quizId: string) {
+    return this.quizService.getQuizWithRelations(quizId);
   }
 }

@@ -29,7 +29,7 @@ export class QuizService {
   ) {
     const quiz = this.quizRepository.create({
       ...createQuizDto,
-      creator: req.user.id,
+      creator: req.user,
     });
 
     await this.quizRepository.save(quiz);
@@ -67,5 +67,18 @@ export class QuizService {
     });
 
     return this.quizResultRepository.save(result);
+  }
+
+  async getQuizWithRelations(quizId: string) {
+    const quiz = await this.quizRepository.findOne({
+      where: { id: quizId },
+      relations: ['creator', 'tasks', 'results', 'participants', 'reviews'],
+    });
+
+    if (!quiz) {
+      throw new Error('Quiz not found');
+    }
+
+    return quiz;
   }
 }
