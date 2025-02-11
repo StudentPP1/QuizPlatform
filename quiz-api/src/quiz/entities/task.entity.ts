@@ -24,7 +24,7 @@ export class Task {
   type: 'text' | 'multiple-choice';
 
   @Column({ type: 'text', nullable: true })
-  correctAnswer?: string;
+  correctAnswer?: string[];
 
   @Column({ type: 'json', nullable: true })
   options?: string[];

@@ -1,10 +1,9 @@
 import {
   IsNotEmpty,
   IsString,
-  IsOptional,
   IsEnum,
+  IsOptional,
   IsArray,
-  ValidateIf,
 } from 'class-validator';
 
 export class CreateTaskDto {
@@ -21,12 +20,12 @@ export class CreateTaskDto {
   type: 'text' | 'multiple-choice';
 
   @IsOptional()
-  @IsString()
-  @ValidateIf((task) => task.type === 'text')
-  correctAnswer?: string;
+  @IsArray()
+  @IsString({ each: true })
+  correctAnswer?: string[];
 
   @IsOptional()
   @IsArray()
-  @ValidateIf((task) => task.type === 'multiple-choice')
+  @IsString({ each: true })
   options?: string[];
 }
