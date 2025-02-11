@@ -56,4 +56,19 @@ export class UsersService {
       await this.usersRepository.save(user);
     }
   }
+
+  async getTopAuthorsInfo(limit: number) {
+    const users = await this.usersRepository.find({
+      select: ['id', 'username', 'avatarUrl'],
+      take: limit,
+      relations: ['createdQuizzes'],
+    });
+
+    return users.map((user) => ({
+      userId: user.id,
+      username: user.username,
+      avatarUrl: user.avatarUrl,
+      createdQuizzesCount: user.createdQuizzes?.length || 0,
+    }));
+  }
 }
