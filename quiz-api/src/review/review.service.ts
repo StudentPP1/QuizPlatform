@@ -41,9 +41,34 @@ export class ReviewService {
       ...createReviewDto,
     });
 
+    await this.reviewRepository.save(review);
+    await this.updateQuizRating(quizId);
     await this.usersService.updateAuthorRating(review.quiz.creator.id);
 
-    return this.reviewRepository.save(review);
+    return review;
+  }
+
+  async updateQuizRating(quizId: string): Promise<void> {
+    const quiz = await this.quizRepository.findOne({
+      where: { id: quizId },
+      relations: ['reviews'],
+    });
+
+    if (!quiz) {
+      throw new Error('Quiz not found');
+    }
+
+    const reviews = await this.reviewRepository.find({
+      where: { quiz: { id: quizId } },
+    });
+
+    if (reviews.length === 0) return;
+
+    const averageRating =
+      reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length;
+
+    quiz.averageRating = parseFloat(averageRating.toFixed(2));
+    await this.quizRepository.save(quiz);
   }
 
   async getReviewsForQuiz(quizId: string) {
