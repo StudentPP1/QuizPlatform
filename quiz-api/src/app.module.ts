@@ -1,12 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { config } from 'dotenv';
-import { resolve } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { QuizModule } from './quiz/quiz.module';
-
-config({ path: resolve(__dirname, '../.env') });
 
 @Module({
   imports: [
