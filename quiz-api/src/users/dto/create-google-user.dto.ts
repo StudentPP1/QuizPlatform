@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsString, IsEmail, IsOptional } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsEmail,
+  IsOptional,
+  IsUrl,
+} from 'class-validator';
 
 export class CreateGoogleUserDto {
   @IsNotEmpty()
@@ -9,8 +15,11 @@ export class CreateGoogleUserDto {
   @IsEmail()
   email: string;
 
-  @IsOptional()
   @IsNotEmpty()
   @IsString()
-  googleId?: string;
+  googleId: string;
+
+  @IsOptional()
+  @IsUrl()
+  avatarUrl?: string;
 }

@@ -5,7 +5,6 @@ import {
   Res,
   HttpCode,
   Req,
-  ForbiddenException,
   Get,
   UseGuards,
 } from '@nestjs/common';
@@ -15,7 +14,8 @@ import { LoginDto } from './dto/login.dto';
 import { Request, Response } from 'express';
 import { TokenService } from '../token/token.service';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
+import { RefreshTokenGuard } from './guards/refresh-token.guard';
 
 @Controller('api/auth')
 export class AuthController {
@@ -59,13 +59,13 @@ export class AuthController {
       await this.authService.googleLogin(req);
 
     this.tokenService.setRefreshTokenCookie(res, refreshToken);
-    return res.json({ accessToken });
+    return res.redirect('http://localhost:5173/home');
   }
 
   @Post('refresh')
+  @UseGuards(RefreshTokenGuard)
   async refresh(@Req() req: Request, @Res() res: Response) {
     const refreshToken = req.cookies['refreshToken'];
-    if (!refreshToken) throw new ForbiddenException('Refresh token is missing');
 
     const { accessToken, refreshToken: newRefreshToken } =
       await this.authService.refreshTokens(refreshToken);
@@ -75,6 +75,7 @@ export class AuthController {
   }
 
   @Get('logout')
+  @UseGuards(AuthGuard('jwt'))
   async logout(@Res() res: Response) {
     this.tokenService.clearCookie(res);
     return res.json({ message: 'Logged out successfully' });

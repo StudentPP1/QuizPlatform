@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { config } from 'dotenv';
-import { resolve } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-
-config({ path: resolve(__dirname, '../.env') });
+import { QuizModule } from './quiz/quiz.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
@@ -24,6 +22,8 @@ config({ path: resolve(__dirname, '../.env') });
       inject: [ConfigService],
     }),
     AuthModule,
+    QuizModule,
+    ReviewModule,
   ],
 })
 export class AppModule {}
