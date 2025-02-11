@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Quiz } from './entities/quiz.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { TaskService } from '../task/task.service';
 import { UsersService } from '../users/users.service';
 import { QuizResult } from './entities/quiz-result.entity';
@@ -95,5 +95,13 @@ export class QuizService {
 
   async getTopAuthors(limit: number) {
     return this.usersService.getTopAuthorsInfo(limit);
+  }
+
+  async searchQuizzesByName(name: string): Promise<Quiz[]> {
+    return this.quizRepository.find({
+      where: {
+        title: ILike(`%${name}%`),
+      },
+    });
   }
 }

@@ -6,6 +6,7 @@ import {
   Req,
   Param,
   Get,
+  Query,
 } from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
@@ -14,6 +15,7 @@ import { CreateTaskDto } from '../task/dto/create-task.dto';
 import { Request } from 'express';
 import { QuizResult } from './entities/quiz-result.entity';
 import { SaveQuizResultDto } from './dto/save-quiz-result.dto';
+import { Quiz } from './entities/quiz.entity';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('api/quiz')
@@ -37,6 +39,11 @@ export class QuizController {
     @Req() req: Request,
   ): Promise<QuizResult> {
     return this.quizService.saveResult(quizId, req, saveQuizResultDto);
+  }
+
+  @Get('search')
+  async searchQuizzes(@Query('name') name: string): Promise<Quiz[]> {
+    return this.quizService.searchQuizzesByName(name);
   }
 
   @Get('top-rate')
