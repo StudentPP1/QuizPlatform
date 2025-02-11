@@ -39,6 +39,16 @@ export class QuizController {
     return this.quizService.saveResult(quizId, req, saveQuizResultDto);
   }
 
+  @Get('top-rate')
+  async getTopQuizzes(limit: number = 3) {
+    return this.quizService.getTopQuizzes(limit);
+  }
+
+  @Get('top-authors')
+  async getTopAuthors(limit: number = 3) {
+    return this.quizService.getTopAuthors(limit);
+  }
+
   @Get(':id')
   async getQuizWithRelations(@Param('id') quizId: string) {
     return this.quizService.getQuizWithRelations(quizId);

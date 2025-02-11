@@ -61,6 +61,25 @@ export class QuizService {
     return this.quizResultRepository.save(result);
   }
 
+  async getTopQuizzes(limit: number) {
+    const quizzes = await this.quizRepository.find({
+      select: ['id', 'title', 'numberOfTasks', 'averageRating'],
+      relations: ['creator'],
+      order: {
+        averageRating: 'DESC',
+      },
+      take: limit,
+    });
+
+    return quizzes.map((quiz) => ({
+      title: quiz.title,
+      numberOfTasks: quiz.numberOfTasks,
+      creatorAvatarUrl: quiz.creator?.avatarUrl,
+      creatorUsername: quiz.creator?.username,
+      averageRating: quiz.averageRating,
+    }));
+  }
+
   async getQuizWithRelations(quizId: string) {
     const quiz = await this.quizRepository.findOne({
       where: { id: quizId },
@@ -72,5 +91,9 @@ export class QuizService {
     }
 
     return quiz;
+  }
+
+  async getTopAuthors(limit: number) {
+    return this.usersService.getTopAuthorsInfo(limit);
   }
 }
