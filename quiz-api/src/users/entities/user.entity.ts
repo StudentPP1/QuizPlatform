@@ -1,3 +1,4 @@
+import { Review } from '../../review/entities/review.entity';
 import { QuizResult } from '../../quiz/entities/quiz-result.entity';
 import { Quiz } from '../../quiz/entities/quiz.entity';
 import {
@@ -43,6 +44,12 @@ export class User {
 
   @OneToMany(() => QuizResult, (quizResult) => quizResult.user)
   quizResults: QuizResult[];
+
+  @OneToMany(() => Review, (review) => review.user)
+  reviews: Review[];
+
+  @Column({ type: 'float', default: 0 })
+  authorRating: number;
 
   @CreateDateColumn()
   createdAt: Date;
