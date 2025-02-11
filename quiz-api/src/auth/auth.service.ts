@@ -50,11 +50,13 @@ export class AuthService {
 
     const hashedPassword = await this.hashPassword(createUserDto.password);
 
-    const user = await this.usersService.createUser({
-      email: createUserDto.email,
-      username: createUserDto.username,
-      password: hashedPassword,
-    });
+    const user = await this.usersService.createUser(
+      {
+        ...createUserDto,
+        password: hashedPassword,
+      },
+      'local',
+    );
 
     const payload = await this.createPayload(user);
     const tokens = await this.tokenService.generateTokens(payload);
@@ -82,7 +84,16 @@ export class AuthService {
   }
 
   async googleLogin(req: Request & { user: User }) {
-    const googleUser = await this.validateGoogleUser(req.user);
+    const { username, email, googleId = '', avatarUrl } = req.user;
+
+    const googleUserDto: CreateGoogleUserDto = {
+      username,
+      email,
+      googleId,
+      avatarUrl,
+    };
+
+    const googleUser = await this.validateGoogleUser(googleUserDto);
 
     const payload = await this.createPayload(googleUser);
     const tokens = await this.tokenService.generateTokens(payload);
@@ -95,7 +106,7 @@ export class AuthService {
       createGoogleUserDto.email,
     );
     if (user) return user;
-    return await this.usersService.createGoogleUser(createGoogleUserDto);
+    return await this.usersService.createUser(createGoogleUserDto, 'google');
   }
 
   async validateRefreshToken(refreshToken: string) {

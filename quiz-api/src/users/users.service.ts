@@ -16,22 +16,14 @@ export class UsersService {
     return await this.usersRepository.findOne({ where: { email } });
   }
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const user = new User();
-    user.username = createUserDto.username;
-    user.email = createUserDto.email;
-    user.password = createUserDto.password;
-    user.authProvider = 'local';
-
-    return this.usersRepository.save(user);
-  }
-
-  async createGoogleUser(createGoogleUserDto: CreateGoogleUserDto) {
-    const user = new User();
-    user.username = createGoogleUserDto.username;
-    user.email = createGoogleUserDto.email;
-    user.googleId = createGoogleUserDto.googleId;
-    user.authProvider = 'google';
+  async createUser<T extends CreateUserDto | CreateGoogleUserDto>(
+    userDto: T,
+    authProvider: 'local' | 'google',
+  ): Promise<User> {
+    const user = this.usersRepository.create({
+      ...userDto,
+      authProvider,
+    });
 
     return this.usersRepository.save(user);
   }
