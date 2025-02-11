@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
   JoinColumn,
 } from 'typeorm';
-import { Quiz } from './quiz.entity';
+import { Quiz } from '../../quiz/entities/quiz.entity';
 
 @Entity()
 export class Task {

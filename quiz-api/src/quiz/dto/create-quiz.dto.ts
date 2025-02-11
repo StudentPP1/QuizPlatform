@@ -8,7 +8,7 @@ import {
   IsArray,
   ValidateNested,
 } from 'class-validator';
-import { CreateTaskDto } from './create-task.dto';
+import { CreateTaskDto } from '../../task/dto/create-task.dto';
 
 export class CreateQuizDto {
   @IsNotEmpty()

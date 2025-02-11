@@ -11,7 +11,7 @@ import {
   JoinTable,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { Task } from './task.entity';
+import { Task } from '../../task/entities/task.entity';
 import { QuizResult } from './quiz-result.entity';
 import { Review } from '../../review/entities/review.entity';
 

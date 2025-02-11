@@ -2,21 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Quiz } from './entities/quiz.entity';
-import { Repository, ILike } from 'typeorm';
-import { Task } from './entities/task.entity';
-import { Request } from 'express';
-import { CreateTaskDto } from './dto/create-task.dto';
+import { Repository } from 'typeorm';
+import { TaskService } from '../task/task.service';
 import { UsersService } from '../users/users.service';
 import { QuizResult } from './entities/quiz-result.entity';
 import { SaveQuizResultDto } from './dto/save-quiz-result.dto';
+import { Request } from 'express';
+import { CreateTaskDto } from '../task/dto/create-task.dto';
 
 @Injectable()
 export class QuizService {
   constructor(
     @InjectRepository(Quiz)
     private readonly quizRepository: Repository<Quiz>,
-    @InjectRepository(Task)
-    private readonly taskRepository: Repository<Task>,
+    private readonly taskService: TaskService,
     @InjectRepository(QuizResult)
     private readonly quizResultRepository: Repository<QuizResult>,
     private readonly usersService: UsersService,
@@ -34,21 +33,14 @@ export class QuizService {
 
     await this.quizRepository.save(quiz);
 
-    const taskEntities = tasks.map((taskDto) => {
-      return this.taskRepository.create({
-        ...taskDto,
-        quiz: quiz,
-      });
-    });
-
-    await this.taskRepository.save(taskEntities);
+    await this.taskService.createTasks(tasks, quiz);
 
     return quiz;
   }
 
   async saveResult(
     quizId: string,
-    req: Request,
+    req: any,
     saveQuizResultDto: SaveQuizResultDto,
   ): Promise<QuizResult> {
     const [user, quiz] = await Promise.all([
