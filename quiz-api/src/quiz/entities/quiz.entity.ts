@@ -13,6 +13,7 @@ import {
 import { User } from '../../users/entities/user.entity';
 import { Task } from './task.entity';
 import { QuizResult } from './quiz-result.entity';
+import { Review } from '../../review/entities/review.entity';
 
 @Entity()
 export class Quiz {
@@ -33,7 +34,7 @@ export class Quiz {
 
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: 'creatorId' })
-  creator: string;
+  creator: User;
 
   @OneToMany(() => Task, (task) => task.quiz)
   tasks: Task[];
@@ -44,6 +45,12 @@ export class Quiz {
   @ManyToMany(() => User, (user) => user.participatedQuizzes)
   @JoinTable()
   participants: User[];
+
+  @OneToMany(() => Review, (review) => review.quiz)
+  reviews: Review[];
+
+  @Column({ type: 'float', default: 0 })
+  averageRating: number;
 
   @CreateDateColumn()
   createdAt: Date;
