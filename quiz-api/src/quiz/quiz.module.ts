@@ -6,9 +6,14 @@ import { Quiz } from './entities/quiz.entity';
 import { Task } from './entities/task.entity';
 import { AuthModule } from '../auth/auth.module';
 import { UsersModule } from '../users/users.module';
+import { QuizResult } from './entities/quiz-result.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Quiz, Task]), AuthModule, UsersModule],
+  imports: [
+    TypeOrmModule.forFeature([Quiz, Task, QuizResult]),
+    AuthModule,
+    UsersModule,
+  ],
   controllers: [QuizController],
   providers: [QuizService],
 })

@@ -16,6 +16,13 @@ export class UsersService {
     return await this.usersRepository.findOne({ where: { email } });
   }
 
+  async findUserById(id: string): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { id },
+      relations: ['quizResults'],
+    });
+  }
+
   async createUser<T extends CreateUserDto | CreateGoogleUserDto>(
     userDto: T,
     authProvider: 'local' | 'google',

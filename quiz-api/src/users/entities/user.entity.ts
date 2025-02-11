@@ -1,3 +1,4 @@
+import { QuizResult } from '../../quiz/entities/quiz-result.entity';
 import { Quiz } from '../../quiz/entities/quiz.entity';
 import {
   Entity,
@@ -39,6 +40,9 @@ export class User {
   @ManyToMany(() => Quiz, (quiz) => quiz.participants)
   @JoinTable()
   participatedQuizzes: Quiz[];
+
+  @OneToMany(() => QuizResult, (quizResult) => quizResult.user)
+  quizResults: QuizResult[];
 
   @CreateDateColumn()
   createdAt: Date;

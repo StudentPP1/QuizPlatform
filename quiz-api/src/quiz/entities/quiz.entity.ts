@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Task } from './task.entity';
+import { QuizResult } from './quiz-result.entity';
 
 @Entity()
 export class Quiz {
@@ -36,6 +37,9 @@ export class Quiz {
 
   @OneToMany(() => Task, (task) => task.quiz)
   tasks: Task[];
+
+  @OneToMany(() => QuizResult, (quizResult) => quizResult.quiz)
+  results: QuizResult[];
 
   @ManyToMany(() => User, (user) => user.participatedQuizzes)
   @JoinTable()
