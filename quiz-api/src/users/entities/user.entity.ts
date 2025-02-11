@@ -1,4 +1,4 @@
-import { Quiz } from 'src/quiz/entities/quiz.entity';
+import { Quiz } from '../../quiz/entities/quiz.entity';
 import {
   Entity,
   Column,
@@ -29,6 +29,9 @@ export class User {
 
   @Column({ type: 'varchar', length: 10 })
   authProvider: string;
+
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  avatarUrl?: string;
 
   @OneToMany(() => Quiz, (quiz) => quiz.creator)
   createdQuizzes: Quiz[];
