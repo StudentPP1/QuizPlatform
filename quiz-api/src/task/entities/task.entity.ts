@@ -33,6 +33,9 @@ export class Task {
   @JoinColumn({ name: 'quizId' })
   quiz: Quiz;
 
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  mediaUrl?: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

@@ -28,4 +28,8 @@ export class CreateTaskDto {
   @IsArray()
   @IsString({ each: true })
   options?: string[];
+
+  @IsOptional()
+  @IsString()
+  mediaUrl?: string;
 }
