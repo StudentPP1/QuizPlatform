@@ -39,15 +39,13 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async getUserInfo(req: Request) {
+  async getUserInfo(req: Request, userId?: string) {
+    const userIdToUse = userId && userId.trim() !== '' ? userId : req.user.id;
+
     return this.usersRepository.findOne({
-      where: { id: req.user.id },
-      relations: [
-        'createdQuizzes',
-        'participatedQuizzes',
-        'quizResults',
-        'reviews',
-      ],
+      where: { id: userIdToUse },
+      select: ['id', 'username', 'avatarUrl', 'authorRating', 'email'],
+      relations: ['createdQuizzes', 'participatedQuizzes', 'quizResult'],
     });
   }
 

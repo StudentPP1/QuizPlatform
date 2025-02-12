@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from './users.service';
 import { Request } from 'express';
@@ -9,7 +9,10 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  getUserInfo(@Req() req: Request) {
-    return this.usersService.getUserInfo(req);
+  getUserInfo(
+    @Query('userId') userId: string | undefined,
+    @Req() req: Request,
+  ) {
+    return this.usersService.getUserInfo(req, userId);
   }
 }
