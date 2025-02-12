@@ -20,7 +20,7 @@ export class Task {
   @Column({ type: 'enum', enum: ['text', 'single', 'multiple-choice'] })
   type: 'text' | 'single' | 'multiple-choice';
 
-  @Column({ type: 'text', nullable: true })
+  @Column('json', { nullable: true })
   correctAnswer?: string[];
 
   @Column({ type: 'json', nullable: true })
