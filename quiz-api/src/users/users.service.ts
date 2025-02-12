@@ -70,16 +70,19 @@ export class UsersService {
 
   async getTopCreatorsInfo(limit: number) {
     const users = await this.usersRepository.find({
-      select: ['id', 'username', 'avatarUrl'],
+      select: ['id', 'username', 'avatarUrl', 'rating', 'email'],
       take: limit,
-      relations: ['createdQuizzes'],
+      relations: ['createdQuizzes', 'participatedQuizzes'],
     });
 
     return users.map((user) => ({
       userId: user.id,
       username: user.username,
       avatarUrl: user.avatarUrl,
-      createdQuizzesCount: user.createdQuizzes?.length || 0,
+      rating: user.rating,
+      email: user.email,
+      participatedQuizzes: user.participatedQuizzes,
+      createdQuizzes: user.createdQuizzes,
     }));
   }
 }

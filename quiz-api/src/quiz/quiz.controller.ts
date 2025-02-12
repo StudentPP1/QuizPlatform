@@ -15,7 +15,6 @@ import { CreateTaskDto } from '../task/dto/create-task.dto';
 import { Request } from 'express';
 import { QuizResult } from './entities/quiz-result.entity';
 import { SaveQuizResultDto } from './dto/save-quiz-result.dto';
-import { Quiz } from './entities/quiz.entity';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('api/quiz')
@@ -29,7 +28,7 @@ export class QuizController {
     @Req() req: Request,
   ) {
     const quiz = await this.quizService.createQuiz(createQuizDto, tasks, req);
-    return quiz;
+    return quiz.id;
   }
 
   @Post(':quizId/results')
@@ -47,7 +46,7 @@ export class QuizController {
   }
 
   @Get('search')
-  async searchQuizzes(@Query('name') name: string): Promise<Quiz[]> {
+  async searchQuizzes(@Query('name') name: string) {
     return this.quizService.searchQuizzesByName(name);
   }
 

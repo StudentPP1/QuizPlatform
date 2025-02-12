@@ -77,6 +77,19 @@ export class ReviewService {
   }
 
   async getReviewsForQuiz(quizId: string) {
-    return this.reviewRepository.find({ where: { quiz: { id: quizId } } });
+    const reviews = await this.reviewRepository.find({
+      where: { quiz: { id: quizId } },
+      relations: ['creator'],
+    });
+
+    return reviews.map((review) => ({
+      creator: {
+        id: review.user?.id,
+        username: review.user?.username,
+        avatarUrl: review.user?.avatarUrl,
+      },
+      text: review.comment,
+      rating: review.rating,
+    }));
   }
 }

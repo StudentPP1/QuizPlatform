@@ -4,16 +4,17 @@ import {
   IsEnum,
   IsOptional,
   IsArray,
+  IsUrl,
 } from 'class-validator';
 
 export class CreateTaskDto {
   @IsNotEmpty()
   @IsString()
-  quesion: string;
+  question: string;
 
   @IsNotEmpty()
-  @IsEnum(['text', 'multiple-choice'])
-  type: 'text' | 'multiple-choice';
+  @IsEnum(['text', 'single', 'multiple-choice'])
+  type: 'text' | 'single' | 'multiple-choice';
 
   @IsOptional()
   @IsArray()
@@ -26,6 +27,6 @@ export class CreateTaskDto {
   options?: string[];
 
   @IsOptional()
-  @IsString()
-  mediaUrl?: string;
+  @IsUrl()
+  image?: string;
 }

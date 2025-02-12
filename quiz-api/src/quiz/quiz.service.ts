@@ -64,8 +64,15 @@ export class QuizService {
 
   async getTopQuizzes(limit: number) {
     const quizzes = await this.quizRepository.find({
-      select: ['id', 'title', 'numberOfTasks', 'rating'],
-      relations: ['creator'],
+      select: [
+        'id',
+        'title',
+        'description',
+        'numberOfTasks',
+        'timeLimit',
+        'rating',
+      ],
+      relations: ['creator', 'tasks'],
       order: {
         rating: 'DESC',
       },
@@ -76,33 +83,97 @@ export class QuizService {
       id: quiz.id,
       title: quiz.title,
       numberOfTasks: quiz.numberOfTasks,
-      creatorAvatarUrl: quiz.creator?.avatarUrl,
-      creatorUsername: quiz.creator?.username,
+      creator: {
+        id: quiz.creator?.id,
+        username: quiz.creator?.username,
+        avatarUrl: quiz.creator?.avatarUrl,
+      },
+      tasks: quiz.tasks.map((task) => ({
+        id: task.id,
+        question: task.question,
+        type: task.type,
+        image: task.image,
+        correctAnswers: task.correctAnswer,
+        options: task.options,
+      })),
     }));
   }
 
   async getQuizWithRelations(quizId: string) {
     const quiz = await this.quizRepository.findOne({
       where: { id: quizId },
-      relations: ['creator', 'tasks', 'results', 'participants', 'reviews'],
+      relations: ['creator', 'tasks'],
     });
 
     if (!quiz) {
       throw new Error('Quiz not found');
     }
 
-    return quiz;
+    return {
+      id: quiz.id,
+      title: quiz.title,
+      description: quiz.description,
+      numberOfTasks: quiz.numberOfTasks,
+      timeLimit: quiz.timeLimit,
+      rating: quiz.rating,
+      creator: {
+        id: quiz.creator?.id,
+        username: quiz.creator?.username,
+        avatarUrl: quiz.creator?.avatarUrl,
+      },
+      tasks: quiz.tasks.map((task) => ({
+        id: task.id,
+        question: task.question,
+        type: task.type,
+        image: task.image,
+        correctAnswers: task.correctAnswer,
+        options: task.options,
+      })),
+    };
   }
 
   async getTopCreators(limit: number) {
     return this.usersService.getTopCreatorsInfo(limit);
   }
 
-  async searchQuizzesByName(name: string): Promise<Quiz[]> {
-    return this.quizRepository.find({
-      where: {
-        title: ILike(`%${name}%`),
-      },
-    });
+  async searchQuizzesByName(name: string) {
+    return this.quizRepository
+      .find({
+        where: {
+          title: ILike(`%${name}%`),
+        },
+        select: [
+          'id',
+          'title',
+          'description',
+          'numberOfTasks',
+          'timeLimit',
+          'rating',
+        ],
+        relations: ['creator', 'tasks'],
+      })
+      .then((quizzes) =>
+        quizzes.map((quiz) => ({
+          id: quiz.id,
+          title: quiz.title,
+          description: quiz.description,
+          numberOfTasks: quiz.numberOfTasks,
+          timeLimit: quiz.timeLimit,
+          rating: quiz.rating,
+          creator: {
+            id: quiz.creator?.id,
+            username: quiz.creator?.username,
+            avatarUrl: quiz.creator?.avatarUrl,
+          },
+          tasks: quiz.tasks.map((task) => ({
+            id: task.id,
+            question: task.question,
+            type: task.type,
+            image: task.image,
+            correctAnswers: task.correctAnswer,
+            options: task.options,
+          })),
+        })),
+      );
   }
 }

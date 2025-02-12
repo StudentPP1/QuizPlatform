@@ -17,8 +17,8 @@ export class Task {
   @Column({ type: 'varchar', length: 255 })
   question: string;
 
-  @Column({ type: 'enum', enum: ['text', 'multiple-choice'] })
-  type: 'text' | 'multiple-choice';
+  @Column({ type: 'enum', enum: ['text', 'single', 'multiple-choice'] })
+  type: 'text' | 'single' | 'multiple-choice';
 
   @Column({ type: 'text', nullable: true })
   correctAnswer?: string[];
@@ -31,7 +31,7 @@ export class Task {
   quiz: Quiz;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  mediaUrl?: string;
+  image?: string;
 
   @CreateDateColumn()
   createdAt: Date;
