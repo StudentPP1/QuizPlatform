@@ -10,12 +10,15 @@ import Avatar from "../../components/avatar/Avatar";
 import { AuthContext, AuthState } from "../../context/context";
 import { AuthService } from "../../api/AuthService";
 import { toast } from "react-toastify";
+import { UserService } from "../../api/UserService";
+import { QuizService } from "../../api/QuizService";
 
 const HomePage: FC = () => {
     function getCookie(key: string) {
         var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
         return b ? b.pop() : "";
     }
+
     const { isAuth, setIsAuth } = useContext<AuthState>(AuthContext);
 
     const navigate = useNavigate();
@@ -51,9 +54,27 @@ const HomePage: FC = () => {
 
     useEffect(() => {
         // TODO: get 2 last quiz from history, top Quizzes, top Authors
-        setRecentQuizzes([testQuiz, testQuiz])
-        setTopQuizzes([testQuiz, testQuiz])
-        setTopAuthors([testCreator, testCreator])
+        const getRecentQuizzes = async () => {
+            await UserService.getUser().then((result) => {
+                setRecentQuizzes(result.createdQuizzes.slice(0, 2))
+            })
+        }
+        const getTopQuizzes = async () => {
+            await QuizService.getTopQuizzes().then((result) => {
+                setTopQuizzes(result)
+            })
+        }
+        const getTopAuthors = async () => {
+            await QuizService.getTopAuthors().then((result) => {
+                setTopAuthors(result)
+            })
+        }
+        getRecentQuizzes()
+        getTopQuizzes()
+        getTopAuthors()
+        // setRecentQuizzes([testQuiz, testQuiz])
+        // setTopQuizzes([testQuiz, testQuiz])
+        // setTopAuthors([testCreator, testCreator])
     }, [])
 
     return (
@@ -115,7 +136,7 @@ const HomePage: FC = () => {
                                     </div>
 
                                     <div className={styles.author_stats}>
-                                        <span> {author.quizzes.length} tests </span>
+                                        <span> {author.createdQuizzes.length} tests </span>
                                     </div>
                                 </div>
 

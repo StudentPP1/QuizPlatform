@@ -1,4 +1,4 @@
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import styles from "./App.module.scss"
 import { MainPage } from "./pages/MainPage/MainPage"
 import { AuthContext } from "./context/context"

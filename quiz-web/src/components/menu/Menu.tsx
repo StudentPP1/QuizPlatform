@@ -2,19 +2,20 @@ import { FC } from "react";
 import styles from "./Menu.module.scss";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "../../api/AuthService";
+import { Creator } from "../../models/Creator";
+import Avatar from "../avatar/Avatar";
 
-const Menu: FC<{ open: boolean }> = ({ open }) => {
+const Menu: FC<{ open: boolean, user: Creator | null }> = ({ open, user }) => {
   const navigate = useNavigate();
 
   return (
     open && (
       <div className={styles.userMenu}>
         <div className={styles.header}>
-          <img src="https://i.pravatar.cc/40" className={styles.avatar}>
-          </img>
+          <Avatar avatarUrl={user?.avatarUrl} />
           <div className={styles.userInfo}>
-            <h3>aboba_abiba3</h3>
-            <p>cumaboba988@gmail.com</p>
+            <h3>{user?.username}</h3>
+            <p>{user?.email}</p>
           </div>
         </div>
         <div className={styles.logout} onClick={async () => {
