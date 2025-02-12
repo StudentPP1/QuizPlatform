@@ -18,6 +18,9 @@ import { ReviewModule } from './review/review.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
         autoLoadEntities: true,
+        ssl: configService.get<boolean>('DB_SSL')
+          ? { rejectUnauthorized: false }
+          : false,
         synchronize: configService.get<string>('NODE_ENV') !== 'production',
       }),
       inject: [ConfigService],
