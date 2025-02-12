@@ -79,7 +79,7 @@ export class ReviewService {
   async getReviewsForQuiz(quizId: string) {
     const reviews = await this.reviewRepository.find({
       where: { quiz: { id: quizId } },
-      relations: ['creator'],
+      relations: ['user'],
     });
 
     return reviews.map((review) => ({
