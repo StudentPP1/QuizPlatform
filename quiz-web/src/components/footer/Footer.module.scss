@@ -1,0 +1,12 @@
+@use "../../scss/variables" as v;
+
+.wrapper {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+}
+.footer {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}

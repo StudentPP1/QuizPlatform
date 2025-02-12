@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import styles from "./MainPage.module.scss"
 import { Modal } from "../../components/modal/Modal";
 import LoginPage from "../LoginPage/LoginPage";
+import Header from "../../components/header/Header";
 
 const modules = [
   { title: "English: Verbs and Prepositions", terms: 49, user: "Quizlet", icon: "quizlet" },
@@ -14,16 +15,15 @@ const modules = [
 
 export const MainPage: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  
+
   return (
     <div className={styles.container}>
 
-      <header className={styles.header}>
-        <span className={styles.logo}>QuizPlatform</span>
+      <Header enabledSearch={false}>
         <div className={styles.actions} onClick={() => setIsOpen(true)}>
           <span>Login</span>
         </div>
-      </header>
+      </Header>
 
       <Modal isOpen={isOpen} children={<LoginPage setIsOpen={setIsOpen} />} />
 
@@ -113,15 +113,15 @@ export const MainPage: FC = () => {
             ))}
           </div>
         </div>
-      </main>
 
-      <footer className={styles.wrapper}>
-        <div className={styles.footer_menu__wrapper}>
-          <div className={styles.footer_menu__logo}>
-            <p>© 2025 QuizPlatform, Inc.</p>
-          </div>
+        <div className={styles.wrapper}>
+          <footer className={styles.footer_wrapper}>
+            <div>
+              <p>© 2025 QuizPlatform, Inc.</p>
+            </div>
+          </footer>
         </div>
-      </footer>
+      </main>
     </div>
   );
 }

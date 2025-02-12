@@ -6,7 +6,7 @@
     width: 100vw;
     align-items: center;
     justify-content: center;
-    background: v.$second_background;
+    background: v.$background;
     font-family: "Arial", sans-serif;
 }
 .left {
@@ -15,7 +15,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, v.$yellow, v.$background);
+    background: linear-gradient(135deg, v.$yellow, v.$second_background);
     height: 100%;
     text-align: center;
     color: #fff;
@@ -119,7 +119,7 @@
     align-items: center;
     border: 3px solid v.$background;
     border-radius: 10px;
-    background-color: v.$background;
+    background-color: v.$second_background;
     color: v.$yellow;
     width: 100%;
     height: 50px;

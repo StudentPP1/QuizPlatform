@@ -1,65 +1,113 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import styles from "./HomePage.module.scss";
-import Sidebar from "../../components/sidebar/Sidebar";
+import QuizCard from "../../components/card/QuizCard";
+import { useNavigate } from "react-router-dom";
+import Wrapper from "../../components/wrapper/Wrapper";
 
 const HomePage: FC = () => {
-    // TODO: зробити перевірку на токен в куках => useIsAuth(true)
-    useEffect(() => {
-        // if token in cookie => useIsAuth(true)
-        document.cookie
-    })
-    // TODO: зробити верстку
+    const navigate = useNavigate();
+
     return (
-        <div className={styles.page_container}>
-            {/* Header */}
-            <header className={styles.header}>
-                {/* Site Logo */}
-                <div className={styles.logo}>QuizPlatform</div>
-
-                {/* Search Input */}
-                <div className={styles.search_box}>
-                    <input type="text" placeholder="Search..." />
-                </div>
-
-                {/* User Avatar */}
-                <div className={styles.user_avatar}>
-                    <img src="https://i.pravatar.cc/40" alt="User Avatar" />
-                </div>
-            </header>
-            <div className={styles.container}>
-                <main className={styles.content}>
-                    <Sidebar />
-
-                    <section className={styles.popular}>
-                        <h2>З найкращою оцінкою квести</h2>
-                        <div className={styles.card_grid}>
-                            <div className={styles.card}>Англійський - 170 термінів</div>
-                            <div className={styles.card}>Наголоси - 232 терміни</div>
-                            <div className={styles.card}>Full Blast 7 - 36 термінів</div>
+        <Wrapper enabledFooter={true} enabledSearch={true}>
+            <section className={styles.section_container}>
+                <div className={styles.recent_container}>
+                    <h2>Recent</h2>
+                    <div className={styles.items_list}>
+                        <div
+                            onClick={() => {
+                                localStorage.setItem("index", "0")
+                                navigate("/quizInfo/1")
+                            }}
+                            className={styles.recent_item}>
+                            <div className={styles.recent_icon}>📘</div>
+                            <div className={styles.recent_details}>
+                                <h4 className={styles.recent_quizTitle}>Completed test</h4>
+                                <p className={styles.recent_meta}>
+                                    9 questions • Author
+                                </p>
+                            </div>
                         </div>
-                    </section>
-
-                    <section className={styles.popular}>
-                        <h2>З найкращою оцінкою автори</h2>
-                        <div className={styles.card_grid}>
-                            <div className={styles.card}>Англійський - 170 термінів</div>
-                            <div className={styles.card}>Наголоси - 232 терміни</div>
-                            <div className={styles.card}>Full Blast 7 - 36 термінів</div>
+                        <div
+                            onClick={() => {
+                                localStorage.setItem("index", "0")
+                                navigate("/quizInfo/1")
+                            }}
+                            className={styles.recent_item}>
+                            <div className={styles.recent_icon}>📘</div>
+                            <div className={styles.recent_details}>
+                                <h4 className={styles.recent_quizTitle}>Completed test</h4>
+                                <p className={styles.recent_meta}>
+                                    9 questions • Author
+                                </p>
+                            </div>
                         </div>
-                    </section>
+                    </div>
+                </div>
+            </section>
 
-                    <section className={styles.recent}>
-                        <h2>Нещодавні пройдені</h2>
-                        <div className={styles.card}>english words - 9 термінів</div>
-                        <div className={styles.card}>words from YouTube - 2 терміни</div>
-                    </section>
+            <section className={styles.section_container}>
+                <h2>The best quest rating</h2>
+                <div className={styles.items_list}>
+                    <QuizCard title="test" count={4} author="author" />
+                    <QuizCard title="test" count={4} author="author" />
+                    <QuizCard title="test" count={4} author="author" />
+                </div>
+            </section>
 
-                    <footer>
-                        footer
-                    </footer>
-                </main>
-            </div>
-        </div>
+            <section className={styles.section_container}>
+                <h2>The best author rating</h2>
+                <div className={styles.items_list}>
+                    <div
+                        onClick={() => {
+                            localStorage.setItem("index", "0");
+                            navigate("/authorInfo/1");
+                        }}
+                        className={styles.author_card}>
+                        <div className={styles.author_content}>
+                            <img src="https://i.pravatar.cc/40" className={styles.author_avatar} />
+                            <div className={styles.author_info}>
+                                <h2>Author</h2>
+                                <div className={styles.author_stats}>
+                                    <span> 9 test </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        onClick={() => {
+                            localStorage.setItem("index", "0");
+                            navigate("/authorInfo/1");
+                        }}
+                        className={styles.author_card}>
+                        <div className={styles.author_content}>
+                            <img src="https://i.pravatar.cc/40" className={styles.author_avatar} />
+                            <div className={styles.author_info}>
+                                <h2>Author</h2>
+                                <div className={styles.author_stats}>
+                                    <span> 9 test </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        onClick={() => {
+                            localStorage.setItem("index", "0");
+                            navigate("/authorInfo/1");
+                        }}
+                        className={styles.author_card}>
+                        <div className={styles.author_content}>
+                            <img src="https://i.pravatar.cc/40" className={styles.author_avatar} />
+                            <div className={styles.author_info}>
+                                <h2>Author</h2>
+                                <div className={styles.author_stats}>
+                                    <span> 9 test </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </Wrapper>
     )
 }
 
