@@ -1,35 +1,87 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { FC, useEffect, useState } from "react"
+import styles from "./App.module.scss"
+import { MainPage } from "./pages/MainPage/MainPage"
+import { AuthContext } from "./context/context"
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom"
+import CreateQuizPage from "./pages/CreateQuizPage/CreateQuizPage"
+import { ToastContainer } from "react-toastify"
+import QuizInfoPage from "./pages/QuizInfoPage/QuizInfoPage"
+import ResultsPage from "./pages/Quiz/ResultPage/ResultsPage"
+import AuthorPage from "./pages/AuthorPage/AuthorPage"
+import SearchPage from "./pages/SearchPage/SearchPage"
+import LibraryPage from "./pages/LibraryPage/LibraryPage"
+import QuizPage from "./pages/Quiz/QuizPage/QuizPage"
+import HomePage from "./pages/HomePage/HomePage"
 
-function App() {
-  const [count, setCount] = useState(0)
+export const App: FC = () => {
+  const [isAuth, setIsAuth] = useState<boolean>(false);
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    const tokenTimestamp = localStorage.getItem("tokenTimestamp");
+    const tokenExpiry = 3600 * 1000; // 1 час в миллисекундах
+
+    if (token && tokenTimestamp) {
+      const expiryTime = parseInt(tokenTimestamp) + tokenExpiry;
+      const now = Date.now();
+
+      if (now < expiryTime) {
+        setIsAuth(true);
+        setTimeLeft(expiryTime - now);
+      } else {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("tokenTimestamp");
+        setIsAuth(false);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isAuth) {
+      const now = Date.now();
+      localStorage.setItem("tokenTimestamp", now.toString());
+      setTimeLeft(3600 * 1000);
+    }
+  }, [isAuth]);
+
+  useEffect(() => {
+    if (isAuth && timeLeft !== null) {
+      const interval = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev !== null && prev > 1000) {
+            return prev - 1000;
+          } else {
+            clearInterval(interval);
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("tokenTimestamp");
+            setIsAuth(false);
+            return null;
+          }
+        });
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [isAuth, timeLeft]);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className={styles.app}>
+      <ToastContainer theme="dark" style={{ zIndex: 1000 }} />
+      <AuthContext.Provider value={{ isAuth, setIsAuth }}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/create-quiz" element={isAuth ? <CreateQuizPage /> : <MainPage />} />
+            <Route path="/quizInfo/:id" element={isAuth ? <QuizInfoPage /> : <MainPage />} />
+            <Route path="/quiz" element={isAuth ? <QuizPage /> : <MainPage />} />
+            <Route path="/results" element={isAuth ? <ResultsPage /> : <MainPage />} />
+            <Route path="/authorInfo/:id" element={isAuth ? <AuthorPage /> : <MainPage />} />
+            <Route path="/search/:text" element={isAuth ? <SearchPage /> : <MainPage />} />
+            <Route path="/library" element={isAuth ? <LibraryPage /> : <MainPage />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthContext.Provider>
+    </div>
   )
 }
-
-export default App

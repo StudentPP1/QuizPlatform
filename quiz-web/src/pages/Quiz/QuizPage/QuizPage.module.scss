@@ -1,0 +1,133 @@
+.quizContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #0d0d0d;
+}
+
+.quizCard {
+    background-color: #262626;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+}
+
+.questionNumber,
+.timer {
+    color: #f2e527;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.questionText {
+    color: #f2f2f2;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.questionImage {
+    max-width: 100%;
+    height: auto;
+    max-height: 250px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.optionsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.option {
+    background-color: #0d0d0d;
+    color: #f2f2f2;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.option:hover {
+    background-color: #f2d64b;
+    color: #0d0d0d;
+}
+
+.radioButton,
+.checkBox {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #f2e527;
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+}
+
+.radioButton:checked::before,
+.checkBox:checked::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: #f2e527;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.checkBox {
+    border-radius: 4px;
+}
+
+.checkBox:checked::before {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.textInput {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background-color: #0d0d0d;
+    color: #f2f2f2;
+    font-size: 18px;
+}
+
+.nextButton {
+    background-color: #f2e527;
+    color: #0d0d0d;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background 0.3s;
+}
+
+.nextButton:hover {
+    background-color: #f2d64b;
+}
+
+.exitButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #f2e527;
+    cursor: pointer;
+}
