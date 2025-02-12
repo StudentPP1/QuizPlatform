@@ -8,5 +8,5 @@ export class CreateReviewDto {
 
   @IsString()
   @IsOptional()
-  comment?: string;
+  text?: string;
 }
