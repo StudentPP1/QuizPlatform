@@ -1,16 +1,46 @@
+import axios from "axios";
+
 export class AuthService {
-    /*
-    TODO: зробити api запроси
-    */
-    public static register(username: string, email: string, password: string) {
-        console.log(username, email, password)
-    }
+  static API = axios.create({
+    baseURL: "https://localhost:3000",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*",
+      "Access-Control-Allow-Headers": "*",
+    },
+    // headers: { "Authorization": `Bearer ${localStorage.getItem("access_token")}` },
+    withCredentials: true,
+  });
 
-    public static login(email: string, password: string) {
-        console.log(email, password)
-    }
+  public static register(username: string, email: string, password: string) {
+    this.API.post("/api/auth/signup", {
+      username: username,
+      email: email,
+      password: password,
+    })
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
-    public static google() {
-        console.log("google")
-    }
+  public static login(email: string, password: string) {
+    this.API.post("/api/auth/login", {
+      email: email,
+      password: password,
+    })
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  public static google() {
+    console.log("google");
+  }
 }

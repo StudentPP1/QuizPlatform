@@ -112,7 +112,7 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
                     >
                       <img
                         className={styles.img}
-                        alt="" src={showPassword ? "../close-eye.svg" : "../eye.svg"}
+                        src={showPassword ? "../../../public/close-eye.svg" : "../../../public/eye.svg"}
                       />
                     </button>
                   </div>
