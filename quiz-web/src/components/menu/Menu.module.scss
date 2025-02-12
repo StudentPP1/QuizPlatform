@@ -47,25 +47,6 @@
         }
     }
 
-    .menuList,
-    .footerMenu {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-
-        li {
-            padding: 10px 15px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-
-            &:hover {
-                background: #29294b;
-            }
-        }
-    }
-
     .logout {
         padding: 10px 15px;
         text-align: center;

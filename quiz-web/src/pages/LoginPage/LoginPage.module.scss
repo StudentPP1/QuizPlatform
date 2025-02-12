@@ -15,23 +15,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, v.$yellow, v.$second_background);
+    background: url("https://retirementessentials.com.au/wp-content/uploads/2022/12/five-question-financial-literacy-quiz-for-retirees.jpg") no-repeat center center; 
+    background-size: cover; 
     height: 100%;
+    width: 100%;
     text-align: center;
     color: #fff;
-    h1 {
-        font-size: 28px;
-        font-weight: bold;
-        max-width: 300px;
-    }
-}
-.image {
-    width: 250px;
-    height: 250px;
-    background-image: url("https://via.placeholder.com/250");
-    background-size: cover;
-    border-radius: 10px;
-    margin-top: 20px;
 }
 .close_button_container {
     height: 10%;

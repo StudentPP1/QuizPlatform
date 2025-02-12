@@ -2,35 +2,25 @@ import { FC, useEffect, useState } from "react";
 import styles from "./LibraryPage.module.scss";
 import { useNavigate } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
+import { Quiz } from "../../models/Quiz";
+import { testQuiz } from "../../test";
+import Avatar from "../../components/avatar/Avatar";
 
-export type QuizType = {
-  title: string,
-  terms: string,
-  user: string,
-  avatar: string
-}
 const LibraryPage: FC = () => {
   const navigate = useNavigate();
-  const [quizzes, setQuizzes] = useState<QuizType[]>([]);
+  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [tab, setTab] = useState<number>(1);
 
   useEffect(() => {
     if (tab === 1) {
-      setQuizzes([
-        { title: "English words", terms: "9 questions", user: "aboba_abiba3", avatar: "https://i.pravatar.cc/30" }
-      ])
+      // TODO: get created quests
+      setQuizzes([testQuiz])
     } else {
-      setQuizzes([
-        { title: "Completed Quiz 1", terms: "15 questions", user: "user123", avatar: "https://i.pravatar.cc/31" },
-        { title: "Completed Quiz 3", terms: "20 questions", user: "user456", avatar: "https://i.pravatar.cc/32" },
-        { title: "Completed Quiz 4", terms: "15 questions", user: "user123", avatar: "https://i.pravatar.cc/31" },
-        { title: "Completed Quiz 5", terms: "20 questions", user: "user456", avatar: "https://i.pravatar.cc/32" },
-        { title: "Completed Quiz 6", terms: "15 questions", user: "user123", avatar: "https://i.pravatar.cc/31" },
-        { title: "Completed Quiz 7", terms: "20 questions", user: "user456", avatar: "https://i.pravatar.cc/32" },
-      ])
+      // TODO: get history 
+      setQuizzes([testQuiz, testQuiz, testQuiz, testQuiz])
     }
   }, [tab])
-  console.log(tab)
+
   return (
     <Wrapper enabledFooter={false} enabledSearch={true}>
       <div className={styles.library_container}>
@@ -51,7 +41,7 @@ const LibraryPage: FC = () => {
         </div>
 
         <div className={styles.modules}>
-          {quizzes.map(({ title, terms, user, avatar }) => (
+          {quizzes.map((quiz) => (
             <button
               className={styles.module_card}
               onClick={() => {
@@ -60,13 +50,13 @@ const LibraryPage: FC = () => {
               }}
             >
               <div className={styles.card_content}>
-                <h3 className={styles.name_quest}>{title}</h3>
+                <h3 className={styles.name_quest}>{quiz.title}</h3>
                 <div className={styles.top_info}>
-                  <span className={styles.term_count}>{terms}</span>
+                  <span className={styles.term_count}>{quiz.numberOfTasks} questions</span>
                 </div>
-                <div className={styles.user_info}>
-                  <img src={avatar} alt="User Avatar" className={styles.user_avatar_small} />
-                  <span className={styles.user_name}>{user}</span>
+                <div className={styles.author}>
+                  <Avatar avatarUrl={quiz.creator.avatarUrl} />
+                  <span className={styles.name}>{quiz.creator.username}</span>
                 </div>
               </div>
             </button>

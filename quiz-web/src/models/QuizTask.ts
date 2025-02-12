@@ -1,7 +1,8 @@
 export type QuizTask = {
     id: string,
-    title: string,
-    description: string,
-    type: string,
-    correctAnswer: string[]
+    question: string,
+    type: string, // text | multiple-choice | single
+    image?: string,
+    correctAnswers: string[],
+    options?: string[],
 }

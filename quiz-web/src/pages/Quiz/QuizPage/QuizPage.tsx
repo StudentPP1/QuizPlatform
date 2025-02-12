@@ -1,51 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import styles from "./QuizPage.module.scss";
+import { UserAnswers } from "../../../models/UserAnswers";
+import { Quiz } from "../../../models/Quiz";
+import { QuizNavigate } from "../../QuizInfoPage/QuizInfoPage";
 
-export type QuestionType = {
-  id: number;
-  type: "single" | "multiple" | "text";
-  question: string;
-  options?: string[];
-  correct: string | string[];
-  image?: string;
-}
-
-export type AnswersType = {
-  [key: number]: string | string[];
+export type QuizResultState = {
+  answers: UserAnswers;
+  quiz: Quiz;
 };
 
-const quizQuestions: QuestionType[] = [
-  {
-    id: 1,
-    type: "single",
-    question: "Який колір сонця?",
-    options: ["Червоний", "Синій", "Жовтий", "Зелений"],
-    correct: "Жовтий",
-    image: "https://images.prom.ua/1734007967_w600_h600_1734007967.jpg",
-  },
-  {
-    id: 2,
-    type: "multiple",
-    question: "Які міста є столицями країн?",
-    options: ["Київ", "Лондон", "Одеса", "Берлін"],
-    correct: ["Київ", "Лондон", "Берлін"],
-  },
-  {
-    id: 3,
-    type: "text",
-    question: "Столиця України?",
-    correct: "Київ",
-  },
-];
-
 const QuizPage: React.FC = () => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-  const [answers, setAnswers] = useState<AnswersType>({});
-  const [timeLeft, setTimeLeft] = useState<number>(60);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { quiz } = location.state as QuizNavigate;
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
+  const [answers, setAnswers] = useState<UserAnswers>({});
+  const [timeLeft, setTimeLeft] = useState<number>(60);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -62,14 +35,13 @@ const QuizPage: React.FC = () => {
     return () => clearInterval(timer);
   }, [navigate]);
 
-  const question = quizQuestions[currentQuestionIndex];
+  const question = quiz.tasks[currentQuestionIndex];
 
   const handleNext = (): void => {
-    if (currentQuestionIndex < quizQuestions.length - 1) {
+    if (currentQuestionIndex < quiz.tasks.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      const quiz = {title: "quizTitle", questions: quizQuestions}
-      navigate("/results", { state: { answers, quiz } });
+      navigate("/results", { state: { answers, quiz } as QuizResultState });
     }
   };
 
@@ -79,7 +51,7 @@ const QuizPage: React.FC = () => {
 
   const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const { value, checked } = event.target;
-    if (question.type === "multiple") {
+    if (question.type === "multiple-choice") {
       setAnswers((prev) => {
         const selected = (prev[question.id] as string[]) || [];
         return {
@@ -90,7 +62,11 @@ const QuizPage: React.FC = () => {
         };
       });
     } else {
-      setAnswers((prev) => ({ ...prev, [question.id]: value }));
+      setAnswers((prev) => {
+        return {
+          ...prev, [question.id]: [value]
+        }
+      });
     }
   };
 
@@ -101,11 +77,11 @@ const QuizPage: React.FC = () => {
       </button>
       <div className={styles.quizCard}>
         <h3 className={styles.questionNumber}>
-          Question {currentQuestionIndex + 1} / {quizQuestions.length}
+          Question {currentQuestionIndex + 1} / {quiz.tasks.length}
         </h3>
         <h3 className={styles.timer}>Time: {timeLeft} seconds</h3>
         <h2 className={styles.questionText}>{question.question}</h2>
-        {question.image && <img src={question.image} className={styles.questionImage} />}
+        {question?.image && <img src={question.image} className={styles.questionImage} />}
         {question.type === "single" && (
           <div className={styles.optionsContainer}>
             {question.options?.map((option) => (
@@ -122,7 +98,7 @@ const QuizPage: React.FC = () => {
             ))}
           </div>
         )}
-        {question.type === "multiple" && (
+        {question.type === "multiple-choice" && (
           <div className={styles.optionsContainer}>
             {question.options?.map((option) => (
               <label key={option} className={styles.option}>

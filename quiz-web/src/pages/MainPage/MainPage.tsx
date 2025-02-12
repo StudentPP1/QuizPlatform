@@ -1,20 +1,18 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from "./MainPage.module.scss"
 import { Modal } from "../../components/modal/Modal";
 import LoginPage from "../LoginPage/LoginPage";
 import Header from "../../components/header/Header";
-
-const modules = [
-  { title: "English: Verbs and Prepositions", terms: 49, user: "Quizlet", icon: "quizlet" },
-  { title: "Repaso Ch.7", terms: 6, user: "meowselot", icon: "meow" },
-  { title: "Argumentative Vocabulary", terms: 18, user: "Christine_Houck", icon: "christine" },
-  { title: "Intro Biochemistry and Molecular Biology", terms: 36, user: "mwillispwillis", icon: "bio" },
-  { title: "Geo Unit 2 Vocabulary", terms: 26, user: "Kimberly_Lashley3", icon: "geo" },
-  { title: "SP3 Lección 2: En la ciudad", terms: 64, user: "Melissa_Brockman", icon: "spanish" },
-];
+import { Quiz } from "../../models/Quiz";
+import { testQuiz } from "../../test";
 
 export const MainPage: FC = () => {
+  const [quizzed, setQuizzes] = useState<Quiz[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    setQuizzes([testQuiz])
+  }, [])
 
   return (
     <div className={styles.container}>
@@ -28,6 +26,7 @@ export const MainPage: FC = () => {
       <Modal isOpen={isOpen} children={<LoginPage setIsOpen={setIsOpen} />} />
 
       <main className={styles.main}>
+
         {/* Title */}
         <div className={styles.wrapper}>
           <div className={styles.header_title}>
@@ -45,28 +44,27 @@ export const MainPage: FC = () => {
         <div className={styles.roadmap__wrapper}>
           <div className={styles.roadmap__item}>
             <div className={styles.roadmap__description}>
-              <h3 className={styles.roadmap__title}>Automated Reports & Widget Alerts</h3>
+              <h3 className={styles.roadmap__title}>
+                Create Your Own Quests
+              </h3>
               <p className={styles.roadmap__text_block}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Elementum nisi aliquet volutpat pellentesque
-                volutpat est. Sapien in etiam vitae nibh nunc mattis imperdiet sed nullam. Vitae et, tortor pulvinar risus
-                pulvinar sit amet.
+                Design unique quests by adding tasks, multimedia elements (text, images, videos), and different types of challenges, from open-ended questions to interactive object searches. Set time limits and challenge other players!
               </p>
             </div>
             <div className={styles.roadmap__picture}>
-              <img src="https://images.prismic.io/quizlet-web/ZuOCD7VsGrYSvUW5_UKUA1Flashcards.png?auto=format,compress" alt="picture roadmap" />
+              <img src="https://ocdn.eu/pulscms-transforms/1/dfuk9kpTURBXy9kMjk5NGQzMzE4MjJmOTY3ODU3ZTJhMDUzZDZmNzg3MC5qcGeTlQMAzQFFzQoozQW2lQLNBLAAw8OTCaZiMDJlN2YG3gABoTAB/quiz.jpeg"
+                alt="picture roadmap" />
             </div>
           </div>
 
           <div className={styles.roadmap__item}>
             <div className={styles.roadmap__picture}>
-              <img src="https://images.prismic.io/quizlet-web/ZuOCD7VsGrYSvUW5_UKUA1Flashcards.png?auto=format,compress" alt="picture roadmap" />
+              <img src="https://files.oaiusercontent.com/file-ECv6FKuJF8mTHnEGQ7iqSU?se=2025-02-12T12%3A08%3A46Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D2111e58d-ef16-4fab-8310-ec3578f36f6c.webp&sig=I8HYlNZDI42DfGmFqKIoW/VgTAf7/K1PDK%2B%2BuTqcMMg%3D" alt="picture roadmap" />
             </div>
             <div className={styles.roadmap__description}>
-              <h3 className={styles.roadmap__title}>Automated Reports & Widget Alerts</h3>
+              <h3 className={styles.roadmap__title}>Explore and Complete Quests</h3>
               <p className={styles.roadmap__text_block}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Elementum nisi aliquet volutpat pellentesque
-                volutpat est. Sapien in etiam vitae nibh nunc mattis imperdiet sed nullam. Vitae et, tortor pulvinar risus
-                pulvinar sit amet.
+                Navigate through engaging quests with an interactive task map. Track your progress in real-time and race against the clock for time-limited challenges!
               </p>
               <button className={styles.register} onClick={() => setIsOpen(true)}>
                 <span>Start</span>
@@ -76,18 +74,16 @@ export const MainPage: FC = () => {
 
           <div className={styles.roadmap__item}>
             <div className={styles.roadmap__description}>
-              <h3 className={styles.roadmap__title}>Automated Reports & Widget Alerts</h3>
+              <h3 className={styles.roadmap__title}>Rate and Share Feedback</h3>
               <p className={styles.roadmap__text_block}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Elementum nisi aliquet volutpat pellentesque
-                volutpat est. Sapien in etiam vitae nibh nunc mattis imperdiet sed nullam. Vitae et, tortor pulvinar risus
-                pulvinar sit amet.
+                Evaluate quests and their creators, leave reviews, and comment on experiences. The rating system helps you discover the most exciting adventures made by other users. Join the questing community today! 🚀
               </p>
               <button className={styles.register} onClick={() => setIsOpen(true)}>
                 <span>Start</span>
               </button>
             </div>
             <div className={styles.roadmap__picture}>
-              <img src="https://images.prismic.io/quizlet-web/ZuOCD7VsGrYSvUW5_UKUA1Flashcards.png?auto=format,compress" alt="picture roadmap" />
+              <img src="https://thumbs.dreamstime.com/b/word-cloud-learn-concept-331092426.jpg" alt="picture roadmap" />
             </div>
           </div>
 
@@ -97,18 +93,14 @@ export const MainPage: FC = () => {
         <div className={styles.wrapper}>
           <h2>Popular Quiz</h2>
           <div className={styles.modules_grid}>
-            {modules.map((module, index) => (
-              <div className={styles.module_card} key={index}>
-
-                <h3>{module.title}</h3>
-
-                <span className={styles.terms}>{module.terms} question</span>
-
+            {quizzed.map((quiz) => (
+              <div className={styles.module_card}>
+                <h3>{quiz.title}</h3>
+                <span className={styles.terms}>{quiz.numberOfTasks} question</span>
                 <div className={styles.user_info}>
-                  <img className={styles.icon} src="https://i.pravatar.cc/40" />
-                  <div>{module.user}</div>
+                  <img className={styles.icon} src={quiz.creator.avatarUrl} />
+                  <div>{quiz.creator.username}</div>
                 </div>
-
               </div>
             ))}
           </div>

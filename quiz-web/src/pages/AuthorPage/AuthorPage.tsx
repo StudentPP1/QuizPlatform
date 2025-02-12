@@ -1,47 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./AuthorPage.module.scss";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
+import { Creator } from "../../models/Creator";
+import { testCreator } from "../../test";
+import Avatar from "../../components/avatar/Avatar";
 
-interface Quest {
-    id: number;
-    title: string;
-    questions: number;
-    rating: number;
-}
-
-const quests: Quest[] = [
-    { id: 1, title: "Квест 1", questions: 10, rating: 4.5 },
-    { id: 2, title: "Квест 2", questions: 15, rating: 4.8 },
-    { id: 3, title: "Квест 3", questions: 20, rating: 4.2 },
-    { id: 4, title: "Квест 2", questions: 15, rating: 4.8 },
-    { id: 5, title: "Квест 3", questions: 20, rating: 4.2 },
-];
 
 const AuthorPage: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
+    const [author, setAuthor] = useState<Creator>();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // TODO: find user by id
+        setAuthor(testCreator)
+    }, [])
 
     return (
         <Wrapper enabledFooter={true} enabledSearch={true}>
             <div className={styles.authorContainer}>
                 <div className={styles.profile}>
-                    <div className={styles.avatar}>🧑</div>
+                    <Avatar avatarUrl={author?.avatarUrl}/>
+                    
                     <div className={styles.info}>
-                        <h2 className={styles.nickname}>Нік користувача</h2>
+                        <h2 className={styles.nickname}>{author?.username}</h2>
                         <p className={styles.rating}>
-                            {"⭐".repeat(4)}
+                            {author != null ? "⭐".repeat(author.rating) : <></>}
                         </p>
                     </div>
                 </div>
                 <h3 className={styles.sectionTitle}>Quests</h3>
                 <div className={styles.quests}>
-                    {quests.map((quest) => (
+                    {author?.quizzes.map((quiz) => (
                         <div
-                            onClick={() => navigate("/quizInfo/1")}
-                            key={quest.id} className={styles.quest}>
-                            <h4 className={styles.questTitle}>{quest.title}</h4>
-                            <p className={styles.questInfo}>{quest.questions} questions</p>
-                            <p className={styles.questInfo}>{"⭐".repeat(4)}</p>
+                            onClick={() => navigate(`/quizInfo/${quiz.id}`)}
+                            key={quiz.id} className={styles.quest}>
+                            <h4 className={styles.questTitle}>{quiz.title}</h4>
+                            <p className={styles.questInfo}>{quiz.numberOfTasks} questions</p>
+                            <p className={styles.questInfo}>{"⭐".repeat(quiz.rating)}</p>
                         </div>
                     ))}
                 </div>

@@ -6,9 +6,11 @@ export type Quiz = {
     description: string,
     numberOfTasks: number,
     timeLimit: number,
+    rating: number,
     creator: {
       id: string,
       username: string,
+      avatarUrl: string,
     },
     tasks: QuizTask[]
 }

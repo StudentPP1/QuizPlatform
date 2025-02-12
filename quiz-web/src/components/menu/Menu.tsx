@@ -16,20 +16,10 @@ const Menu: FC<{ open: boolean }> = ({ open }) => {
             <p>cumaboba988@gmail.com</p>
           </div>
         </div>
-        {/* <ul className={styles.menuList}>
-        <li>🏆 Досягнення</li>
-        <li>⚙️ Налаштування</li>
-        <li>🌞 Світлий режим</li>
-      </ul> */}
         <div className={styles.logout} onClick={() => {
           localStorage.setItem("index", "2");
           navigate("/")
         }}>Quit</div>
-        {/* <ul className={styles.footerMenu}>
-        <li>Політика конфіденційності</li>
-        <li>Допомога та відгуки</li>
-        <li>Підписатися</li>
-      </ul> */}
       </div>
     )
 

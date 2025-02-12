@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
 import { Quiz } from "../../models/Quiz";
 import styles from "./SearchPage.module.scss"
+import { testQuiz } from "../../test";
+import Avatar from "../../components/avatar/Avatar";
 
 const SearchPage = () => {
   const navigate = useNavigate();
@@ -11,37 +13,8 @@ const SearchPage = () => {
 
   useEffect(() => {
     localStorage.setItem("index", "0")
-    // get quizzes from API by text
-    setQuizzes([
-      {
-        id: "1",
-        title: "SP3 Lección 2: En la ciudad",
-        description: "asjdsak",
-        numberOfTasks: 64,
-        timeLimit: 600,
-        creator: {
-          username: "Melissa_Brockman",
-          id: "1"
-        },
-        tasks: [
-
-        ]
-      },
-      {
-        id: "1",
-        title: "SP3 Lección 2: En la ciudad",
-        description: "asjdsak",
-        numberOfTasks: 64,
-        timeLimit: 600,
-        creator: {
-          username: "Melissa_Brockman",
-          id: "1"
-        },
-        tasks: [
-
-        ]
-      }
-    ])
+    // TODO: get quizzes from API by text
+    setQuizzes([testQuiz, testQuiz])
   }, [])
 
   return (
@@ -62,7 +35,7 @@ const SearchPage = () => {
               className={styles.module_card}
               onClick={() => {
                 localStorage.setItem("index", "0")
-                navigate("/quizInfo/1")
+                navigate(`/quizInfo/${quiz.id}`)
               }}
             >
               <div className={styles.card_content}>
@@ -70,9 +43,9 @@ const SearchPage = () => {
                 <div className={styles.top_info}>
                   <span className={styles.term_count}>{quiz.numberOfTasks} questions</span>
                 </div>
-                <div className={styles.user_info}>
-                  <img src="https://i.pravatar.cc/31" alt="User Avatar" className={styles.user_avatar_small} />
-                  <span className={styles.user_name}>{quiz.creator.username}</span>
+                <div className={styles.author}>
+                  <Avatar avatarUrl={quiz.creator.avatarUrl} />
+                  <span className={styles.name}>{quiz.creator.username}</span>
                 </div>
               </div>
             </button>

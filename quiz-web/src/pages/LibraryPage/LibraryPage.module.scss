@@ -60,10 +60,9 @@
 }
 .name_quest {
   color: v.$orange;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   text-align: left;
-  margin-top: 10px; 
   order: -1; 
 }
 .module_card {
@@ -99,7 +98,6 @@
 .card_content {
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
 
 .top_info {
@@ -111,7 +109,6 @@
 .user_info {
   display: flex;
   align-items: center;
-  gap: 6px;
   color: #ffffff;
   margin-top: auto;
 }
@@ -132,4 +129,17 @@
   font-size: 14px;
   font-weight: bold;
   color: #f2f2f2;
+}
+
+.author {
+  padding-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.name {
+  padding-left: 10px;
+  font-size: 15px;
+  font-weight: 500;
 }

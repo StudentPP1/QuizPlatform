@@ -1,9 +1,10 @@
 import { FC } from "react";
 import styles from "./quizCard.module.scss";
 import { useNavigate } from "react-router-dom";
+import Avatar from "../avatar/Avatar";
 
-const QuizCard: FC<{ title: string, count: number, author: string }> =
-  ({ title, count, author }) => {
+const QuizCard: FC<{ title: string, count: number, avatarUrl: string, username: string }> =
+  ({ title, count, avatarUrl, username }) => {
     const navigate = useNavigate();
     
     return (
@@ -12,8 +13,8 @@ const QuizCard: FC<{ title: string, count: number, author: string }> =
         <span className={styles.terms}>{count} questions</span>
         <div className={styles.footer}>
           <div className={styles.author}>
-            <img src="https://i.pravatar.cc/40" className={styles.icon} />
-            <span className={styles.name}>{author}</span>
+            <Avatar avatarUrl={avatarUrl} />
+            <span className={styles.name}>{username}</span>
           </div>
         </div>
       </div>

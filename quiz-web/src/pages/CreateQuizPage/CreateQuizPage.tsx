@@ -1,18 +1,15 @@
 import { FC, useState } from 'react';
 import styles from "./CreateQuizPage.module.scss";
-import Header from '../../components/header/Header';
-import Sidebar from '../../components/sidebar/Sidebar';
-import Menu from '../../components/menu/Menu';
 import { toast } from 'react-toastify';
 import Wrapper from '../../components/wrapper/Wrapper';
 
-export type AnswerType = {
+type AnswerType = {
     id: number,
     text: string,
     isCorrect: boolean
 }
 
-export type QuestionType = {
+type QuestionType = {
     id: number;
     text: string;
     answers: AnswerType[];
@@ -153,7 +150,38 @@ const CreateQuizPage: FC = () => {
             toast.error("Time must be between 1 and 120 minutes!", { position: "top-right" });
         } else {
             if (validateQuestions()) {
-                console.log("Saved", questions);
+                const quiz = {
+                    title: title,
+                    description: description,
+                    numberOfTasks: questions.length,
+                    timeLimit: timeLimit,
+                    tasks: questions.map((question) => {
+                        let type;
+                        if (question.isOpenEnded) {
+                            type = "text"
+                        }
+                        else {
+                            if (question.answers.filter(answer => answer.isCorrect).map(answer => answer.text).length == 1) {
+                                type = "single"
+                            }
+                            else {
+                                type = "multi-choice"
+                            }
+                        }
+                        return {
+                            question: question.text,
+                            type: type,
+                            image: question.image,
+                            correctAnswers: question.answers
+                                .filter(answer => answer.isCorrect)
+                                .map(answer => answer.text)
+                            ,
+                            options: question.answers.map(answer => answer.text)
+                        }
+                    })
+                }
+                // TODO: send to api & redirect to /home
+                console.log("Saved", quiz);
                 toast.success("Quiz saved!", { position: "top-right" });
             }
         }

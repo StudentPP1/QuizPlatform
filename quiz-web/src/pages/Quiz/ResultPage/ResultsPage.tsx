@@ -2,44 +2,46 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./ResultsPage.module.scss";
 import { FaTimes } from "react-icons/fa";
-import { AnswersType, QuestionType } from "../QuizPage/QuizPage";
+import { UserAnswers } from "../../../models/UserAnswers";
+import { QuizTask } from "../../../models/QuizTask";
+import { QuizResultState } from "../QuizPage/QuizPage";
+
 
 const ResultsPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { answers, quiz } = location.state;
-
+  const { answers, quiz } = location.state as QuizResultState;
+  console.log(answers, quiz)
   const [quizRating, setQuizRating] = useState(0);
   const [authorRating, setAuthorRating] = useState(0);
   const [comment, setComment] = useState("");
 
-  const calculateCorrectAnswers = (quizQuestions: QuestionType[], userAnswers: AnswersType[]): number => {
-    let correctCount = 0;
+  const calculateCorrectAnswers = (quizQuestions: QuizTask[], userAnswers: UserAnswers): number => {
+    let correctUserAnswers = 0;
+    let correctAnswers = 0;
 
     quizQuestions.forEach((question) => {
       const userAnswer = userAnswers[question.id];
-      const correctAnswer = question.correct;
+      const correctAnswer = question.correctAnswers;
 
-      if (Array.isArray(correctAnswer)) {
-        if (
-          Array.isArray(userAnswer) &&
-          userAnswer.length === correctAnswer.length &&
-          userAnswer.every((answer) => correctAnswer.includes(answer))
-        ) {
-          correctCount++;
-        }
-      } else {
-        if (userAnswer === correctAnswer) {
-          correctCount++;
-        }
+      console.log("===", userAnswer, correctAnswer)
+      correctAnswers += correctAnswer.length;
+      if (userAnswer != null) {
+        correctAnswer.map((answer) => {
+          if (userAnswer.includes(answer)) {
+            correctUserAnswers++;
+          }
+        })
       }
-    });
+    }
+    );
 
-    return Math.round((correctCount / quizQuestions.length) * 100);
+    return Math.round((correctUserAnswers / correctAnswers) * 100);
   };
 
   const handleSubmit = () => {
     console.log("Отзыв отправлен:", { quizRating, authorRating, comment });
+    // TODO: send feetback
     navigate("/home");
   };
 
@@ -54,7 +56,7 @@ const ResultsPage: React.FC = () => {
       </button>
       <div className={styles.resultsCard}>
         <h1 className={styles.quizTitle}>{quiz.title}</h1>
-        <p className={styles.percentage}>{calculateCorrectAnswers(quiz.questions, answers)} %</p>
+        <p className={styles.percentage}>{calculateCorrectAnswers(quiz.tasks, answers)} %</p>
 
         <div className={styles.ratingSection}>
           <p>Rate the quiz:</p>
