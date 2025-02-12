@@ -40,7 +40,8 @@ export class ReviewService {
     const review = this.reviewRepository.create({
       quiz,
       user,
-      ...createReviewDto,
+      rating: createReviewDto.rating,
+      comment: createReviewDto.text,
     });
 
     await this.reviewRepository.save(review);
