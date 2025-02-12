@@ -1,27 +1,37 @@
 import { FaPlay } from "react-icons/fa";
 import styles from "./QuizInfoPage.module.scss";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { FC, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
 import { Quiz } from "../../models/Quiz";
 import { Review } from "../../models/Review";
 import { testQuiz, testReviews } from "../../test";
 import Avatar from "../../components/avatar/Avatar";
+import { QuizService } from "../../api/QuizService";
 
 export type QuizNavigate = {
     quiz: Quiz;
 }
 
-const QuizInfoPage = () => {
+const QuizInfoPage: FC = () => {
     const navigate = useNavigate();
     const [quiz, setQuiz] = useState<Quiz | null>(null)
     const [reviews, setReviews] = useState<Review[]>()
+    const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
-        // TODO: get quiz & reviews
-        setQuiz(testQuiz)
-        setReviews(testReviews)
         localStorage.setItem("index", "0")
+        const getQuiz = async (id: string) => {
+            await QuizService.getQuiz(id).then((result) => {
+                console.log(result)
+                setQuiz(result)
+            })
+        }
+        if (id != null) {
+            getQuiz(id)
+        }
+        // setQuiz(testQuiz)
+        // setReviews(testReviews)
     }, [])
 
     return (

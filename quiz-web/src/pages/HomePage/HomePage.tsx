@@ -4,7 +4,6 @@ import QuizCard from "../../components/card/QuizCard";
 import { useNavigate } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
 import { Quiz } from "../../models/Quiz";
-import { testCreator, testQuiz } from "../../test";
 import { Creator } from "../../models/Creator";
 import Avatar from "../../components/avatar/Avatar";
 import { AuthContext, AuthState } from "../../context/context";
@@ -53,7 +52,6 @@ const HomePage: FC = () => {
     }, [])
 
     useEffect(() => {
-        // TODO: get 2 last quiz from history, top Quizzes, top Authors
         const getRecentQuizzes = async () => {
             await UserService.getUser().then((result) => {
                 setRecentQuizzes(result.createdQuizzes.slice(0, 2))
@@ -72,9 +70,6 @@ const HomePage: FC = () => {
         getRecentQuizzes()
         getTopQuizzes()
         getTopAuthors()
-        // setRecentQuizzes([testQuiz, testQuiz])
-        // setTopQuizzes([testQuiz, testQuiz])
-        // setTopAuthors([testCreator, testCreator])
     }, [])
 
     return (

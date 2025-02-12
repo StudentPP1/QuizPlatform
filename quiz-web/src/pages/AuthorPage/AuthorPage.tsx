@@ -5,6 +5,7 @@ import Wrapper from "../../components/wrapper/Wrapper";
 import { Creator } from "../../models/Creator";
 import { testCreator } from "../../test";
 import Avatar from "../../components/avatar/Avatar";
+import { UserService } from "../../api/UserService";
 
 
 const AuthorPage: React.FC = () => {
@@ -13,8 +14,15 @@ const AuthorPage: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // TODO: find user by id
-        setAuthor(testCreator)
+        const getAuthor = async (id: string) => {
+            await UserService.getUser(id).then((result) => {
+                setAuthor(result)
+            })
+        }
+        if (id != null) {
+            getAuthor(id)
+        }
+        // setAuthor(testCreator)
     }, [])
 
     return (
@@ -32,7 +40,7 @@ const AuthorPage: React.FC = () => {
                 </div>
                 <h3 className={styles.sectionTitle}>Quests</h3>
                 <div className={styles.quests}>
-                    {author?.quizzes.map((quiz) => (
+                    {author?.createdQuizzes.map((quiz) => (
                         <div
                             onClick={() => navigate(`/quizInfo/${quiz.id}`)}
                             key={quiz.id} className={styles.quest}>
