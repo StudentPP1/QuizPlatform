@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   Req,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ReviewService } from './review.service';
@@ -26,8 +27,8 @@ export class ReviewController {
     return this.reviewService.addReview(quizId, createReviewDto, req);
   }
 
-  @Get('quiz/:quizId')
-  async getReviewsForQuiz(@Param('quizId') quizId: string) {
+  @Get('quiz')
+  async getReviewsForQuiz(@Query('quizId') quizId: string) {
     return this.reviewService.getReviewsForQuiz(quizId);
   }
 }
