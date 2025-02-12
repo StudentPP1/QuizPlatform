@@ -73,11 +73,11 @@ export class QuizService {
     });
 
     return quizzes.map((quiz) => ({
+      id: quiz.id,
       title: quiz.title,
       numberOfTasks: quiz.numberOfTasks,
       creatorAvatarUrl: quiz.creator?.avatarUrl,
       creatorUsername: quiz.creator?.username,
-      averageRating: quiz.averageRating,
     }));
   }
 

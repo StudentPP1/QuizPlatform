@@ -45,7 +45,7 @@ export class UsersService {
     return this.usersRepository.findOne({
       where: { id: userIdToUse },
       select: ['id', 'username', 'avatarUrl', 'authorRating', 'email'],
-      relations: ['createdQuizzes', 'participatedQuizzes', 'quizResult'],
+      relations: ['createdQuizzes', 'participatedQuizzes'],
     });
   }
 
