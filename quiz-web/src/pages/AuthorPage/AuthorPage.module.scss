@@ -1,0 +1,67 @@
+@use "../../scss/variables" as v;
+
+.authorContainer {
+    height: 38vw;
+    background-color: #0d0d0d;
+    color: #f2f2f2;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: #262626;
+    border-radius: 10px;
+}
+.info {
+    display: flex;
+    flex-direction: column;
+}
+.nickname {
+    font-size: 20px;
+    font-weight: bold;
+}
+.rating {
+    font-size: 16px;
+    color: #f2e527;
+    text-align: left;
+}
+.sectionTitle {
+    margin: 20px 0;
+    font-size: 22px;
+    font-weight: bold;
+}
+.quests {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    padding-top: 0;
+    max-height: 350px;
+    overflow-y: auto;
+}
+.quest {
+    text-align: left;
+    font-weight: bold;
+    background: #262626;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.03);
+        background: v.$second_background;
+    }
+}
+.questTitle {
+    font-size: 18px;
+    font-weight: bold;
+}
+.questInfo {
+    font-size: 14px;
+    color: #f2d64b;
+}

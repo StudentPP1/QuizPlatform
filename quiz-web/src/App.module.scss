@@ -1,8 +1,6 @@
 @use "./scss/variables" as v; 
 
 .app {
-    height: 100vw;
-    width: 100vw;
     background-color: v.$background;
     overflow-y: auto;
     overflow-x: hidden;

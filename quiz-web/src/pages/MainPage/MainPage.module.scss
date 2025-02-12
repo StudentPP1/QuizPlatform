@@ -3,29 +3,12 @@
 .container {
     font-family: Arial, sans-serif;
     text-align: center;
-    background-color: v.$second_background;
+    background-color: v.$background;
     color: v.$white;
     min-width: 320px;
     max-width: 100%;
     box-sizing: border-box;
     margin: 0 auto;
-}
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background: v.$second_background;
-    color: v.$white;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
-}
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: v.$yellow;
 }
 .actions {
     font-size: 16px;
@@ -108,6 +91,10 @@
     max-width: 1180px;
     box-sizing: border-box;
     margin: 0 auto;
+
+    h2 {
+        text-align: center;
+    }
 }
 .roadmap__wrapper {
     min-width: 320px;
@@ -157,19 +144,9 @@
     height: 30px;
     border-radius: 50%;
 }
-
-.footer_menu {
-    background-color: transparent;
-}
-.footer_menu__wrapper {
-    padding-top: 5vw;
-    display: flex;
-    justify-content: space-between;
-}
-.footer_menu__logo {
-    padding-top: 10px;
-    border-top: 1px solid v.$yellow;
+.footer_wrapper {
     width: 100%;
     display: flex;
-    align-items: center;
+    justify-content: left;
+    text-align: left;
 }

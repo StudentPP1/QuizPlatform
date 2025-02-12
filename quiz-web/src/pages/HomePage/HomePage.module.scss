@@ -1,91 +1,150 @@
 @use "../../scss/variables" as v;
 
-.page_container {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: v.$second_background;
-    color: v.$white;
-    min-width: 320px;
-    max-width: 100%;
-    box-sizing: border-box;
-    margin: 0 auto;
+h2 {
+  text-align: left;
+  color: v.$white;
 }
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background: v.$second_background;
-    color: v.$white;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
-
-    .logo {
-        font-size: 22px;
-        font-weight: bold;
-        color: #f39c12;
-    }
-
-    .search_box {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-
-        input {
-            width: 40%;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 20px;
-            outline: none;
-        }
-    }
-
-    .user_avatar {
-        img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid white;
-            transition: transform 0.2s;
-
-            &:hover {
-                transform: scale(1.1);
-            }
-        }
-    }
-}
-.container {
-    padding-top: 50px;
-    display: flex;
+.section_container {
+  color: v.$white;
+  padding-top: 50px;
 }
 .content {
-    margin-left: 80px;
-    padding: 20px;
-    width: 100%;
-    background: #0d0d1a;
-    color: white;
+  color: v.$white;
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
 
-    h2 {
-        margin-bottom: 15px;
-    }
+  h2 {
+    color: v.$white;
+    margin-bottom: 15px;
+  }
+
+  .card {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+  }
+
+  .card_grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(250px, 1fr));
+    gap: 10px;
+    padding-top: 3rem;
 
     .card {
-        background: #1a1a2e;
-        padding: 15px;
-        margin-bottom: 10px;
-        border-radius: 10px;
+      text-align: center;
+    }
+  }
+}
+
+.recent_container {
+  width: 100%;
+  font-family: "Inter", sans-serif;
+}
+
+.recent_title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.items_list {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.recent_item {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: v.$background;
+  padding: 12px;
+  border-radius: 8px;
+  width: 50%;
+
+  &:hover {
+    cursor: pointer;
+    background: v.$second_background;
+  }
+}
+.author {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.name {
+  padding-left: 5px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.recent_icon {
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 20px;
+}
+
+.recent_details {
+  display: flex;
+  flex-direction: column;
+}
+
+.recent_quizTitle {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.recent_meta {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.author_card {
+  padding: 5px 5px;
+  border-radius: 10px;
+  width: 33%;
+
+  .author_header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .author_content {
+    display: flex;
+    align-items: center;
+    background: v.$second_background;
+    padding: 15px;
+    border-radius: 8px;
+
+    &:hover {
+      cursor: pointer;
+      box-shadow: 0 4px v.$orange;
     }
 
-    .card_grid {
+    .author_avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+
+    .author_info {
+      h2 {
+        font-size: 16px;
+        margin-bottom: 8px;
+      }
+
+      .author_stats {
+        padding-top: 20px;
         display: flex;
         gap: 10px;
-
-        .card {
-            flex: 1;
-            text-align: center;
-        }
+        font-size: 14px;
+        text-align: right;
+      }
     }
+  }
 }

@@ -1,22 +1,26 @@
 import { FC, useState } from "react";
 import { AuthService } from "../../api/AuthService";
 import styles from "./LoginPage.module.scss";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-// TODO: 63 винести api в файл для констант
 const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const [isLogin, setIsLogin] = useState<boolean>();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const login = () => {
     AuthService.login(email, password)
+    setIsOpen(false)
+    navigate("/home")
   }
 
   const register = () => {
     AuthService.register(username, email, password)
+    setIsOpen(false)
+    navigate("/home")
   }
 
   const google = () => {
@@ -33,7 +37,6 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   return (
     <div className={styles.container}>
       <div className={styles.left}>
-        <h1>Lorem ipsum dolor sit amet.</h1>
         <div className={styles.image}></div>
       </div>
 
@@ -60,13 +63,13 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
             </div>
 
             <div className={styles.social_container}>
-              <Link className={styles.google} to="http://localhost:3000/api/auth/google">
+              <div className={styles.google} onClick={() => google()}>
                 <img
                   className={styles.img}
                   alt="" src="../google.png"
                 />
                 <span>Continue with Google</span>
-              </Link>
+              </div>
             </div>
 
             <div className={styles.form_container}>
@@ -109,7 +112,7 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
                     >
                       <img
                         className={styles.img}
-                        alt="" src={showPassword ? "../public/close-eye.svg" : "../public/eye.svg"}
+                        alt="" src={showPassword ? "../close-eye.svg" : "../eye.svg"}
                       />
                     </button>
                   </div>
