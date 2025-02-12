@@ -72,7 +72,7 @@ export class ReviewService {
     const averageRating =
       reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length;
 
-    quiz.averageRating = parseFloat(averageRating.toFixed(2));
+    quiz.rating = parseFloat(averageRating.toFixed(2));
     await this.quizRepository.save(quiz);
   }
 

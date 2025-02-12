@@ -64,10 +64,10 @@ export class QuizService {
 
   async getTopQuizzes(limit: number) {
     const quizzes = await this.quizRepository.find({
-      select: ['id', 'title', 'numberOfTasks', 'averageRating'],
+      select: ['id', 'title', 'numberOfTasks', 'rating'],
       relations: ['creator'],
       order: {
-        averageRating: 'DESC',
+        rating: 'DESC',
       },
       take: limit,
     });
