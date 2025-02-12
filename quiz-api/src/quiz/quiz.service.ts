@@ -9,6 +9,7 @@ import { UsersService } from '../users/users.service';
 import { CreateTaskDto } from '../task/dto/create-task.dto';
 import { SaveQuizResultDto } from './dto/save-quiz-result.dto';
 import { Request } from 'express';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class QuizService {
@@ -17,6 +18,8 @@ export class QuizService {
     private readonly quizRepository: Repository<Quiz>,
     @InjectRepository(QuizResult)
     private readonly quizResultRepository: Repository<QuizResult>,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
     private readonly taskService: TaskService,
     private readonly usersService: UsersService,
   ) {}
@@ -51,11 +54,21 @@ export class QuizService {
       throw new Error('User or Quiz not found');
     }
 
+    if (!user.participatedQuizzes) {
+      user.participatedQuizzes = [];
+    }
+
+    user.participatedQuizzes.push(quiz);
+
     const result = this.quizResultRepository.create({
       user,
       quiz,
       ...saveQuizResultDto,
     });
+
+    await this.quizResultRepository.save(result);
+
+    await this.usersRepository.save(user);
 
     return this.quizResultRepository.save(result);
   }

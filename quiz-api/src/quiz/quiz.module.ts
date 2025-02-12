@@ -7,10 +7,11 @@ import { QuizResult } from './entities/quiz-result.entity';
 import { TaskModule } from '../task/task.module';
 import { AuthModule } from '../auth/auth.module';
 import { UsersModule } from '../users/users.module';
+import { User } from '../users/entities/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Quiz, QuizResult]),
+    TypeOrmModule.forFeature([Quiz, QuizResult, User]),
     TaskModule,
     AuthModule,
     UsersModule,
