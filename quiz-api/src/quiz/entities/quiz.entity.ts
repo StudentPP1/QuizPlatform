@@ -50,7 +50,7 @@ export class Quiz {
   reviews: Review[];
 
   @Column({ type: 'float', default: 0 })
-  averageRating: number;
+  rating: number;
 
   @CreateDateColumn()
   createdAt: Date;

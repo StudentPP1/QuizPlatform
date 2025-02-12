@@ -15,10 +15,7 @@ export class Task {
   id: string;
 
   @Column({ type: 'varchar', length: 255 })
-  title: string;
-
-  @Column({ type: 'text' })
-  description: string;
+  question: string;
 
   @Column({ type: 'enum', enum: ['text', 'multiple-choice'] })
   type: 'text' | 'multiple-choice';

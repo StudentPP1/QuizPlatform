@@ -49,7 +49,7 @@ export class User {
   reviews: Review[];
 
   @Column({ type: 'float', default: 0 })
-  authorRating: number;
+  rating: number;
 
   @CreateDateColumn()
   createdAt: Date;

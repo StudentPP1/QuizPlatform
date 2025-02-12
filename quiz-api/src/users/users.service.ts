@@ -44,7 +44,7 @@ export class UsersService {
 
     return this.usersRepository.findOne({
       where: { id: userIdToUse },
-      select: ['id', 'username', 'avatarUrl', 'authorRating', 'email'],
+      select: ['id', 'username', 'avatarUrl', 'rating', 'email'],
       relations: ['createdQuizzes', 'participatedQuizzes'],
     });
   }
@@ -63,7 +63,7 @@ export class UsersService {
 
     const user = await this.usersRepository.findOne({ where: { id: userId } });
     if (user) {
-      user.authorRating = averageRating;
+      user.rating = averageRating;
       await this.usersRepository.save(user);
     }
   }

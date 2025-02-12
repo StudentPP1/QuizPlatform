@@ -9,11 +9,7 @@ import {
 export class CreateTaskDto {
   @IsNotEmpty()
   @IsString()
-  title: string;
-
-  @IsNotEmpty()
-  @IsString()
-  description: string;
+  quesion: string;
 
   @IsNotEmpty()
   @IsEnum(['text', 'multiple-choice'])
