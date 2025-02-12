@@ -41,23 +41,23 @@ export class QuizController {
     return this.quizService.saveResult(quizId, req, saveQuizResultDto);
   }
 
+  @Get()
+  async getQuizWithRelations(@Query('quizId') quizId: string) {
+    return this.quizService.getQuizWithRelations(quizId);
+  }
+
   @Get('search')
   async searchQuizzes(@Query('name') name: string): Promise<Quiz[]> {
     return this.quizService.searchQuizzesByName(name);
   }
 
-  @Get('top-rate')
+  @Get('top-rated')
   async getTopQuizzes(limit: number = 3) {
     return this.quizService.getTopQuizzes(limit);
   }
 
-  @Get('top-authors')
-  async getTopAuthors(limit: number = 3) {
-    return this.quizService.getTopAuthors(limit);
-  }
-
-  @Get(':id')
-  async getQuizWithRelations(@Param('id') quizId: string) {
-    return this.quizService.getQuizWithRelations(quizId);
+  @Get('top-creators')
+  async getTopCreators(limit: number = 3) {
+    return this.quizService.getTopCreators(limit);
   }
 }

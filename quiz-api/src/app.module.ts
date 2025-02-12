@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './auth/auth.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 import { QuizModule } from './quiz/quiz.module';
 import { ReviewModule } from './review/review.module';
-import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -23,9 +23,9 @@ import { UsersModule } from './users/users.module';
       inject: [ConfigService],
     }),
     AuthModule,
+    UsersModule,
     QuizModule,
     ReviewModule,
-    UsersModule,
   ],
 })
 export class AppModule {}

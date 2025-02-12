@@ -5,16 +5,16 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
+import { TokenService } from '../token/token.service';
 import { hash, compare } from 'bcrypt';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { CreateGoogleUserDto } from '../users/dto/create-google-user.dto';
+import { LoginDto } from './dto/login.dto';
 import { User } from '../users/entities/user.entity';
 import { Payload } from './interfaces/payload.interface';
-import { LoginDto } from './dto/login.dto';
-import { Request } from 'express';
-import { TokenService } from '../token/token.service';
 import { Tokens } from './interfaces/tokens.interface';
-import { CreateGoogleUserDto } from '../users/dto/create-google-user.dto';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthService {

@@ -2,19 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Quiz } from '../quiz/entities/quiz.entity';
 import { User } from '../users/entities/user.entity';
-import { Repository } from 'typeorm';
-import { CreateReviewDto } from './dto/create-review.dto';
 import { Review } from './entities/review.entity';
-import { Request } from 'express';
+import { Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
+import { CreateReviewDto } from './dto/create-review.dto';
+import { Request } from 'express';
 
 @Injectable()
 export class ReviewService {
   constructor(
-    @InjectRepository(Review)
-    private readonly reviewRepository: Repository<Review>,
     @InjectRepository(Quiz) private readonly quizRepository: Repository<Quiz>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(Review)
+    private readonly reviewRepository: Repository<Review>,
     private readonly usersService: UsersService,
   ) {}
 
@@ -23,13 +23,15 @@ export class ReviewService {
     createReviewDto: CreateReviewDto,
     req: Request,
   ) {
-    const quiz = await this.quizRepository.findOne({
-      where: { id: quizId },
-      relations: ['creator'],
-    });
-    const user = await this.userRepository.findOne({
-      where: { id: req.user.id },
-    });
+    const [quiz, user] = await Promise.all([
+      this.quizRepository.findOne({
+        where: { id: quizId },
+        relations: ['creator'],
+      }),
+      this.userRepository.findOne({
+        where: { id: req.user.id },
+      }),
+    ]);
 
     if (!quiz || !user) {
       throw new Error('Quiz or user not found');
@@ -42,8 +44,11 @@ export class ReviewService {
     });
 
     await this.reviewRepository.save(review);
-    await this.updateQuizRating(quizId);
-    await this.usersService.updateAuthorRating(review.quiz.creator.id);
+
+    await Promise.all([
+      this.updateQuizRating(quizId),
+      this.usersService.updateAuthorRating(review.quiz.creator.id),
+    ]);
 
     return review;
   }

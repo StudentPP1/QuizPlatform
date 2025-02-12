@@ -19,6 +19,6 @@ export class TaskService {
       });
     });
 
-    return await this.taskRepository.save(taskEntities);
+    return this.taskRepository.save(taskEntities);
   }
 }

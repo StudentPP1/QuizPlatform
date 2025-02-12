@@ -17,11 +17,11 @@ export class UsersService {
   ) {}
 
   async findUserByEmail(email: string): Promise<User> {
-    return await this.usersRepository.findOne({ where: { email } });
+    return this.usersRepository.findOne({ where: { email } });
   }
 
   async findUserById(id: string): Promise<User> {
-    return await this.usersRepository.findOne({
+    return this.usersRepository.findOne({
       where: { id },
       relations: ['quizResults'],
     });
@@ -70,7 +70,7 @@ export class UsersService {
     }
   }
 
-  async getTopAuthorsInfo(limit: number) {
+  async getTopCreatorsInfo(limit: number) {
     const users = await this.usersRepository.find({
       select: ['id', 'username', 'avatarUrl'],
       take: limit,

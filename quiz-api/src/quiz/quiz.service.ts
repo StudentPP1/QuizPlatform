@@ -2,22 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Quiz } from './entities/quiz.entity';
+import { QuizResult } from './entities/quiz-result.entity';
 import { ILike, Repository } from 'typeorm';
 import { TaskService } from '../task/task.service';
 import { UsersService } from '../users/users.service';
-import { QuizResult } from './entities/quiz-result.entity';
+import { CreateTaskDto } from '../task/dto/create-task.dto';
 import { SaveQuizResultDto } from './dto/save-quiz-result.dto';
 import { Request } from 'express';
-import { CreateTaskDto } from '../task/dto/create-task.dto';
 
 @Injectable()
 export class QuizService {
   constructor(
     @InjectRepository(Quiz)
     private readonly quizRepository: Repository<Quiz>,
-    private readonly taskService: TaskService,
     @InjectRepository(QuizResult)
     private readonly quizResultRepository: Repository<QuizResult>,
+    private readonly taskService: TaskService,
     private readonly usersService: UsersService,
   ) {}
 
@@ -31,9 +31,10 @@ export class QuizService {
       creator: req.user,
     });
 
-    await this.quizRepository.save(quiz);
-
-    await this.taskService.createTasks(tasks, quiz);
+    await Promise.all([
+      this.quizRepository.save(quiz),
+      this.taskService.createTasks(tasks, quiz),
+    ]);
 
     return quiz;
   }
@@ -93,8 +94,8 @@ export class QuizService {
     return quiz;
   }
 
-  async getTopAuthors(limit: number) {
-    return this.usersService.getTopAuthorsInfo(limit);
+  async getTopCreators(limit: number) {
+    return this.usersService.getTopCreatorsInfo(limit);
   }
 
   async searchQuizzesByName(name: string): Promise<Quiz[]> {
