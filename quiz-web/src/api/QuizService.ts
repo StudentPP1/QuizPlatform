@@ -57,7 +57,7 @@ export class QuizService {
     return json;
   };
 
-  static getQuiz = async (id: string): Promise<Quiz[]> => {
+  static getQuiz = async (id: string): Promise<Quiz> => {
     const response = await fetch(
       `http://localhost:3000/api/quiz?quizId=${id}`,
       {

@@ -5,7 +5,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
 import { Quiz } from "../../models/Quiz";
 import { Review } from "../../models/Review";
-import { testQuiz, testReviews } from "../../test";
 import Avatar from "../../components/avatar/Avatar";
 import { QuizService } from "../../api/QuizService";
 
@@ -14,10 +13,10 @@ export type QuizNavigate = {
 }
 
 const QuizInfoPage: FC = () => {
+    const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [quiz, setQuiz] = useState<Quiz | null>(null)
-    const [reviews, setReviews] = useState<Review[]>()
-    const { id } = useParams<{ id: string }>();
+    const [reviews, setReviews] = useState<Review[]>([])
 
     useEffect(() => {
         localStorage.setItem("index", "0")
@@ -30,8 +29,18 @@ const QuizInfoPage: FC = () => {
         if (id != null) {
             getQuiz(id)
         }
-        // setQuiz(testQuiz)
-        // setReviews(testReviews)
+    }, [])
+
+    useEffect(() => {
+        const getReviews = async (id: string) => {
+            await QuizService.getReviews(id).then((result) => {
+                console.log(result)
+                setReviews(result != null ? result : [])
+            })
+        }
+        if (id != null) {
+            getReviews(id)
+        }
     }, [])
 
     return (
@@ -72,8 +81,8 @@ const QuizInfoPage: FC = () => {
                 <div className={styles.quizReviews}>
                     <h2>Reviews</h2>
                     <div className={styles.reviewList}>
-                        {reviews?.map((review, index) => (
-                            <div key={index} className={styles.review}>
+                        {reviews.map((review) => (
+                            <div className={styles.review}>
                                 <div className={styles.userProfile} onClick={() => {
                                     navigate(`/authorInfo/${review.creator.id}`)
                                 }}>

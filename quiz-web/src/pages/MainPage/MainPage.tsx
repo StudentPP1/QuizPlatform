@@ -1,18 +1,11 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import styles from "./MainPage.module.scss"
 import { Modal } from "../../components/modal/Modal";
 import LoginPage from "../LoginPage/LoginPage";
 import Header from "../../components/header/Header";
-import { Quiz } from "../../models/Quiz";
-import { testQuiz } from "../../test";
 
 export const MainPage: FC = () => {
-  const [quizzed, setQuizzes] = useState<Quiz[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    setQuizzes([testQuiz])
-  }, [])
 
   return (
     <div className={styles.container}>
@@ -87,23 +80,6 @@ export const MainPage: FC = () => {
             </div>
           </div>
 
-        </div>
-
-        {/* Popular Quiz */}
-        <div className={styles.wrapper}>
-          <h2>Popular Quiz</h2>
-          <div className={styles.modules_grid}>
-            {quizzed.map((quiz) => (
-              <div className={styles.module_card}>
-                <h3>{quiz.title}</h3>
-                <span className={styles.terms}>{quiz.numberOfTasks} question</span>
-                <div className={styles.user_info}>
-                  <img className={styles.icon} src={quiz.creator.avatarUrl} />
-                  <div>{quiz.creator.username}</div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
 
         <div className={styles.wrapper}>

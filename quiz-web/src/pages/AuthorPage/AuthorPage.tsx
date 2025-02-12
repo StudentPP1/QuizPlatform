@@ -3,7 +3,6 @@ import styles from "./AuthorPage.module.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
 import { Creator } from "../../models/Creator";
-import { testCreator } from "../../test";
 import Avatar from "../../components/avatar/Avatar";
 import { UserService } from "../../api/UserService";
 
@@ -15,14 +14,13 @@ const AuthorPage: React.FC = () => {
 
     useEffect(() => {
         const getAuthor = async (id: string) => {
-            await UserService.getUser(id).then((result) => {
+            await UserService.getAuthor(id).then((result) => {
                 setAuthor(result)
             })
         }
         if (id != null) {
             getAuthor(id)
         }
-        // setAuthor(testCreator)
     }, [])
 
     return (
