@@ -5,6 +5,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateGoogleUserDto } from './dto/create-google-user.dto';
 import { Review } from '../review/entities/review.entity';
+import { Request } from 'express';
 
 @Injectable()
 export class UsersService {
@@ -36,6 +37,18 @@ export class UsersService {
     });
 
     return this.usersRepository.save(user);
+  }
+
+  async getUserInfo(req: Request) {
+    return this.usersRepository.findOne({
+      where: { id: req.user.id },
+      relations: [
+        'createdQuizzes',
+        'participatedQuizzes',
+        'quizResults',
+        'reviews',
+      ],
+    });
   }
 
   async updateAuthorRating(userId: string): Promise<void> {
