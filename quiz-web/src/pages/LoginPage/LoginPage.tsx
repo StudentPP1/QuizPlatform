@@ -1,9 +1,13 @@
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { AuthService } from "../../api/AuthService";
 import styles from "./LoginPage.module.scss";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { AuthContext, AuthState } from "../../context/context";
 
 const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
+  const { isAuth, setIsAuth } = useContext<AuthState>(AuthContext);
+
   const [isLogin, setIsLogin] = useState<boolean>();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -11,20 +15,48 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const login = () => {
-    AuthService.login(email, password)
-    setIsOpen(false)
-    navigate("/home")
+  const login = async () => {
+    await AuthService.login(email, password)
+      .then((result) => {
+        if (result.hasOwnProperty("statusCode")) {
+          if (Array.isArray(result.message)) {
+            toast.error(result.message[0], { position: "top-right" });
+          }
+          else {
+            toast.error(result.message, { position: "top-right" });
+          }
+        }
+        else {
+          setIsAuth(true)
+          localStorage.setItem("accessToken", result.accessToken)
+          setIsOpen(false)
+          navigate("/home")
+        }
+      })
   }
 
-  const register = () => {
-    AuthService.register(username, email, password)
-    setIsOpen(false)
-    navigate("/home")
+  const register = async () => {
+    await AuthService.register(username, email, password)
+      .then((result) => {
+        if (result.hasOwnProperty("statusCode")) {
+          if (Array.isArray(result.message)) {
+            toast.error(result.message[0], { position: "top-right" });
+          }
+          else {
+            toast.error(result.message, { position: "top-right" });
+          }
+        }
+        else {
+          setIsAuth(true)
+          localStorage.setItem("accessToken", result.accessToken)
+          setIsOpen(false)
+          navigate("/home")
+        }
+      })
   }
 
-  const google = () => {
-    AuthService.google()
+  const google = async () => {
+    await AuthService.google()
   }
 
   const clearForm = () => {
