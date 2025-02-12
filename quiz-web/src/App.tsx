@@ -71,7 +71,7 @@ export const App: FC = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<MainPage />} />
-            <Route path="/home" element={isAuth ? <HomePage /> : <MainPage />} />
+            <Route path="/home" element={<HomePage />} />
             <Route path="/create-quiz" element={isAuth ? <CreateQuizPage /> : <MainPage />} />
             <Route path="/quizInfo/:id" element={isAuth ? <QuizInfoPage /> : <MainPage />} />
             <Route path="/quiz" element={isAuth ? <QuizPage /> : <MainPage />} />

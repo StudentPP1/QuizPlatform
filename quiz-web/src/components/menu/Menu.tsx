@@ -20,7 +20,7 @@ const Menu: FC<{ open: boolean, user: Creator | null }> = ({ open, user }) => {
         </div>
         <div className={styles.logout} onClick={async () => {
           await AuthService.logout().then(() => {
-            localStorage.setItem("index", "2");
+            localStorage.clear()
             navigate("/")
           })
         }}>Quit</div>

@@ -8,16 +8,10 @@ import { Creator } from "../../models/Creator";
 import Avatar from "../../components/avatar/Avatar";
 import { AuthContext, AuthState } from "../../context/context";
 import { AuthService } from "../../api/AuthService";
-import { toast } from "react-toastify";
 import { UserService } from "../../api/UserService";
 import { QuizService } from "../../api/QuizService";
 
 const HomePage: FC = () => {
-    function getCookie(key: string) {
-        var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
-        return b ? b.pop() : "";
-    }
-
     const { isAuth, setIsAuth } = useContext<AuthState>(AuthContext);
 
     const navigate = useNavigate();
@@ -44,33 +38,20 @@ const HomePage: FC = () => {
                 setTopAuthors(result)
             })
         }
-        if (
-            getCookie('refreshToken') != null &&
-            localStorage.getItem("accessToken") == null && isAuth
-        ) {
-            const refreshToken = async () => {
-                await AuthService.refreshToken()
-                    .then((result) => {
-                        if (result.hasOwnProperty("statusCode")) {
-                            if (Array.isArray(result.message)) {
-                                toast.error(result.message[0], { position: "top-right" });
-                            }
-                            else {
-                                toast.error(result.message, { position: "top-right" });
-                            }
-                        }
-                        else {
-                            setIsAuth(true)
-                            localStorage.setItem("accessToken", result.accessToken)
-                        }
-                    })
-            }
-            refreshToken().then(() => {
-                if (isAuth) {
-                    getRecentQuizzes()
-                    getTopQuizzes()
-                    getTopAuthors()
+        const refreshToken = async () => {
+            await AuthService.refreshToken().then((result) => {
+                if (!result.hasOwnProperty("statusCode")) {
+                    localStorage.setItem("accessToken", result.accessToken)
+                    setIsAuth(true)
                 }
+            })
+        }
+
+        if (localStorage.getItem("accessToken") == null) {
+            refreshToken().then(() => {
+                getRecentQuizzes()
+                getTopQuizzes()
+                getTopAuthors()
             })
         } else {
             getRecentQuizzes()
