@@ -18,7 +18,7 @@ const QuizPage: React.FC = () => {
   const { quiz } = location.state as QuizNavigate;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [answers, setAnswers] = useState<UserAnswers>({});
-  const [timeLeft, setTimeLeft] = useState<number>(60);
+  const [timeLeft, setTimeLeft] = useState<number>(quiz.timeLimit * 60);
 
   useEffect(() => {
     const timer = setInterval(() => {

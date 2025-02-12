@@ -2,6 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   height: 100vh;
   background-color: #0D0D0D;
 }
@@ -36,12 +37,14 @@
 .percentage {
   color: #F2F2F2;
   font-size: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
-
+.ratingSection_container {
+  padding: 10px;
+}
 .ratingSection {
   color: #F2F2F2;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .stars {

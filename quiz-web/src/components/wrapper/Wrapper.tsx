@@ -17,15 +17,18 @@ const Wrapper: FC<{
     const [user, setUser] = useState<Creator | null>(null);
 
     useEffect(() => {
+        console.log(1)
         const getUser = async () => {
+            console.log(3)
             await UserService.getUser().then((result) => {
-                console.log(result)
+                console.log(5)
+                console.log("user: ", result)
                 setUser(result)
             })
         }
         getUser()
     }, [])
-    console.log(user)
+
     return (
         <>
             <div className={styles.page_container}>

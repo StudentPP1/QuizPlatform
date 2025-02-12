@@ -34,8 +34,8 @@ const QuizInfoPage: FC = () => {
     useEffect(() => {
         const getReviews = async (id: string) => {
             await QuizService.getReviews(id).then((result) => {
-                console.log(result)
-                setReviews(result != null ? result : [])
+                console.log("getReviews" , result)
+                setReviews(result)
             })
         }
         if (id != null) {

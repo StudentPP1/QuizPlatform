@@ -12,7 +12,7 @@ const ResultsPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { answers, quiz } = location.state as QuizResultState;
-  console.log(answers, quiz)
+  console.log("::::::", answers, quiz)
   const [quizRating, setQuizRating] = useState(0);
   const [comment, setComment] = useState("");
 
@@ -42,12 +42,14 @@ const ResultsPage: React.FC = () => {
   const handleSubmit = async () => {
     await QuizService.sendReview(quiz.id, quizRating, comment).then(() => {
       toast.success("Review was sent", { position: "top-right" })
-      navigate("/home");
     })
   };
 
-  const handleExit = (): void => {
-    navigate("/home");
+  const handleExit = async () => {
+    await QuizService.doneQuiz(quiz.id, calculateCorrectAnswers(quiz.tasks, answers)).then(() => {
+      toast.success("Quiz done", { position: "top-right" })
+      navigate("/home");
+    })
   };
 
   return (
@@ -55,36 +57,39 @@ const ResultsPage: React.FC = () => {
       <button className={styles.exitButton} onClick={handleExit}>
         <FaTimes />
       </button>
+
       <div className={styles.resultsCard}>
         <h1 className={styles.quizTitle}>{quiz.title}</h1>
         <p className={styles.percentage}>{calculateCorrectAnswers(quiz.tasks, answers)} %</p>
 
-        <div className={styles.ratingSection}>
-          <p>Rate the quiz:</p>
-          <div className={styles.stars}>
-            {[1, 2, 3, 4, 5].map((star) => (
-              <span
-                key={star}
-                className={star <= quizRating ? styles.filledStar : styles.emptyStar}
-                onClick={() => setQuizRating(star)}
-              >
-                ★
-              </span>
-            ))}
+        <div className={styles.ratingSection_container}>
+          <div className={styles.ratingSection}>
+            <p>Rate the quiz:</p>
+            <div className={styles.stars}>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span
+                  key={star}
+                  className={star <= quizRating ? styles.filledStar : styles.emptyStar}
+                  onClick={() => setQuizRating(star)}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
           </div>
+
+          <textarea
+            className={styles.commentBox}
+            placeholder="Leave a comment..."
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          ></textarea>
+
+          <button className={styles.submitButton} onClick={handleSubmit}>
+            Send
+          </button>
         </div>
       </div>
-
-      <textarea
-        className={styles.commentBox}
-        placeholder="Leave a comment..."
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-      ></textarea>
-
-      <button className={styles.submitButton} onClick={handleSubmit}>
-        Send
-      </button>
     </div>
   );
 };
