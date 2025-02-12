@@ -15,6 +15,7 @@ export class UserService {
       credentials: "include",
     });
     const json = await response.json();
+    console.log(json)
     return json;
   }
 

@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react"
 import styles from "./App.module.scss"
 import { MainPage } from "./pages/MainPage/MainPage"
 import { AuthContext } from "./context/context"
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom"
 import CreateQuizPage from "./pages/CreateQuizPage/CreateQuizPage"
 import { ToastContainer } from "react-toastify"
 import QuizInfoPage from "./pages/QuizInfoPage/QuizInfoPage"
@@ -71,14 +71,14 @@ export const App: FC = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<MainPage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/create-quiz" element={<CreateQuizPage />} />
-            <Route path="/quizInfo/:id" element={<QuizInfoPage />} />
-            <Route path="/quiz" element={<QuizPage />} />
-            <Route path="/results" element={<ResultsPage />} />
-            <Route path="/authorInfo/:id" element={<AuthorPage />} />
-            <Route path="/search/:text" element={<SearchPage />} />
-            <Route path="/library" element={<LibraryPage />} />
+            <Route path="/home" element={isAuth ? <HomePage /> : <MainPage />} />
+            <Route path="/create-quiz" element={isAuth ? <CreateQuizPage /> : <MainPage />} />
+            <Route path="/quizInfo/:id" element={isAuth ? <QuizInfoPage /> : <MainPage />} />
+            <Route path="/quiz" element={isAuth ? <QuizPage /> : <MainPage />} />
+            <Route path="/results" element={isAuth ? <ResultsPage /> : <MainPage />} />
+            <Route path="/authorInfo/:id" element={isAuth ? <AuthorPage /> : <MainPage />} />
+            <Route path="/search/:text" element={isAuth ? <SearchPage /> : <MainPage />} />
+            <Route path="/library" element={isAuth ? <LibraryPage /> : <MainPage />} />
           </Routes>
         </BrowserRouter>
       </AuthContext.Provider>

@@ -131,4 +131,27 @@ export class QuizService {
     const json = await response.json();
     return json;
   }
+
+  static async doneQuiz(quizId: string, score: number) {
+    const response = await fetch(
+      `http://localhost:3000/api/quiz/${quizId}/results`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "http://localhost:5137",
+          "Access-Control-Allow-Methods": "*",
+          "Access-Control-Allow-Headers": "*",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          score: score,
+          passed: true,
+        }),
+      }
+    );
+    const json = await response.json();
+    return json;
+  }
 }

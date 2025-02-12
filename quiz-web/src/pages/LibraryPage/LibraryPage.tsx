@@ -9,28 +9,28 @@ import { UserService } from "../../api/UserService";
 const LibraryPage: FC = () => {
   const navigate = useNavigate();
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-  const [competed, setCompleted] = useState<Quiz[]>([]);
-  const [history, setHistory] = useState<Quiz[]>([]);
   const [tab, setTab] = useState<number>(1);
 
   useEffect(() => {
-    const getUser = async () => {
+    const getCompeted = async () => {
       await UserService.getUser().then((result) => {
-        console.log(result)
-        setCompleted(result.createdQuizzes)
-        setHistory(result.participatedQuizzes)
+        console.log("competed", result)
+        setQuizzes(result.createdQuizzes)
       })
     }
-    getUser()
-  }, [])
-
-  useEffect(() => {
+    const getHistory = async () => {
+      await UserService.getUser().then((result) => {
+        console.log("history", result)
+        setQuizzes(result.participatedQuizzes)
+      })
+    }
     if (tab === 1) {
-      setQuizzes(competed)
+      getCompeted()
     } else {
-      setQuizzes(history)
+      getHistory()
     }
   }, [tab])
+
 
   return (
     <Wrapper enabledFooter={false} enabledSearch={true}>
@@ -57,7 +57,7 @@ const LibraryPage: FC = () => {
               className={styles.module_card}
               onClick={() => {
                 localStorage.setItem("index", "0")
-                navigate("/quizInfo/1")
+                navigate(`/quizInfo/${quiz.id}`)
               }}
             >
               <div className={styles.card_content}>

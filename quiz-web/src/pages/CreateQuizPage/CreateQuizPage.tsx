@@ -156,7 +156,7 @@ const CreateQuizPage: FC = () => {
                     title: title,
                     description: description,
                     numberOfTasks: questions.length,
-                    timeLimit: timeLimit,
+                    timeLimit: Number.parseInt(timeLimit),
                     tasks: questions.map((question) => {
                         let type;
                         if (question.isOpenEnded) {
@@ -183,6 +183,7 @@ const CreateQuizPage: FC = () => {
                     })
                 }
                 await QuizService.createQuiz(quiz).then((result) => {
+                    console.log(result)
                     toast.success("Quiz saved!", { position: "top-right" });
                     navigate("/quizInfo/" + result.id)
                 })

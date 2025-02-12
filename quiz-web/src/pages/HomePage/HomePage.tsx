@@ -26,6 +26,24 @@ const HomePage: FC = () => {
     const [topAuthors, setTopAuthors] = useState<Creator[]>([]);
 
     useEffect(() => {
+        const getRecentQuizzes = async () => {
+            await UserService.getUser().then((result) => {
+                console.log(result)
+                setRecentQuizzes(result.participatedQuizzes.slice(0, 2))
+            })
+        }
+        const getTopQuizzes = async () => {
+            await QuizService.getTopQuizzes().then((result) => {
+                console.log(result)
+                setTopQuizzes(result)
+            })
+        }
+        const getTopAuthors = async () => {
+            await QuizService.getTopAuthors().then((result) => {
+                console.log(result)
+                setTopAuthors(result)
+            })
+        }
         if (
             getCookie('refreshToken') != null &&
             localStorage.getItem("accessToken") == null && isAuth
@@ -47,32 +65,18 @@ const HomePage: FC = () => {
                         }
                     })
             }
-            refreshToken();
-        }
-    }, [])
-
-    useEffect(() => {
-        const getRecentQuizzes = async () => {
-            await UserService.getUser().then((result) => {
-                console.log(result)
-                setRecentQuizzes(result.createdQuizzes.slice(0, 2))
+            refreshToken().then(() => {
+                if (isAuth) {
+                    getRecentQuizzes()
+                    getTopQuizzes()
+                    getTopAuthors()
+                }
             })
+        } else {
+            getRecentQuizzes()
+            getTopQuizzes()
+            getTopAuthors()
         }
-        const getTopQuizzes = async () => {
-            await QuizService.getTopQuizzes().then((result) => {
-                console.log(result)
-                setTopQuizzes(result)
-            })
-        }
-        const getTopAuthors = async () => {
-            await QuizService.getTopAuthors().then((result) => {
-                console.log(result)
-                setTopAuthors(result)
-            })
-        }
-        getRecentQuizzes()
-        getTopQuizzes()
-        getTopAuthors()
     }, [])
 
     return (
