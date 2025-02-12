@@ -5,19 +5,30 @@ import Wrapper from "../../components/wrapper/Wrapper";
 import { Quiz } from "../../models/Quiz";
 import { testQuiz } from "../../test";
 import Avatar from "../../components/avatar/Avatar";
+import { UserService } from "../../api/UserService";
 
 const LibraryPage: FC = () => {
   const navigate = useNavigate();
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [competed, setCompleted] = useState<Quiz[]>([]);
+  const [history, setHistory] = useState<Quiz[]>([]);
   const [tab, setTab] = useState<number>(1);
 
   useEffect(() => {
+    const getUser = async () => {
+      await UserService.getUser().then((result) => {
+        setCompleted(result.createdQuizzes)
+        setHistory(result.participatedQuizzes)
+      })
+    }
+    getUser()
+  }, [])
+
+  useEffect(() => {
     if (tab === 1) {
-      // TODO: get created quests
-      setQuizzes([testQuiz])
+      setQuizzes(competed)
     } else {
-      // TODO: get history 
-      setQuizzes([testQuiz, testQuiz, testQuiz, testQuiz])
+      setQuizzes(history)
     }
   }, [tab])
 

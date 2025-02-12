@@ -2,6 +2,8 @@ import { FC, useState } from 'react';
 import styles from "./CreateQuizPage.module.scss";
 import { toast } from 'react-toastify';
 import Wrapper from '../../components/wrapper/Wrapper';
+import { QuizService } from '../../api/QuizService';
+import { useNavigate } from 'react-router-dom';
 
 type AnswerType = {
     id: number,
@@ -18,7 +20,7 @@ type QuestionType = {
 }
 
 const CreateQuizPage: FC = () => {
-    const [open, setOpen] = useState<boolean>(false);
+    const navigate = useNavigate()
     const [questions, setQuestions] = useState<QuestionType[]>([]);
     const [title, setTitle] = useState<string>("")
     const [description, setDescription] = useState<string>("")
@@ -145,7 +147,7 @@ const CreateQuizPage: FC = () => {
         return false;
     };
 
-    const saveModule = () => {
+    const saveModule = async () => {
         if (!handleTimeChange()) {
             toast.error("Time must be between 1 and 120 minutes!", { position: "top-right" });
         } else {
@@ -165,7 +167,7 @@ const CreateQuizPage: FC = () => {
                                 type = "single"
                             }
                             else {
-                                type = "multi-choice"
+                                type = "multiple-choice"
                             }
                         }
                         return {
@@ -180,9 +182,10 @@ const CreateQuizPage: FC = () => {
                         }
                     })
                 }
-                // TODO: send to api & redirect to /home
-                console.log("Saved", quiz);
-                toast.success("Quiz saved!", { position: "top-right" });
+                await QuizService.createQuiz(quiz).then((result) => {
+                    toast.success("Quiz saved!", { position: "top-right" });
+                    navigate("/quizInfo/" + result.id)
+                })
             }
         }
     };

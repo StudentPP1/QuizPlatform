@@ -15,6 +15,54 @@ import HomePage from "./pages/HomePage/HomePage"
 
 export const App: FC = () => {
   const [isAuth, setIsAuth] = useState<boolean>(false);
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    const tokenTimestamp = localStorage.getItem("tokenTimestamp");
+    const tokenExpiry = 3600 * 1000; // 1 час в миллисекундах
+
+    if (token && tokenTimestamp) {
+      const expiryTime = parseInt(tokenTimestamp) + tokenExpiry;
+      const now = Date.now();
+
+      if (now < expiryTime) {
+        setIsAuth(true);
+        setTimeLeft(expiryTime - now);
+      } else {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("tokenTimestamp");
+        setIsAuth(false);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isAuth) {
+      const now = Date.now();
+      localStorage.setItem("tokenTimestamp", now.toString());
+      setTimeLeft(3600 * 1000);
+    }
+  }, [isAuth]);
+
+  useEffect(() => {
+    if (isAuth && timeLeft !== null) {
+      const interval = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev !== null && prev > 1000) {
+            return prev - 1000;
+          } else {
+            clearInterval(interval);
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("tokenTimestamp");
+            setIsAuth(false);
+            return null;
+          }
+        });
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [isAuth, timeLeft]);
 
   return (
     <div className={styles.app}>

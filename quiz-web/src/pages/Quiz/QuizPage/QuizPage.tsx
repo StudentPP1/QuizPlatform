@@ -26,7 +26,7 @@ const QuizPage: React.FC = () => {
         if (prev <= 1) {
           clearInterval(timer);
           toast.warn("You didn't have time to complete the quest!");
-          navigate("/quizInfo/1");
+          navigate(`/quizInfo/${quiz.id}`);
           return 0;
         }
         return prev - 1;

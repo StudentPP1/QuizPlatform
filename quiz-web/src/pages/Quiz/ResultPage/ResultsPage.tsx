@@ -5,7 +5,8 @@ import { FaTimes } from "react-icons/fa";
 import { UserAnswers } from "../../../models/UserAnswers";
 import { QuizTask } from "../../../models/QuizTask";
 import { QuizResultState } from "../QuizPage/QuizPage";
-
+import { QuizService } from "../../../api/QuizService";
+import { toast } from "react-toastify";
 
 const ResultsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -13,7 +14,6 @@ const ResultsPage: React.FC = () => {
   const { answers, quiz } = location.state as QuizResultState;
   console.log(answers, quiz)
   const [quizRating, setQuizRating] = useState(0);
-  const [authorRating, setAuthorRating] = useState(0);
   const [comment, setComment] = useState("");
 
   const calculateCorrectAnswers = (quizQuestions: QuizTask[], userAnswers: UserAnswers): number => {
@@ -39,10 +39,11 @@ const ResultsPage: React.FC = () => {
     return Math.round((correctUserAnswers / correctAnswers) * 100);
   };
 
-  const handleSubmit = () => {
-    console.log("Отзыв отправлен:", { quizRating, authorRating, comment });
-    // TODO: send feetback
-    navigate("/home");
+  const handleSubmit = async () => {
+    await QuizService.sendReview(quiz.id, quizRating, comment).then(() => {
+      toast.success("Review was sent", { position: "top-right" })
+      navigate("/home");
+    })
   };
 
   const handleExit = (): void => {
@@ -71,31 +72,19 @@ const ResultsPage: React.FC = () => {
               </span>
             ))}
           </div>
-          <p>Rate the author:</p>
-          <div className={styles.stars}>
-            {[1, 2, 3, 4, 5].map((star) => (
-              <span
-                key={star}
-                className={star <= authorRating ? styles.filledStar : styles.emptyStar}
-                onClick={() => setAuthorRating(star)}
-              >
-                ★
-              </span>
-            ))}
-          </div>
         </div>
-
-        <textarea
-          className={styles.commentBox}
-          placeholder="Leave a comment..."
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-        ></textarea>
-
-        <button className={styles.submitButton} onClick={handleSubmit}>
-          Send
-        </button>
       </div>
+
+      <textarea
+        className={styles.commentBox}
+        placeholder="Leave a comment..."
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+      ></textarea>
+
+      <button className={styles.submitButton} onClick={handleSubmit}>
+        Send
+      </button>
     </div>
   );
 };

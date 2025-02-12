@@ -5,6 +5,7 @@ import { Quiz } from "../../models/Quiz";
 import styles from "./SearchPage.module.scss"
 import { testQuiz } from "../../test";
 import Avatar from "../../components/avatar/Avatar";
+import { QuizService } from "../../api/QuizService";
 
 const SearchPage = () => {
   const navigate = useNavigate();
@@ -13,8 +14,16 @@ const SearchPage = () => {
 
   useEffect(() => {
     localStorage.setItem("index", "0")
-    // TODO: get quizzes from API by text
-    setQuizzes([testQuiz, testQuiz])
+    const search = async () => {
+      if (text != null) {
+        await QuizService.search(text).then((result) => {
+          console.log(result)
+          setQuizzes(result)
+        })
+      }
+    }
+    search()
+    // setQuizzes([testQuiz, testQuiz])
   }, [])
 
   return (
