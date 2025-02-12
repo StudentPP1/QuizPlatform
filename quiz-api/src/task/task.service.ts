@@ -13,10 +13,11 @@ export class TaskService {
 
   async createTasks(createTaskDtos: CreateTaskDto[], quiz: any) {
     const taskEntities = createTaskDtos.map((taskDto) => {
-      return this.taskRepository.create({
+      const task = this.taskRepository.create({
         ...taskDto,
         quiz,
       });
+      return task;
     });
 
     return this.taskRepository.save(taskEntities);

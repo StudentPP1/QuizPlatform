@@ -31,10 +31,8 @@ export class QuizService {
       creator: req.user,
     });
 
-    await Promise.all([
-      this.quizRepository.save(quiz),
-      this.taskService.createTasks(tasks, quiz),
-    ]);
+    await this.quizRepository.save(quiz);
+    await this.taskService.createTasks(tasks, quiz);
 
     return quiz;
   }
