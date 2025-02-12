@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import styles from "./HomePage.module.scss";
 import QuizCard from "../../components/card/QuizCard";
 import { useNavigate } from "react-router-dom";
@@ -7,12 +7,47 @@ import { Quiz } from "../../models/Quiz";
 import { testCreator, testQuiz } from "../../test";
 import { Creator } from "../../models/Creator";
 import Avatar from "../../components/avatar/Avatar";
+import { AuthContext, AuthState } from "../../context/context";
+import { AuthService } from "../../api/AuthService";
+import { toast } from "react-toastify";
 
 const HomePage: FC = () => {
+    function getCookie(key: string) {
+        var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+        return b ? b.pop() : "";
+    }
+    const { isAuth, setIsAuth } = useContext<AuthState>(AuthContext);
+
     const navigate = useNavigate();
     const [recentQuizzes, setRecentQuizzes] = useState<Quiz[]>([]);
     const [topQuizzes, setTopQuizzes] = useState<Quiz[]>([]);
     const [topAuthors, setTopAuthors] = useState<Creator[]>([]);
+
+    useEffect(() => {
+        if (
+            getCookie('refreshToken') != null &&
+            localStorage.getItem("accessToken") == null && isAuth
+        ) {
+            const refreshToken = async () => {
+                await AuthService.refreshToken()
+                    .then((result) => {
+                        if (result.hasOwnProperty("statusCode")) {
+                            if (Array.isArray(result.message)) {
+                                toast.error(result.message[0], { position: "top-right" });
+                            }
+                            else {
+                                toast.error(result.message, { position: "top-right" });
+                            }
+                        }
+                        else {
+                            setIsAuth(true)
+                            localStorage.setItem("accessToken", result.accessToken)
+                        }
+                    })
+            }
+            refreshToken();
+        }
+    }, [])
 
     useEffect(() => {
         // TODO: get 2 last quiz from history, top Quizzes, top Authors

@@ -1,6 +1,7 @@
 import { FC } from "react";
 import styles from "./Menu.module.scss";
 import { useNavigate } from "react-router-dom";
+import { AuthService } from "../../api/AuthService";
 
 const Menu: FC<{ open: boolean }> = ({ open }) => {
   const navigate = useNavigate();
@@ -16,9 +17,11 @@ const Menu: FC<{ open: boolean }> = ({ open }) => {
             <p>cumaboba988@gmail.com</p>
           </div>
         </div>
-        <div className={styles.logout} onClick={() => {
-          localStorage.setItem("index", "2");
-          navigate("/")
+        <div className={styles.logout} onClick={async () => {
+          await AuthService.logout().then(() => {
+            localStorage.setItem("index", "2");
+            navigate("/")
+          })
         }}>Quit</div>
       </div>
     )

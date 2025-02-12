@@ -18,7 +18,7 @@ export const App: FC = () => {
 
   return (
     <div className={styles.app}>
-      <ToastContainer theme="dark" />
+      <ToastContainer theme="dark" style={{ zIndex: 1000 }} />
       <AuthContext.Provider value={{ isAuth, setIsAuth }}>
         <BrowserRouter>
           <Routes>
