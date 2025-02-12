@@ -26,8 +26,8 @@ export class CreateQuizDto {
 
   @IsNotEmpty()
   @IsInt()
-  @Min(0)
-  @Max(3600)
+  @Min(1)
+  @Max(120)
   timeLimit: number;
 
   @IsArray()
