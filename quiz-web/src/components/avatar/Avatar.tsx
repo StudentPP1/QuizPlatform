@@ -11,7 +11,7 @@ const Avatar: FC<{avatarUrl: string | undefined | null}> = ({avatarUrl}) => {
                 </div>
                 :
 
-                <div className={styles.avatar}>🧑</div>
+                <div className={styles.avatar}></div>
             }
         </>
     )

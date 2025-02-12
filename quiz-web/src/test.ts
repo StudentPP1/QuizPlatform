@@ -42,9 +42,11 @@ export const testQuiz: Quiz = {
 export const testCreator: Creator = {
   rating: 3,
   userId: "creatorId",
+  email: "creatorUsername",
   username: "creatorUsername",
   avatarUrl: "https://i.pravatar.cc/40",
-  quizzes: [testQuiz],
+  createdQuizzes: [testQuiz],
+  participatedQuizzes: [testQuiz, testQuiz]
 };
 
 export const testReviews: Review[] = [
