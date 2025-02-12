@@ -136,7 +136,7 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@eslint/js@9.20.0":
+"@eslint/js@9.20.0", "@eslint/js@^9.20.0":
   version "9.20.0"
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-9.20.0.tgz#7421bcbe74889fcd65d1be59f00130c289856eb4"
   integrity sha512-iZA07H9io9Wn836aVTytRaNqh00Sad+EamwOVJT12GTLw1VGMFV/4JaME+JjLtr9fiGaoWgYnS54wrfWsSs4oQ==
@@ -758,7 +758,7 @@
   resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.12.2.tgz#760329e756e18a4aab82fc502b51ebdfebbe49f5"
   integrity sha512-6SlHBzUW8Jhf3liqrGGXyTJSIFe4nqlJ5A5KaMZ2l/vbM3Wh3KSybots/wfWVzNLK4D1NZluDlSQIbIEPx6oyA==
 
-"@typescript-eslint/eslint-plugin@^8.24.0":
+"@typescript-eslint/eslint-plugin@8.24.0", "@typescript-eslint/eslint-plugin@^8.24.0":
   version "8.24.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-8.24.0.tgz#574a95d67660a1e4544ae131d672867a5b40abb3"
   integrity sha512-aFcXEJJCI4gUdXgoo/j9udUYIHgF23MFkg09LFz2dzEmU0+1Plk4rQWv/IYKvPHAtlkkGoB3m5e6oUp+JPsNaQ==
@@ -773,7 +773,7 @@
     natural-compare "^1.4.0"
     ts-api-utils "^2.0.1"
 
-"@typescript-eslint/parser@^8.24.0":
+"@typescript-eslint/parser@8.24.0", "@typescript-eslint/parser@^8.24.0":
   version "8.24.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-8.24.0.tgz#bba837f9ee125b78f459ad947ff9b61be8139085"
   integrity sha512-MFDaO9CYiard9j9VepMNa9MTcqVvSny2N4hkY6roquzj8pdCBRENhErrteaQuu7Yjn1ppk0v1/ZF9CG3KIlrTA==
@@ -1821,7 +1821,7 @@ eslint-visitor-keys@^4.2.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-4.2.0.tgz#687bacb2af884fcdda8a6e7d65c606f46a14cd45"
   integrity sha512-UyLnSehNt62FFhSwjZlHmeokpRK59rcz29j+F1/aDgbkbRTk7wIc9XzdoasMUbRNKDM0qQt/+BJ4BrpFeABemw==
 
-eslint@^9.20.0:
+eslint@^9.20.1:
   version "9.20.1"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-9.20.1.tgz#923924c078f5226832449bac86662dd7e53c91d6"
   integrity sha512-m1mM33o6dBUjxl2qb6wv6nGNwCAsns1eKtaQ4l/NPHeTvhiUPbtdfMyktxN4B3fgHIgsYh1VT3V9txblpQHq+g==
@@ -4094,6 +4094,15 @@ typeorm@^0.3.20:
     tslib "^2.5.0"
     uuid "^9.0.0"
     yargs "^17.6.2"
+
+typescript-eslint@^8.24.0:
+  version "8.24.0"
+  resolved "https://registry.yarnpkg.com/typescript-eslint/-/typescript-eslint-8.24.0.tgz#cc655e71885ecb8280342b422ad839a2e2e46a96"
+  integrity sha512-/lmv4366en/qbB32Vz5+kCNZEMf6xYHwh1z48suBwZvAtnXKbP+YhGe8OLE2BqC67LMqKkCNLtjejdwsdW6uOQ==
+  dependencies:
+    "@typescript-eslint/eslint-plugin" "8.24.0"
+    "@typescript-eslint/parser" "8.24.0"
+    "@typescript-eslint/utils" "8.24.0"
 
 typescript@5.7.3, typescript@^5.7.3:
   version "5.7.3"
