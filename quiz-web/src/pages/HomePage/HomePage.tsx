@@ -54,16 +54,19 @@ const HomePage: FC = () => {
     useEffect(() => {
         const getRecentQuizzes = async () => {
             await UserService.getUser().then((result) => {
+                console.log(result)
                 setRecentQuizzes(result.createdQuizzes.slice(0, 2))
             })
         }
         const getTopQuizzes = async () => {
             await QuizService.getTopQuizzes().then((result) => {
+                console.log(result)
                 setTopQuizzes(result)
             })
         }
         const getTopAuthors = async () => {
             await QuizService.getTopAuthors().then((result) => {
+                console.log(result)
                 setTopAuthors(result)
             })
         }
@@ -89,7 +92,7 @@ const HomePage: FC = () => {
                                 <div className={styles.recent_details}>
                                     <h4 className={styles.recent_quizTitle}>{quiz.title}</h4>
                                     <p className={styles.recent_meta}>
-                                        {quiz.tasks.length} questions • {quiz.creator.username}
+                                        {quiz.numberOfTasks} questions • {quiz.creator.username}
                                     </p>
                                 </div>
                             </div>
@@ -107,6 +110,7 @@ const HomePage: FC = () => {
                             count={quiz.tasks.length}
                             avatarUrl={quiz.creator.avatarUrl}
                             username={quiz.creator.username}
+                            quizId={quiz.id}
                         />
                     )}
                 </div>

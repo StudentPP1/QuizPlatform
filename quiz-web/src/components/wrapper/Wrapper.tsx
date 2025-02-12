@@ -19,6 +19,7 @@ const Wrapper: FC<{
     useEffect(() => {
         const getUser = async () => {
             await UserService.getUser().then((result) => {
+                console.log(result)
                 setUser(result)
             })
         }

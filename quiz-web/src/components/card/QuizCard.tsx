@@ -3,12 +3,12 @@ import styles from "./quizCard.module.scss";
 import { useNavigate } from "react-router-dom";
 import Avatar from "../avatar/Avatar";
 
-const QuizCard: FC<{ title: string, count: number, avatarUrl: string, username: string }> =
-  ({ title, count, avatarUrl, username }) => {
+const QuizCard: FC<{ title: string, count: number, avatarUrl: string, username: string, quizId: string }> =
+  ({ title, count, avatarUrl, username, quizId }) => {
     const navigate = useNavigate();
     
     return (
-      <div className={styles.card} onClick={() => navigate("/quizInfo/1")}>
+      <div className={styles.card} onClick={() => navigate(`/quizInfo/${quizId}`)}>
         <h3 className={styles.title}>{title}</h3>
         <span className={styles.terms}>{count} questions</span>
         <div className={styles.footer}>

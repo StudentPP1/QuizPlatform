@@ -3,7 +3,6 @@ import styles from "./LibraryPage.module.scss";
 import { useNavigate } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
 import { Quiz } from "../../models/Quiz";
-import { testQuiz } from "../../test";
 import Avatar from "../../components/avatar/Avatar";
 import { UserService } from "../../api/UserService";
 
@@ -17,6 +16,7 @@ const LibraryPage: FC = () => {
   useEffect(() => {
     const getUser = async () => {
       await UserService.getUser().then((result) => {
+        console.log(result)
         setCompleted(result.createdQuizzes)
         setHistory(result.participatedQuizzes)
       })

@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
 import { Quiz } from "../../models/Quiz";
 import styles from "./SearchPage.module.scss"
-import { testQuiz } from "../../test";
 import Avatar from "../../components/avatar/Avatar";
 import { QuizService } from "../../api/QuizService";
 
-const SearchPage = () => {
+const SearchPage: FC = () => {
   const navigate = useNavigate();
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const { text } = useParams<{ text: string }>();
@@ -23,7 +22,6 @@ const SearchPage = () => {
       }
     }
     search()
-    // setQuizzes([testQuiz, testQuiz])
   }, [])
 
   return (
