@@ -42,11 +42,55 @@ export class UsersService {
   async getUserInfo(req: Request, userId?: string) {
     const userIdToUse = userId && userId.trim() !== '' ? userId : req.user.id;
 
-    return this.usersRepository.findOne({
+    const user = await this.usersRepository.findOne({
       where: { id: userIdToUse },
       select: ['id', 'username', 'avatarUrl', 'rating', 'email'],
       relations: ['createdQuizzes', 'participatedQuizzes'],
     });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const userInfo = {
+      id: user.id,
+      username: user.username,
+      avatarUrl: user.avatarUrl,
+      rating: user.rating,
+      email: user.email,
+      participatedQuizzes:
+        user.participatedQuizzes?.map((quiz) => ({
+          id: quiz.id,
+          title: quiz.title,
+          description: quiz.description,
+          numberOfTasks: quiz.numberOfTasks,
+          timeLimit: quiz.timeLimit,
+          rating: quiz.rating,
+          creator: {
+            id: quiz.creator?.id,
+            username: quiz.creator?.username,
+            avatarUrl: quiz.creator?.avatarUrl,
+          },
+          tasks: quiz.tasks,
+        })) || [],
+      createdQuizzes:
+        user.createdQuizzes?.map((quiz) => ({
+          id: quiz.id,
+          title: quiz.title,
+          description: quiz.description,
+          numberOfTasks: quiz.numberOfTasks,
+          timeLimit: quiz.timeLimit,
+          rating: quiz.rating,
+          creator: {
+            id: quiz.creator?.id,
+            username: quiz.creator?.username,
+            avatarUrl: quiz.creator?.avatarUrl,
+          },
+          tasks: quiz.tasks,
+        })) || [],
+    };
+
+    return userInfo;
   }
 
   async updateAuthorRating(userId: string): Promise<void> {
