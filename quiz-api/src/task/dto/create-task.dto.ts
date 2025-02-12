@@ -19,7 +19,7 @@ export class CreateTaskDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  correctAnswer?: string[];
+  correctAnswers?: string[];
 
   @IsOptional()
   @IsArray()
