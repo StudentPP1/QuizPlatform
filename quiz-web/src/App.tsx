@@ -3,14 +3,14 @@ import styles from "./scss/App.module.scss";
 import { ToastContainer } from "react-toastify";
 import { AuthContext } from "./context/context";
 import Router from "./router/Router";
-import { refreshToken } from "./utils/refreshToken";
 import { ACCESS_TOKEN_NAME } from "./constants/constants";
+import { TokenService } from "./api/TokenService";
 
 export const App: FC = () => {
   const [isAuth, setIsAuth] = useState<boolean>(false);
 
   useEffect(() => {
-    refreshToken();
+    TokenService.refreshToken();
     if (sessionStorage.getItem(ACCESS_TOKEN_NAME) != null) {
       setIsAuth(true)
     }
