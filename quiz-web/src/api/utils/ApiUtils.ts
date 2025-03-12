@@ -1,4 +1,8 @@
-import { DEFAULT_CREDENTIALS, DEFAULT_HEADERS } from "../../constants/constants";
+import {
+  ACCESS_TOKEN_NAME,
+  DEFAULT_CREDENTIALS,
+  DEFAULT_HEADERS,
+} from "../../constants/constants";
 
 export class RequestAttributes {
   private method: string = "GET";
@@ -25,6 +29,13 @@ export class RequestAttributes {
       this.headers = {};
     }
     this.headers[key] = value;
+    return this;
+  }
+
+  addAuthHeader(): this {
+    this.headers["Authorization"] = `Bearer ${sessionStorage.getItem(
+      ACCESS_TOKEN_NAME
+    )}`;
     return this;
   }
 
