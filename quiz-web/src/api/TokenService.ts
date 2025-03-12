@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN_NAME, API_BASE_URL } from "../constants/constants";
-import { RequestAttributes } from "../utils/ApiUtils";
+import { RequestAttributes } from "./utils/ApiUtils";
 
 export class TokenService {
   static async refreshToken() {

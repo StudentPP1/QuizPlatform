@@ -1,4 +1,4 @@
-import { DEFAULT_CREDENTIALS, DEFAULT_HEADERS } from "../constants/constants";
+import { DEFAULT_CREDENTIALS, DEFAULT_HEADERS } from "../../constants/constants";
 
 export class RequestAttributes {
   private method: string = "GET";
