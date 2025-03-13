@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { User } from '../users/entities/user.entity';
+import { LoginCredentialsDTo } from './dto/login-credentials.dto';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +23,17 @@ export class AuthService {
       ...createUserDto,
       password: hashedPassword,
     });
+
+    return user;
+  }
+
+  async login(loginCredentialsDTo: LoginCredentialsDTo): Promise<User> {
+    const { email, password } = loginCredentialsDTo;
+    const user = await this.usersService.getUserByEmail(email);
+
+    const isPasswordValid = await compare(password, user.password);
+
+    if (!isPasswordValid) throw new UnauthorizedException('Invalid password');
 
     return user;
   }
