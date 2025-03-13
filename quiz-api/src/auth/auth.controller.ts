@@ -1,9 +1,18 @@
-import { Controller, Post, Body, Res, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  HttpCode,
+  Get,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginCredentialsDTo } from './dto/login-credentials.dto';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { JwtGuard } from '../common/guards/auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -47,5 +56,18 @@ export class AuthController {
     });
 
     response.json({ accessToken });
+  }
+
+  @Get('logout')
+  @UseGuards(JwtGuard)
+  @HttpCode(200)
+  async logout(@Res() response: Response) {
+    response.clearCookie('refresh_token', {
+      httpOnly: true,
+      secure: this.configService.get<string>('NODE_ENV') === 'production',
+      sameSite: 'strict',
+    });
+
+    response.json({ message: 'Logged out successfully' });
   }
 }
