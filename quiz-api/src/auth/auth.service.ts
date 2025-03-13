@@ -4,7 +4,7 @@ import { compare, hash } from 'bcrypt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginCredentialsDTo } from './dto/login-credentials.dto';
 import { TokenService } from '../token/token.service';
-import { Response } from 'express';
+import { Tokens } from '../token/interfaces/tokens.payload';
 
 @Injectable()
 export class AuthService {
@@ -20,10 +20,7 @@ export class AuthService {
     return hashedPassword;
   }
 
-  async signUp(
-    createUserDto: CreateUserDto,
-    response: Response,
-  ): Promise<{ accessToken: string }> {
+  async signUp(createUserDto: CreateUserDto): Promise<Tokens> {
     const hashedPassword = await this.hashPassword(createUserDto.password);
 
     const user = await this.usersService.createUser({
@@ -31,14 +28,11 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    const accessToken = await this.tokenService.generateTokens(user, response);
-    return accessToken;
+    const tokens = await this.tokenService.generateTokens(user);
+    return tokens;
   }
 
-  async login(
-    loginCredentialsDTo: LoginCredentialsDTo,
-    response: Response,
-  ): Promise<{ accessToken: string }> {
+  async login(loginCredentialsDTo: LoginCredentialsDTo): Promise<Tokens> {
     const { email, password } = loginCredentialsDTo;
     const user = await this.usersService.getUserByEmail(email);
 
@@ -46,7 +40,7 @@ export class AuthService {
 
     if (!isPasswordValid) throw new UnauthorizedException('Invalid password');
 
-    const accessToken = await this.tokenService.generateTokens(user, response);
-    return accessToken;
+    const tokens = await this.tokenService.generateTokens(user);
+    return tokens;
   }
 }

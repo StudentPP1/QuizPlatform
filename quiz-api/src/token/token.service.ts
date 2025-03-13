@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
 import { Payload } from './interfaces/payload.interface';
 import { ConfigService } from '@nestjs/config';
-import { Response } from 'express';
+import { Tokens } from './interfaces/tokens.payload';
 
 @Injectable()
 export class TokenService {
@@ -22,10 +22,7 @@ export class TokenService {
     return payload;
   }
 
-  async generateTokens(
-    user: User,
-    response: Response,
-  ): Promise<{ accessToken: string }> {
+  async generateTokens(user: User): Promise<Tokens> {
     const payload = this.createPayload(user);
 
     const [accessToken, refreshToken] = await Promise.all([
@@ -39,17 +36,6 @@ export class TokenService {
       }),
     ]);
 
-    this.setRefreshTokenCookie(response, refreshToken);
-
-    return { accessToken };
-  }
-
-  private setRefreshTokenCookie(response: Response, refreshToken: string) {
-    response.cookie('refresh_token', refreshToken, {
-      httpOnly: true,
-      secure: this.configService.get<string>('NODE_ENV') === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    return { accessToken, refreshToken };
   }
 }
