@@ -11,6 +11,7 @@ import QuizCard from "../../components/card/card/QuizCard";
 import AuthorCard from "../../components/card/author/AuthorCard";
 
 const HomePage: FC = () => {
+    // TODO: change all models to DTO, if it isn't their info page
     const [recentQuizzes, setRecentQuizzes] = useState<Quiz[]>([]);
     const [topQuizzes, setTopQuizzes] = useState<Quiz[]>([]);
     const [topAuthors, setTopAuthors] = useState<Creator[]>([]);
