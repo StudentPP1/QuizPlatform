@@ -7,16 +7,12 @@ import { ACCESS_TOKEN_NAME } from "./constants/constants";
 import { TokenService } from "./api/TokenService";
 
 export const App: FC = () => {
+  // TODO: start components
   const [isAuth, setIsAuth] = useState<boolean>(false);
 
   useEffect(() => {
     TokenService.refreshToken();
-    if (sessionStorage.getItem(ACCESS_TOKEN_NAME) != null) {
-      setIsAuth(true)
-    }
-    else {
-      setIsAuth(false)
-    }
+    setIsAuth(sessionStorage.getItem(ACCESS_TOKEN_NAME) != null)
   }, [])
 
   return (

@@ -1,9 +1,7 @@
+import { Creator } from "./Creator";
+
 export type Review = {
-  creator: {
-    id: string;
-    username: string;
-    avatarUrl: string;
-  };
+  creator: Creator,
   text: string,
   rating: number
 };

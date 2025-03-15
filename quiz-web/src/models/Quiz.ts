@@ -1,3 +1,4 @@
+import { Creator } from "./Creator"
 import { QuizTask } from "./QuizTask"
 
 export type Quiz = {
@@ -7,5 +8,6 @@ export type Quiz = {
     numberOfTasks: number,
     timeLimit: number,
     rating: number,
-    tasks: QuizTask[]
+    tasks: QuizTask[],
+    creator: Creator
 }
