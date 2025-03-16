@@ -1,6 +1,5 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { ApiWrapper } from "../../api/utils/ApiWrapper";
-import { UserService } from "../../api/UserService";
 import { QuizService } from "../../api/QuizService";
 import styles from "./HomePage.module.scss"
 import Wrapper from "../../components/wrapper/Wrapper";
@@ -9,19 +8,14 @@ import QuizCard from "../../components/card/card/QuizCard";
 import AuthorCard from "../../components/card/author/AuthorCard";
 import { QuizDTO } from "../../models/QuizDTO";
 import { CreatorDTO } from "../../models/CreatorDTO";
+import { AuthContext } from "../../context/context";
 
 const HomePage: FC = () => {
-    // TODO: change all models to DTO, if it isn't their info page
-    const [recentQuizzes, setRecentQuizzes] = useState<QuizDTO[]>([]);
+    const {user} = useContext(AuthContext);
     const [topQuizzes, setTopQuizzes] = useState<QuizDTO[]>([]);
     const [topAuthors, setTopAuthors] = useState<CreatorDTO[]>([]);
     
     useEffect(() => {
-        ApiWrapper.call(
-            // TODO: set User to context
-            UserService.getUser,
-            (result: any) => { setRecentQuizzes(result.participatedQuizzes.slice(0, 2)) },
-            [])
         ApiWrapper.call(
             QuizService.getTopQuizzes,
             (result: any) => { setTopQuizzes(result) },
@@ -38,7 +32,7 @@ const HomePage: FC = () => {
                 <div className={styles.recent_container}>
                     <h2>Recent</h2>
                     <div className={styles.items_list}>
-                        {recentQuizzes.map((quiz) =>
+                        {user?.participatedQuizzes.splice(0, 2).map((quiz) =>
                             <RecentQuiz quiz={quiz} />
                         )}
                     </div>
