@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Creator } from '../../../models/Creator';
 import styles from "./AuthorCard.module.scss";
 import Avatar from '../../avatar/Avatar';
+import { CreatorDTO } from '../../../models/CreatorDTO';
 
-const AuthorCard: FC<{ author: Creator }> = ({ author }) => {
+const AuthorCard: FC<{ author: CreatorDTO }> = ({ author }) => {
   const navigate = useNavigate();
   return (
     <div
@@ -20,12 +20,10 @@ const AuthorCard: FC<{ author: Creator }> = ({ author }) => {
             <Avatar avatarUrl={author.avatarUrl} />
             <span className={styles.name}>{author.username}</span>
           </div>
-
           <div className={styles.author_stats}>
-            <span> {author.createdQuizzes.length} tests </span>
+            <span> {author.numberOfQuizzes} tests </span>
           </div>
         </div>
-
       </div>
     </div>
   )

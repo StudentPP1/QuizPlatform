@@ -1,6 +1,4 @@
 import { FC, useEffect, useState } from "react";
-import { Quiz } from "../../models/Quiz";
-import { Creator } from "../../models/Creator";
 import { ApiWrapper } from "../../api/utils/ApiWrapper";
 import { UserService } from "../../api/UserService";
 import { QuizService } from "../../api/QuizService";
@@ -9,12 +7,14 @@ import Wrapper from "../../components/wrapper/Wrapper";
 import { RecentQuiz } from "../../components/card/card/RecentQuizCard";
 import QuizCard from "../../components/card/card/QuizCard";
 import AuthorCard from "../../components/card/author/AuthorCard";
+import { QuizDTO } from "../../models/QuizDTO";
+import { CreatorDTO } from "../../models/CreatorDTO";
 
 const HomePage: FC = () => {
     // TODO: change all models to DTO, if it isn't their info page
-    const [recentQuizzes, setRecentQuizzes] = useState<Quiz[]>([]);
-    const [topQuizzes, setTopQuizzes] = useState<Quiz[]>([]);
-    const [topAuthors, setTopAuthors] = useState<Creator[]>([]);
+    const [recentQuizzes, setRecentQuizzes] = useState<QuizDTO[]>([]);
+    const [topQuizzes, setTopQuizzes] = useState<QuizDTO[]>([]);
+    const [topAuthors, setTopAuthors] = useState<CreatorDTO[]>([]);
     
     useEffect(() => {
         ApiWrapper.call(
@@ -51,7 +51,7 @@ const HomePage: FC = () => {
                     {topQuizzes.map((quiz) =>
                         <QuizCard
                             title={quiz.title}
-                            count={quiz.tasks.length}
+                            count={quiz.numberOfTasks}
                             avatarUrl={quiz.creator.avatarUrl}
                             username={quiz.creator.username}
                             quizId={quiz.id}

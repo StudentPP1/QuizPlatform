@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./RecentQuizCard.module.scss"
 import { FC } from "react";
-import { Quiz } from "../../../models/Quiz";
+import { QuizDTO } from "../../../models/QuizDTO";
 
-export const RecentQuiz: FC<{quiz: Quiz}> = ({quiz}) => {
+export const RecentQuiz: FC<{quiz: QuizDTO}> = ({quiz}) => {
     const navigate = useNavigate();
     return (
         <div
