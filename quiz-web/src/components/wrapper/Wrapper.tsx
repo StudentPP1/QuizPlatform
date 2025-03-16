@@ -9,9 +9,8 @@ import Menu from "../menu/Menu";
 import Sidebar from "../sidebar/Sidebar";
 
 const Wrapper: FC<{
-    enabledSearch: boolean,
     children: any
-}> = ({ enabledSearch, children }) => {
+}> = ({ children }) => {
     const [open, setOpen] = useState<boolean>(false);
     const [user, setUser] = useState<Creator | null>(null);
 
@@ -21,11 +20,11 @@ const Wrapper: FC<{
             (result: any) => { setUser(result) },
             [])
     }, [])
-    
+
     return (
         <>
             <div className={styles.page_container}>
-                <Header enabledSearch={enabledSearch}>
+                <Header>
                     <div onClick={() => setOpen(!open)} className={styles.avatar_container}>
                         <Avatar avatarUrl={user?.avatarUrl} />
                     </div>

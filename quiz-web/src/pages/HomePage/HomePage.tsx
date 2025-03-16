@@ -33,7 +33,7 @@ const HomePage: FC = () => {
     }, [])
 
     return (
-        <Wrapper enabledSearch={true}>
+        <Wrapper>
             <section className={styles.section_container}>
                 <div className={styles.recent_container}>
                     <h2>Recent</h2>
