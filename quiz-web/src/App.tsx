@@ -11,7 +11,11 @@ export const App: FC = () => {
   const [isAuth, setIsAuth] = useState<boolean>(false);
 
   useEffect(() => {
-    TokenService.refreshToken();
+    TokenService.refreshToken().then(() => {
+      // TODO: set user in context
+      // valid  sessionStorage.getItem(ACCESS_TOKEN_NAME) != null
+      // if true => UserService.getUser => setUser()
+    })
     setIsAuth(sessionStorage.getItem(ACCESS_TOKEN_NAME) != null)
   }, [])
 

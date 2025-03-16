@@ -5,7 +5,14 @@ export class ApiWrapper {
   static async call(func: Function, callback: Function, args?: any) {
     await func(...args).then((result: any) => {
       if (result.hasOwnProperty("statusCode")) {
-        toast.error(result.message, { position: "top-right" });
+        const errorMessages: string | string[] = result.message;
+        if (!Array.isArray(errorMessages)) {
+          toast.error(result.message, { position: "top-right" });
+        } else {
+          for (const message of errorMessages) {
+            toast.error(message, { position: "top-right" });
+          }
+        }
       } else {
         callback(result);
       }

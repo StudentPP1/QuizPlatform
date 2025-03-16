@@ -15,7 +15,7 @@ const HomePage: FC = () => {
     const [recentQuizzes, setRecentQuizzes] = useState<Quiz[]>([]);
     const [topQuizzes, setTopQuizzes] = useState<Quiz[]>([]);
     const [topAuthors, setTopAuthors] = useState<Creator[]>([]);
-
+    
     useEffect(() => {
         ApiWrapper.call(
             // TODO: set User to context
