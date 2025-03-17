@@ -3,7 +3,7 @@ import { Creator } from "../models/Creator";
 
 export interface AuthState {
     user: Creator | null;
-    setUser: (user: Creator) => void
+    setUser: (user: Creator | null) => void
 }
 
 const initAuthState: AuthState = {

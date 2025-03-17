@@ -4,6 +4,7 @@ import styles from "./LoginPage.module.scss";
 import { useNavigate } from "react-router-dom";
 import { AuthContext, AuthState } from "../../context/context";
 import { ApiWrapper } from "../../api/utils/ApiWrapper";
+import { UserService } from "../../api/UserService";
 
 const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const { setUser } = useContext<AuthState>(AuthContext);
@@ -15,10 +16,14 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const navigate = useNavigate();
 
   const authenticate = (result: any) => {
-    setUser(result.user)
     localStorage.setItem("accessToken", result.accessToken)
     setIsOpen(false)
-    navigate("/home")
+    ApiWrapper.call(
+      UserService.getUser,
+      (result: any) => { setUser(result) },
+      [],
+      () => { setUser(null) }
+    ).then(() => { navigate("/home") })
   }
 
   const login = async () => {
