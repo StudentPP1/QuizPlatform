@@ -10,6 +10,7 @@ import { ApiWrapper } from "./api/utils/ApiWrapper";
 import { UserService } from "./api/UserService";
 
 export const App: FC = () => {
+  // TODO: test login & go to do user library
   const [user, setUser] = useState<Creator | null>(null);
 
   useEffect(() => {
