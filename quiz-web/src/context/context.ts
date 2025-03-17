@@ -1,13 +1,14 @@
 import { createContext } from "react";
+import { Creator } from "../models/Creator";
 
 export interface AuthState {
-    isAuth: boolean
-    setIsAuth: (isAuth: boolean) => void
+    user: Creator | null;
+    setUser: (user: Creator) => void
 }
 
 const initAuthState: AuthState = {
-    isAuth: false,
-    setIsAuth: () => {}
+    user: null,
+    setUser: () => {}
 }
 
 export const AuthContext = createContext<AuthState>(initAuthState);

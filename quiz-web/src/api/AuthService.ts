@@ -33,4 +33,11 @@ export class AuthService {
   static async google() {
     window.location.href = `${API_BASE_URL}/api/auth/google`;
   }
+
+  static async logout() {
+    return ApiWrapper.fetch(
+      "/api/auth/login",
+      RequestAttributes.builder().addAuthHeader().build()
+    );
+  }
 }

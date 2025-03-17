@@ -1,9 +1,7 @@
+import { CreatorDTO } from "./CreatorDTO";
+
 export type Review = {
-  creator: {
-    id: string;
-    username: string;
-    avatarUrl: string;
-  };
+  creator: CreatorDTO,
   text: string,
   rating: number
 };

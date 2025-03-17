@@ -2,10 +2,27 @@ import { toast } from "react-toastify";
 import { API_BASE_URL } from "../../constants/constants";
 
 export class ApiWrapper {
-  static async call(func: Function, callback: Function, args?: any) {
+  static apiErrorHandling = ApiWrapper.defaultErrorHandling;
+
+  private static defaultErrorHandling(errorMessages: string | string[]) {
+    if (!Array.isArray(errorMessages)) {
+      toast.error(errorMessages, { position: "top-right" });
+    } else {
+      for (const message of errorMessages) {
+        toast.error(message, { position: "top-right" });
+      }
+    }
+  }
+
+  static async call(
+    func: Function,
+    callback: Function,
+    args?: any,
+    errorHandling: Function = this.apiErrorHandling
+  ) {
     await func(...args).then((result: any) => {
       if (result.hasOwnProperty("statusCode")) {
-        toast.error(result.message, { position: "top-right" });
+        errorHandling(result.message);
       } else {
         callback(result);
       }
