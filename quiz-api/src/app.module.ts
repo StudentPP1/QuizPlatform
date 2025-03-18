@@ -4,12 +4,14 @@ import { resolve } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
+import { configValidationSchema } from './config.schema';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: resolve(process.cwd(), `.env.${process.env.NODE_ENV}.local`),
+      validationSchema: configValidationSchema,
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
