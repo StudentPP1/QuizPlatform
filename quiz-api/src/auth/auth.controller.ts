@@ -33,12 +33,7 @@ export class AuthController {
     const { accessToken, refreshToken } =
       await this.authService.signUp(createUserDto);
 
-    response.cookie('refresh_token', refreshToken, {
-      httpOnly: true,
-      secure: this.configService.get<string>('NODE_ENV') === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    this.setRefreshTokenCookie(response, refreshToken);
 
     response.json({ accessToken });
   }
@@ -52,12 +47,7 @@ export class AuthController {
     const { accessToken, refreshToken } =
       await this.authService.login(loginCredentialsDTo);
 
-    response.cookie('refresh_token', refreshToken, {
-      httpOnly: true,
-      secure: this.configService.get<string>('NODE_ENV') === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    this.setRefreshTokenCookie(response, refreshToken);
 
     response.json({ accessToken });
   }
@@ -79,12 +69,7 @@ export class AuthController {
     }
     const refreshToken = await this.authService.googleLogin(request.user);
 
-    response.cookie('refresh_token', refreshToken, {
-      httpOnly: true,
-      secure: this.configService.get<string>('NODE_ENV') === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    this.setRefreshTokenCookie(response, refreshToken);
 
     response.redirect(`${this.configService.get<string>('CLIENT_URL')}/home`);
   }
@@ -100,5 +85,17 @@ export class AuthController {
     });
 
     response.json({ message: 'Logged out successfully' });
+  }
+
+  private setRefreshTokenCookie(
+    response: Response,
+    refreshToken: string,
+  ): void {
+    response.cookie('refresh_token', refreshToken, {
+      httpOnly: true,
+      secure: this.configService.get<string>('NODE_ENV') === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
   }
 }
