@@ -86,7 +86,7 @@ export class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    response.redirect(this.configService.get<string>('CLIENT_URL'));
+    response.redirect(`${this.configService.get<string>('CLIENT_URL')}/home`);
   }
 
   @Get('logout')
