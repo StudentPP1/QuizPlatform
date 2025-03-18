@@ -12,7 +12,7 @@ export class TokenService {
     private readonly configService: ConfigService,
   ) {}
 
-  private createPayload(user: User): Payload {
+  private createPayload(user: Partial<User>): Payload {
     const payload = {
       userId: user.id,
       username: user.username,
@@ -22,7 +22,7 @@ export class TokenService {
     return payload;
   }
 
-  async generateTokens(user: User): Promise<Tokens> {
+  async generateTokens(user: Partial<User>): Promise<Tokens> {
     const payload = this.createPayload(user);
 
     const [accessToken, refreshToken] = await Promise.all([
