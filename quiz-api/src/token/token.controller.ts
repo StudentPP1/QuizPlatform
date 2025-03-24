@@ -18,8 +18,10 @@ export class TokenController {
     @Req() request: Request & { decoded?: Payload },
     @Res() response: Response,
   ) {
-    const { accessToken, refreshToken } =
-      await this.tokenService.generateTokens(request.decoded);
+    const generator = this.tokenService.generateTokens(request.decoded);
+
+    const accessToken = (await generator.next()).value;
+    const refreshToken = (await generator.next()).value;
 
     response.cookie('refresh_token', refreshToken, {
       httpOnly: true,

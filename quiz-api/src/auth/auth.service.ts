@@ -32,7 +32,14 @@ export class AuthService {
       'local',
     );
 
-    const tokens = await this.tokenService.generateTokens(user);
+    const generator: AsyncGenerator<string, void, unknown> =
+      this.tokenService.generateTokens(user);
+
+    const tokens: Tokens = {
+      accessToken: (await generator.next()).value as string,
+      refreshToken: (await generator.next()).value as string,
+    };
+
     return tokens;
   }
 
@@ -48,12 +55,23 @@ export class AuthService {
   }
 
   async login(user: User): Promise<Tokens> {
-    const tokens = await this.tokenService.generateTokens(user);
+    const generator: AsyncGenerator<string, void, unknown> =
+      this.tokenService.generateTokens(user);
+
+    const tokens: Tokens = {
+      accessToken: (await generator.next()).value as string,
+      refreshToken: (await generator.next()).value as string,
+    };
+
     return tokens;
   }
 
   async googleLogin(data: User) {
-    const { refreshToken } = await this.tokenService.generateTokens(data);
+    const generator = this.tokenService.generateTokens(data);
+
+    await generator.next();
+    const refreshToken = (await generator.next()).value as string;
+
     return refreshToken;
   }
 

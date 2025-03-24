@@ -22,20 +22,19 @@ export class TokenService {
     return payload;
   }
 
-  async generateTokens(user: Partial<User>): Promise<Tokens> {
+  async *generateTokens(
+    user: Partial<User>,
+  ): AsyncGenerator<string, void, unknown> {
     const payload = this.createPayload(user);
 
-    const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(payload, {
-        secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
-        expiresIn: this.configService.get<string>('ACCESS_TOKEN_EXPIRATION'),
-      }),
-      this.jwtService.signAsync(payload, {
-        secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-        expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRATION'),
-      }),
-    ]);
+    yield await this.jwtService.signAsync(payload, {
+      secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
+      expiresIn: this.configService.get<string>('ACCESS_TOKEN_EXPIRATION'),
+    });
 
-    return { accessToken, refreshToken };
+    yield await this.jwtService.signAsync(payload, {
+      secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+      expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRATION'),
+    });
   }
 }
