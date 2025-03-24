@@ -11,10 +11,10 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { LoginCredentialsDTo } from './dto/login-credentials.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { JwtGuard } from '../common/guards/auth.guard';
+import { LocalAuthGuard } from '../common/guards/local-auth.guard';
 import { GoogleOAuthGuard } from '../common/guards/google-oauth.guard';
 import { User } from '../users/entities/user.entity';
 
@@ -38,14 +38,16 @@ export class AuthController {
     response.json({ accessToken });
   }
 
+  @UseGuards(LocalAuthGuard)
   @Post('login')
   @HttpCode(200)
   async login(
-    @Body() loginCredentialsDTo: LoginCredentialsDTo,
+    @Req() request: Request & { user?: User },
     @Res() response: Response,
   ): Promise<void> {
-    const { accessToken, refreshToken } =
-      await this.authService.login(loginCredentialsDTo);
+    const { accessToken, refreshToken } = await this.authService.login(
+      request.user,
+    );
 
     this.setRefreshTokenCookie(response, refreshToken);
 

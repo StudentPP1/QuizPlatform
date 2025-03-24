@@ -1,12 +1,7 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { compare, hash } from 'bcrypt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { LoginCredentialsDTo } from './dto/login-credentials.dto';
 import { TokenService } from '../token/token.service';
 import { Tokens } from '../token/interfaces/tokens.payload';
 import { CreateGoogleUserDto } from '../users/dto/create-google-user.dto';
@@ -41,18 +36,18 @@ export class AuthService {
     return tokens;
   }
 
-  async login(loginCredentialsDTo: LoginCredentialsDTo): Promise<Tokens> {
-    const { email, password } = loginCredentialsDTo;
+  async validateUser(email: string, password: string): Promise<User> {
     const user = await this.usersService.getUserByEmail(email);
 
-    if (!user) {
-      throw new NotFoundException('User with this email does not exists');
+    if (!user || !(await compare(password, user.password))) {
+      throw new UnauthorizedException('Incorrect email or password');
     }
 
-    const isPasswordValid = await compare(password, user.password);
+    const { password: _, ...result } = user;
+    return result;
+  }
 
-    if (!isPasswordValid) throw new UnauthorizedException('Invalid password');
-
+  async login(user: User): Promise<Tokens> {
     const tokens = await this.tokenService.generateTokens(user);
     return tokens;
   }
