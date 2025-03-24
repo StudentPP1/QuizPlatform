@@ -18,14 +18,11 @@ export class RefreshTokenGuard implements CanActivate {
       throw new UnauthorizedException('Refresh token not found');
     }
 
-    const decoded = await this.refreshTokenStrategy.validate(refreshToken);
-
-    if (!decoded) {
+    try {
+      request.decoded = await this.refreshTokenStrategy.validate(refreshToken);
+      return true;
+    } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }
-
-    request.decoded = decoded;
-
-    return true;
   }
 }

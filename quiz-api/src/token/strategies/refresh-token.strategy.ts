@@ -10,13 +10,9 @@ export class RefreshTokenStrategy {
     private readonly configService: ConfigService,
   ) {}
 
-  async validate(refreshToken: string): Promise<Payload | null> {
-    try {
-      return await this.jwtService.verifyAsync(refreshToken, {
-        secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-      });
-    } catch (error) {
-      return null;
-    }
+  async validate(refreshToken: string): Promise<Payload> {
+    return this.jwtService.verifyAsync(refreshToken, {
+      secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+    });
   }
 }
