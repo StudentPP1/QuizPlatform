@@ -4,7 +4,7 @@ import { RequestAttributes } from "./utils/ApiUtils";
 export class TokenService {
   static async refreshToken() {
     await fetch(
-      `${API_BASE_URL}/auth/refresh-token`,
+      `${API_BASE_URL}/api/token/update`,
       RequestAttributes.builder().build()
     )
       .then(async (result) => {
