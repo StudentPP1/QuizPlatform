@@ -79,7 +79,12 @@ export class AuthController {
   @Get('logout')
   @UseGuards(JwtGuard)
   @HttpCode(200)
-  async logout(@Res() response: Response) {
+  async logout(
+    @Req() request: Request & { user?: User },
+    @Res() response: Response,
+  ) {
+    await this.authService.logout(request.user.id);
+
     response.clearCookie('refresh_token', {
       httpOnly: true,
       secure: this.configService.get<string>('NODE_ENV') === 'production',

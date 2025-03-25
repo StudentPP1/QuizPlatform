@@ -3,10 +3,14 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
 import { Payload } from './interfaces/payload.interface';
 import { ConfigService } from '@nestjs/config';
-import { Tokens } from './interfaces/tokens.payload';
 
 @Injectable()
 export class TokenService {
+  private tokenGenerators = new Map<
+    string,
+    AsyncGenerator<string, void, unknown>
+  >();
+
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
@@ -22,19 +26,37 @@ export class TokenService {
     return payload;
   }
 
-  async *generateTokens(
+  async *createTokenGenerator(
     user: Partial<User>,
   ): AsyncGenerator<string, void, unknown> {
     const payload = this.createPayload(user);
 
-    yield await this.jwtService.signAsync(payload, {
-      secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
-      expiresIn: this.configService.get<string>('ACCESS_TOKEN_EXPIRATION'),
-    });
+    while (true) {
+      yield await this.jwtService.signAsync(payload, {
+        secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
+        expiresIn: this.configService.get<string>('ACCESS_TOKEN_EXPIRATION'),
+      });
 
-    yield await this.jwtService.signAsync(payload, {
-      secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-      expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRATION'),
-    });
+      yield await this.jwtService.signAsync(payload, {
+        secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+        expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRATION'),
+      });
+
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
+  }
+
+  getTokenGenerator(
+    user: Partial<User>,
+  ): AsyncGenerator<string, void, unknown> {
+    if (!this.tokenGenerators.has(user.id)) {
+      this.tokenGenerators.set(user.id, this.createTokenGenerator(user));
+    }
+
+    return this.tokenGenerators.get(user.id);
+  }
+
+  removeTokenGenerator(userId: string) {
+    this.tokenGenerators.delete(userId);
   }
 }

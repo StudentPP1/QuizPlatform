@@ -32,15 +32,12 @@ export class AuthService {
       'local',
     );
 
-    const generator: AsyncGenerator<string, void, unknown> =
-      this.tokenService.generateTokens(user);
+    const generator = this.tokenService.getTokenGenerator(user);
 
-    const tokens: Tokens = {
+    return {
       accessToken: (await generator.next()).value as string,
       refreshToken: (await generator.next()).value as string,
     };
-
-    return tokens;
   }
 
   async validateUser(email: string, password: string): Promise<User> {
@@ -55,24 +52,20 @@ export class AuthService {
   }
 
   async login(user: User): Promise<Tokens> {
-    const generator: AsyncGenerator<string, void, unknown> =
-      this.tokenService.generateTokens(user);
+    const generator = this.tokenService.getTokenGenerator(user);
 
-    const tokens: Tokens = {
+    return {
       accessToken: (await generator.next()).value as string,
       refreshToken: (await generator.next()).value as string,
     };
-
-    return tokens;
   }
 
-  async googleLogin(data: User) {
-    const generator = this.tokenService.generateTokens(data);
+  async googleLogin(user: User) {
+    const generator = this.tokenService.getTokenGenerator(user);
 
     await generator.next();
-    const refreshToken = (await generator.next()).value as string;
 
-    return refreshToken;
+    return (await generator.next()).value as string;
   }
 
   async validateGoogleUser(data: CreateGoogleUserDto) {
@@ -83,5 +76,9 @@ export class AuthService {
     }
 
     return await this.usersService.createUser(data, 'google');
+  }
+
+  async logout(userId: string) {
+    this.tokenService.removeTokenGenerator(userId);
   }
 }
