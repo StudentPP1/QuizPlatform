@@ -1,11 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
 import { compare, hash } from 'bcrypt';
-import { CreateUserDto } from '../users/dto/create-user.dto';
-import { TokenService } from '../token/token.service';
-import { Tokens } from '../token/interfaces/tokens.payload';
-import { CreateGoogleUserDto } from '../users/dto/create-google-user.dto';
-import { User } from '../users/entities/user.entity';
+
+import { Tokens } from '@token/interfaces/tokens.payload';
+import { TokenService } from '@token/token.service';
+import { CreateGoogleUserDto } from '@users/dto/create-google-user.dto';
+import { CreateUserDto } from '@users/dto/create-user.dto';
+import { User } from '@users/entities/user.entity';
+import { UsersService } from '@users/users.service';
 
 @Injectable()
 export class AuthService {

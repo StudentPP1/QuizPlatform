@@ -4,7 +4,8 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
-import { RefreshTokenStrategy } from '../../token/strategies/refresh-token.strategy';
+
+import { RefreshTokenStrategy } from '@token/strategies/refresh-token.strategy';
 
 @Injectable()
 export class RefreshTokenGuard implements CanActivate {

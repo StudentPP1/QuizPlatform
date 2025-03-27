@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { Payload } from '../interfaces/payload.interface';
+import { JwtService } from '@nestjs/jwt';
+
+import { Payload } from '@token/interfaces/payload.interface';
 
 @Injectable()
 export class RefreshTokenStrategy {
