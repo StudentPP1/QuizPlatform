@@ -53,7 +53,8 @@ export const MainPage: FC = () => {
 
           <div className={styles.roadmap__item}>
             <div className={styles.roadmap__picture}>
-              <img src="https://files.oaiusercontent.com/file-ECv6FKuJF8mTHnEGQ7iqSU?se=2025-02-12T12%3A08%3A46Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D2111e58d-ef16-4fab-8310-ec3578f36f6c.webp&sig=I8HYlNZDI42DfGmFqKIoW/VgTAf7/K1PDK%2B%2BuTqcMMg%3D" alt="picture roadmap" />
+              <img src="https://www.dragnsurvey.com/blog/en/wp-content/webp-express/webp-images/uploads/2024/02/quiz-neon.jpg.webp" 
+              alt="picture roadmap" />
             </div>
             <div className={styles.roadmap__description}>
               <h3 className={styles.roadmap__title}>Explore and Complete Quests</h3>
