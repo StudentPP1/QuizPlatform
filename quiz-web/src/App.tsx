@@ -10,7 +10,7 @@ import { UserService } from "./api/services/UserService";
 
 
 export const App: FC = () => {
-  // TODO: test login & go to do user library
+  // TODO: test login & add loading animation
   const [user, setUser] = useState<Creator | null>(null);
 
   useEffect(() => {

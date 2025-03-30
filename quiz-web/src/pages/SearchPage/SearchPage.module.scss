@@ -1,0 +1,130 @@
+@use "../../scss/variables" as v;
+
+.library_container {
+  background-color: #0c0c0c;
+  color: #f2f2f2;
+  font-family: Arial, sans-serif;
+}
+
+.nav_bar {
+  background-color: #262626;
+  padding: 5px;
+  border-radius: 20px;
+  ul {
+    list-style: none;
+  }
+}
+
+.hot_bar {
+  padding: 10px 10px 15px 10px;
+}
+
+.modules {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user_info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #0a0a0a;
+  text-align: center;
+}
+
+.user_name {
+  text-align: center;
+  font-weight: bold;
+}
+
+.term_count {
+  font-size: 40px;
+  font-weight: bold;
+  color: #0a0a0a;
+}
+.name_quest {
+  color: v.$orange;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: left;
+  order: -1; 
+}
+.module_card {
+  height: 130px;
+  pointer-events: auto;
+  border-radius: 8px;
+  background-color: #262626;
+  padding: 16px 16px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  text-align: left;
+  border: none;
+  width: 100%;
+  color: v.$white;
+}
+
+.module_card:hover {
+  background-color: #262626;
+  transform: scale(1.01);
+}
+
+.module_card:active,
+.module_card[aria-pressed="true"] {
+  background-color: #262626;
+  transform: scale(0.97);
+}
+
+.card_content {
+  display: flex;
+  flex-direction: column;
+}
+
+.top_info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user_info {
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  margin-top: auto;
+}
+
+.user_avatar_small {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.user_name {
+  margin-top: auto;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.term_count {
+  font-size: 14px;
+  font-weight: bold;
+  color: #f2f2f2;
+}
+
+.author {
+  padding-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.name {
+  padding-left: 10px;
+  font-size: 15px;
+  font-weight: 500;
+}
