@@ -1,9 +1,10 @@
 import { Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { TokenService } from './token.service';
-import { RefreshTokenGuard } from '../common/guards/refresh-token.guard';
 import { ConfigService } from '@nestjs/config';
-import { Payload } from './interfaces/payload.interface';
+import { Request, Response } from 'express';
+
+import { RefreshTokenGuard } from '@common/guards/refresh-token.guard';
+import { Payload } from '@token/interfaces/payload.interface';
+import { TokenService } from '@token/token.service';
 
 @Controller('token')
 export class TokenController {

@@ -1,10 +1,13 @@
+import { resolve } from 'path';
+
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { resolve } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
-import { TokenModule } from './token/token.module';
-import { configValidationSchema } from './config.schema';
+
+import { AuthModule } from '@auth/auth.module';
+import { TokenModule } from '@token/token.module';
+
+import { configValidationSchema } from '@src/config.schema';
 
 @Module({
   imports: [
