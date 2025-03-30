@@ -1,0 +1,20 @@
+.ratingSection {
+    color: #f2f2f2;
+    padding-bottom: 20px;
+}
+
+.stars {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.filledStar {
+    color: #f2e527;
+}
+
+.emptyStar {
+    color: #888;
+}
