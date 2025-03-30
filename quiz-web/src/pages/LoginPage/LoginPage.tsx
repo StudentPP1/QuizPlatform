@@ -1,10 +1,9 @@
 import { FC, useContext, useState } from "react";
-import { AuthService } from "../../api/AuthService";
+import { AuthService } from "../../api/services/AuthService";
 import styles from "./LoginPage.module.scss";
 import { useNavigate } from "react-router-dom";
 import { AuthContext, AuthState } from "../../context/context";
-import { ApiWrapper } from "../../api/utils/ApiWrapper";
-import { UserService } from "../../api/UserService";
+import { UserService } from "../../api/services/UserService";
 
 const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const { setUser } = useContext<AuthState>(AuthContext);
@@ -18,30 +17,22 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const authenticate = (result: any) => {
     localStorage.setItem("accessToken", result.accessToken)
     setIsOpen(false)
-    ApiWrapper.call(
-      UserService.getUser,
-      (result: any) => { setUser(result) },
-      [],
-      () => { setUser(null) }
-    ).then(() => { navigate("/home") })
+    UserService.getUser()
+      .then((result: any) => { setUser(result) })
+      .then(() => { navigate("/home") })
+      .catch(() => { setUser(null) })
   }
 
   const login = async () => {
-    ApiWrapper.call(
-      AuthService.login,
-      (result: any) => { authenticate(result) },
-      [email, password])
+    AuthService.login(email, password).then((result: any) => { authenticate(result) })
   }
 
   const register = async () => {
-    ApiWrapper.call(
-      AuthService.register,
-      (result: any) => { authenticate(result) },
-      [username, email, password])
+    AuthService.register(username, email, password).then((result: any) => { authenticate(result) })
   }
 
   const google = async () => {
-    await AuthService.google()
+    AuthService.google()
   }
 
   const clearForm = () => {

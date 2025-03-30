@@ -1,6 +1,4 @@
 import { FC, useContext, useEffect, useState } from "react";
-import { ApiWrapper } from "../../api/utils/ApiWrapper";
-import { QuizService } from "../../api/QuizService";
 import styles from "./HomePage.module.scss"
 import Wrapper from "../../components/wrapper/Wrapper";
 import { RecentQuiz } from "../../components/card/card/RecentQuizCard";
@@ -9,21 +7,16 @@ import AuthorCard from "../../components/card/author/AuthorCard";
 import { QuizDTO } from "../../models/QuizDTO";
 import { CreatorDTO } from "../../models/CreatorDTO";
 import { AuthContext } from "../../context/context";
+import { QuizService } from "../../api/services/QuizService";
 
 const HomePage: FC = () => {
-    const {user} = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const [topQuizzes, setTopQuizzes] = useState<QuizDTO[]>([]);
     const [topAuthors, setTopAuthors] = useState<CreatorDTO[]>([]);
-    
+
     useEffect(() => {
-        ApiWrapper.call(
-            QuizService.getTopQuizzes,
-            (result: any) => { setTopQuizzes(result) },
-            [])
-        ApiWrapper.call(
-            QuizService.getTopAuthors,
-            (result: any) => { setTopAuthors(result) },
-            [])
+        QuizService.getTopQuizzes().then((result: any) => { setTopQuizzes(result) })
+        QuizService.getTopAuthors().then((result: any) => { setTopAuthors(result) })
     }, [])
 
     return (

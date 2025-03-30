@@ -1,55 +1,13 @@
-import {
-  ACCESS_TOKEN_NAME,
-  DEFAULT_CREDENTIALS,
-  DEFAULT_HEADERS,
-} from "../../constants/constants";
+import { API_BASE_URL } from "../../constants/constants";
 
-export class RequestAttributes {
-  private method: string = "GET";
-  private headers: Record<string, string> = DEFAULT_HEADERS;
-  private credentials: RequestCredentials = DEFAULT_CREDENTIALS;
-  private body?: string = undefined;
-
-  static builder(): RequestAttributes {
-    return new RequestAttributes();
+export async function fetch(
+  url: string,
+  attributes: RequestInit
+): Promise<any> {
+  const response = await fetch(`${API_BASE_URL}${url}`, attributes);
+  if (response.statusCode !== 200) {
+    throw Error(response.message);
   }
-
-  setMethod(method: string): this {
-    this.method = method;
-    return this;
-  }
-
-  setEmptyHeader() {
-    this.headers = {};
-    return this;
-  }
-
-  addHeader(key: string, value: string): this {
-    if (!this.headers) {
-      this.headers = {};
-    }
-    this.headers[key] = value;
-    return this;
-  }
-
-  addAuthHeader(): this {
-    this.headers["Authorization"] = `Bearer ${sessionStorage.getItem(
-      ACCESS_TOKEN_NAME
-    )}`;
-    return this;
-  }
-
-  setBody(data: any): this {
-    this.body = JSON.stringify(data);
-    return this;
-  }
-
-  build() {
-    return {
-      method: this.method,
-      headers: this.headers,
-      credentials: this.credentials,
-      body: this.body,
-    };
-  }
+  const json = await response.json();
+  return json;
 }

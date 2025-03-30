@@ -1,12 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import { Creator } from "../../models/Creator";
-import { ApiWrapper } from "../../api/utils/ApiWrapper";
-import { UserService } from "../../api/UserService";
 import styles from "./Wrapper.module.scss";
 import Header from "../header/Header";
 import Avatar from "../avatar/Avatar";
 import Menu from "../menu/Menu";
 import Sidebar from "../sidebar/Sidebar";
+import { UserService } from "../../api/services/UserService";
 
 const Wrapper: FC<{
     children: any
@@ -15,10 +14,9 @@ const Wrapper: FC<{
     const [user, setUser] = useState<Creator | null>(null);
 
     useEffect(() => {
-        ApiWrapper.call(
-            UserService.getUser,
-            (result: any) => { setUser(result) },
-            [])
+        UserService.getUser()
+            .then((result: any) => { setUser(result) })
+            .catch(() => { setUser(null) })
     }, [])
 
     return (

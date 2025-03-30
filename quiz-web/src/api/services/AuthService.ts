@@ -1,10 +1,10 @@
-import { API_BASE_URL } from "../constants/constants";
-import { RequestAttributes } from "./utils/ApiUtils";
-import { ApiWrapper } from "./utils/ApiWrapper";
+import { API_BASE_URL } from "../../constants/constants";
+import { fetch } from "../utils/ApiUtils";
+import { RequestAttributes } from "../utils/RequestAttributes";
 
 export class AuthService {
   static async register(username: string, email: string, password: string) {
-    return ApiWrapper.fetch(
+    return fetch(
       "/api/auth/signup",
       RequestAttributes.builder()
         .setMethod("POST")
@@ -18,7 +18,7 @@ export class AuthService {
   }
 
   static async login(email: string, password: string) {
-    return ApiWrapper.fetch(
+    return fetch(
       "/api/auth/login",
       RequestAttributes.builder()
         .setMethod("POST")
@@ -35,7 +35,7 @@ export class AuthService {
   }
 
   static async logout() {
-    return ApiWrapper.fetch(
+    return fetch(
       "/api/auth/login",
       RequestAttributes.builder().addAuthHeader().build()
     );
