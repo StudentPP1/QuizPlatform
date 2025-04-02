@@ -46,14 +46,14 @@ const QuizPage: React.FC = () => {
     handleAnswerSelection(question, event.target.value, event.target.checked);
   };
 
-  const SingleChoiceStrategy = (options: string[] | undefined, questionId: string) => (
+  const SingleChoiceStrategy = (question: QuizTask) => (
     <>
-      {options?.map((option) => (
+      {question.options?.map((option) => (
         <label key={option} className={styles.option}>
           <input
             className={styles.radioButton}
             type="radio"
-            name={questionId}
+            name={question.id}
             value={option}
             onChange={handleAnswerChange}
           />
@@ -63,9 +63,9 @@ const QuizPage: React.FC = () => {
     </>
   );
 
-  const MultipleChoiceStrategy = (options: string[] | undefined) => (
+  const MultipleChoiceStrategy = (question: QuizTask) => (
     <>
-      {options?.map((option) => (
+      {question.options?.map((option) => (
         <label key={option} className={styles.option}>
           <input
             className={styles.checkBox}
@@ -79,9 +79,9 @@ const QuizPage: React.FC = () => {
     </>
   );
 
-  const TextStrategy = (options: string[] | undefined) => (
+  const TextStrategy = (question: QuizTask) => (
     <>
-      {options?.map((option) => (
+      {question.options?.map((option) => (
         <label key={option} className={styles.option}>
           <input
             type="text"
@@ -94,15 +94,14 @@ const QuizPage: React.FC = () => {
     </>
   );
 
+  const strategies = new Map<string, (question: QuizTask) => any>([
+    ['single', (question) => SingleChoiceStrategy(question)],
+    ['multiple-choice', (question) => MultipleChoiceStrategy(question)],
+    ['text', (question) => TextStrategy(question)],
+  ]);
+
   const QuestionStrategy = (question: QuizTask) => {
-    switch (question.type) {
-      case 'single':
-        return SingleChoiceStrategy(question.options, question.id);
-      case 'multiple-choice':
-        return MultipleChoiceStrategy(question.options);
-      case 'text':
-        return TextStrategy(question.options);
-    }
+    return strategies.get(question.type)?.(question);
   };
 
   return (
