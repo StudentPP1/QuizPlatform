@@ -8,9 +8,8 @@ import { Creator } from "./models/Creator";
 import { refreshToken } from "./api/services/TokenService";
 import { UserService } from "./api/services/UserService";
 
-
 export const App: FC = () => {
-  // TODO: test login & add loading animation
+  // TODO: test & add loading animation 
   const [user, setUser] = useState<Creator | null>(null);
 
   useEffect(() => {

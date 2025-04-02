@@ -46,6 +46,65 @@ const QuizPage: React.FC = () => {
     handleAnswerSelection(question, event.target.value, event.target.checked);
   };
 
+  const SingleChoiceStrategy = (options: string[] | undefined, questionId: string) => (
+    <>
+      {options?.map((option) => (
+        <label key={option} className={styles.option}>
+          <input
+            className={styles.radioButton}
+            type="radio"
+            name={questionId}
+            value={option}
+            onChange={handleAnswerChange}
+          />
+          {option}
+        </label>
+      ))}
+    </>
+  );
+
+  const MultipleChoiceStrategy = (options: string[] | undefined) => (
+    <>
+      {options?.map((option) => (
+        <label key={option} className={styles.option}>
+          <input
+            className={styles.checkBox}
+            type="checkbox"
+            value={option}
+            onChange={handleAnswerChange}
+          />
+          {option}
+        </label>
+      ))}
+    </>
+  );
+
+  const TextStrategy = (options: string[] | undefined) => (
+    <>
+      {options?.map((option) => (
+        <label key={option} className={styles.option}>
+          <input
+            type="text"
+            className={styles.textInput}
+            onChange={handleAnswerChange}
+          />
+          {option}
+        </label>
+      ))}
+    </>
+  );
+
+  const QuestionStrategy = (question: QuizTask) => {
+    switch (question.type) {
+      case 'single':
+        return SingleChoiceStrategy(question.options, question.id);
+      case 'multiple-choice':
+        return MultipleChoiceStrategy(question.options);
+      case 'text':
+        return TextStrategy(question.options);
+    }
+  };
+
   return (
     <div className={styles.quizContainer}>
       <button className={styles.exitButton} onClick={handleExit}>
@@ -58,44 +117,9 @@ const QuizPage: React.FC = () => {
         <h3 className={styles.timer}>Time: {timeLeft} seconds</h3>
         <h2 className={styles.questionText}>{question.question}</h2>
         {question?.image && <img src={question.image} className={styles.questionImage} />}
-        {question.type === "single" && (
-          <div className={styles.optionsContainer}>
-            {question.options?.map((option) => (
-              <label key={option} className={styles.option}>
-                <input
-                  className={styles.radioButton}
-                  type="radio"
-                  name={String(question.id)}
-                  value={option}
-                  onChange={handleAnswerChange}
-                />
-                {option}
-              </label>
-            ))}
-          </div>
-        )}
-        {question.type === "multiple-choice" && (
-          <div className={styles.optionsContainer}>
-            {question.options?.map((option) => (
-              <label key={option} className={styles.option}>
-                <input
-                  className={styles.checkBox}
-                  type="checkbox"
-                  value={option}
-                  onChange={handleAnswerChange}
-                />
-                {option}
-              </label>
-            ))}
-          </div>
-        )}
-        {question.type === "text" && (
-          <input
-            type="text"
-            className={styles.textInput}
-            onChange={handleAnswerChange}
-          />
-        )}
+        <div className={styles.optionsContainer}>
+          {QuestionStrategy(question)}
+        </div>
         <button className={styles.nextButton} onClick={handleNext}>Next</button>
       </div>
     </div>

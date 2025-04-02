@@ -82,6 +82,7 @@ const CreateQuizPage: FC = () => {
                         <button className={styles.button} onClick={() => addQuestion(true)}>+ Open-ended question</button>
                     </div>
 
+                    {/* TODO: updateQuestion => refactor to Create quiz -> check -> if correct safe & update state */}
                     {questions.map((question) => (
                         <QuestionItem
                             key={question.id}
