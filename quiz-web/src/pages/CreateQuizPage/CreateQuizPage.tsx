@@ -36,12 +36,35 @@ const CreateQuizPage: FC = () => {
         ]);
     };
 
-    const saveModule = async () => {
-        if (!questions.length) {
-            toast.error("Add at least one question!", { position: "top-right" });
-            return;
+    const validateQuestions = () => {
+        for (const question of questions) {
+            if (!question.text.trim()) {
+                toast.error("Fill in all the fields!", { position: "top-right" });
+                return false;
+            }
+            if (!question.isOpenEnded && question.answers.some((answer) => !answer.text.trim()) === true) {
+                toast.error("Fill in all the fields!", { position: "top-right" });
+                return false;
+            }
+            if (!question.isOpenEnded && !question.answers.some((answer) => answer.isCorrect)) {
+                toast.error("Every question should have at least one correct answer!", { position: "top-right" });
+                return false;
+            }
         }
+        return true;
+    };
 
+    const handleTimeChange = () => {
+        if (/^\d*$/.test(timeLimit)) {
+            const numValue = parseInt(timeLimit, 10);
+            if (!isNaN(numValue) && numValue >= 1 && numValue <= 120) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    const saveQuestion = async () => {
         const quiz = {
             title,
             description,
@@ -60,12 +83,23 @@ const CreateQuizPage: FC = () => {
             }))
         };
 
-        QuizService.createQuiz(quiz).then((result: any) => {
+        await QuizService.createQuiz(quiz).then((result) => {
+            console.log(result)
             toast.success("Quiz saved!", { position: "top-right" });
             navigate("/quizInfo/" + result.id)
         }).catch(() => {
             toast.error("Error saving quiz!", { position: "top-right" })
         })
+    }
+
+    const saveModule = async () => {
+        if (!handleTimeChange()) {
+            toast.error("Time must be between 1 and 120 minutes!", { position: "top-right" });
+        } else {
+            if (validateQuestions()) {
+                saveQuestion()
+            }
+        }
     };
 
     return (
@@ -82,18 +116,13 @@ const CreateQuizPage: FC = () => {
                         <button className={styles.button} onClick={() => addQuestion(true)}>+ Open-ended question</button>
                     </div>
 
-                    {/* TODO: updateQuestion => refactor to Create quiz -> check -> if correct safe & update state */}
+                    {/* create question -> check -> if correct -> safe & update state */}
                     {questions.map((question) => (
                         <QuestionItem
                             key={question.id}
                             question={question}
-                            onTextChange={(text) => updateQuestion(question.id, { text })}
-                            onImageUpload={(e) => updateQuestion(question.id, { image: URL.createObjectURL(e.target.files![0]) })}
-                            onRemove={() => setQuestions((prev) => prev.filter((q) => q.id !== question.id))}
-                            onAddAnswer={() => updateQuestion(question.id, { answers: [...question.answers, { id: Date.now(), text: "", isCorrect: false }] })}
-                            onUpdateAnswer={(aId, text) => updateQuestion(question.id, { answers: question.answers.map((a) => (a.id === aId ? { ...a, text } : a)) })}
-                            onToggleCorrectAnswer={(aId) => updateQuestion(question.id, { answers: question.answers.map((a) => (a.id === aId ? { ...a, isCorrect: !a.isCorrect } : a)) })}
-                            onRemoveAnswer={(aId) => updateQuestion(question.id, { answers: question.answers.filter((a) => a.id !== aId) })}
+                            removeQuestion={(id) => setQuestions((prev) => prev.filter((q) => q.id !== id))}
+                            saveQuestion={(id, text, image, answers) => updateQuestion(id, { answers: answers, text: text, image: image })}
                         />
                     ))}
 

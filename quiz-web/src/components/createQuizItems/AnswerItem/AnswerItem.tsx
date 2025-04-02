@@ -5,9 +5,9 @@ import { AnswerType } from "../../../models/AnswerType";
 interface Props {
     answer: AnswerType;
     isOpenEnded: boolean;
-    onTextChange: (text: string) => void;
-    onToggleCorrect: () => void;
-    onRemove: () => void;
+    onTextChange: (id: number, text: string) => void;
+    onToggleCorrect: (id: number) => void;
+    onRemove: (id: number) => void;
 }
 
 const AnswerItem: FC<Props> = ({ answer, isOpenEnded, onTextChange, onToggleCorrect, onRemove }) => {
@@ -17,13 +17,17 @@ const AnswerItem: FC<Props> = ({ answer, isOpenEnded, onTextChange, onToggleCorr
                 type="text"
                 value={answer.text}
                 className={styles.answerInput}
-                onChange={(e) => onTextChange(e.target.value)}
+                onChange={(e) => onTextChange(answer.id, e.target.value)}
                 placeholder="Answer..."
             />
             {!isOpenEnded && (
-                <input type="checkbox" checked={answer.isCorrect} onChange={onToggleCorrect} />
+                <input type="checkbox" checked={answer.isCorrect} onChange={() => {
+                    onToggleCorrect(answer.id);
+                }} />
             )}
-            <button className={styles.deleteAnswer} onClick={onRemove}>❌</button>
+            <button className={styles.deleteAnswer} onChange={() => {
+                onRemove(answer.id);
+            }}>❌</button>
         </div>
     );
 };
