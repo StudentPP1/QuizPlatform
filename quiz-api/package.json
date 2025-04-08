@@ -68,7 +68,10 @@
     "@src": "dist",
     "@auth": "dist/auth",
     "@common": "dist/common",
+    "@review": "dist/review",
+    "@task": "dist/task",
     "@token": "dist/token",
-    "@users": "dist/users"
+    "@users": "dist/users",
+    "@quiz": "dist/quiz"
   }
 }
