@@ -6,6 +6,7 @@ import { TokenService } from '@token/token.service';
 import { CreateGoogleUserDto } from '@users/dto/create-google-user.dto';
 import { CreateUserDto } from '@users/dto/create-user.dto';
 import { User } from '@users/entities/user.entity';
+import { AuthProvider } from '@users/enum/auth-provider.enum';
 import { UsersService } from '@users/users.service';
 
 @Injectable()
@@ -30,7 +31,7 @@ export class AuthService {
         ...createUserDto,
         password: hashedPassword,
       },
-      'local',
+      AuthProvider.LOCAL,
     );
 
     const generator = this.tokenService.getTokenGenerator(user);
@@ -76,7 +77,7 @@ export class AuthService {
       return user;
     }
 
-    return await this.usersService.createUser(data, 'google');
+    return await this.usersService.createUser(data, AuthProvider.GOOGLE);
   }
 
   async logout(userId: string) {

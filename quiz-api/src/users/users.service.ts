@@ -2,9 +2,10 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { CreateGoogleUserDto } from './dto/create-google-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './entities/user.entity';
+import { CreateGoogleUserDto } from '@users/dto/create-google-user.dto';
+import { CreateUserDto } from '@users/dto/create-user.dto';
+import { User } from '@users/entities/user.entity';
+import { AuthProvider } from '@users/enum/auth-provider.enum';
 
 @Injectable()
 export class UsersService {
@@ -18,7 +19,7 @@ export class UsersService {
 
   async createUser<T extends CreateUserDto | CreateGoogleUserDto>(
     userDto: T,
-    authProvider: 'local' | 'google',
+    authProvider: AuthProvider,
   ): Promise<User> {
     const existingUser = await this.getUserByEmail(userDto.email);
 
