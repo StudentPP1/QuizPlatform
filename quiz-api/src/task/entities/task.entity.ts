@@ -23,7 +23,7 @@ export class Task {
   type: TaskType;
 
   @Column('json', { nullable: true })
-  correctAnswer?: string[];
+  correctAnswers?: string[];
 
   @Column({ type: 'json', nullable: true })
   options?: string[];
