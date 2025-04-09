@@ -1,0 +1,20 @@
+import { Task } from '@task/entities/task.entity';
+import { TaskType } from '@task/enum/task-type.enum';
+
+export class TaskPreviewDto {
+  id: string;
+  question: string;
+  type: TaskType;
+  image?: string;
+  correctAnswers: string[];
+  options?: string[];
+
+  constructor(task: Task) {
+    this.id = task.id;
+    this.question = task.question;
+    this.type = task.type;
+    this.image = task.image;
+    this.correctAnswers = task.correctAnswers;
+    this.options = task.options;
+  }
+}
