@@ -41,9 +41,14 @@ export class UsersService {
     return await this.usersRepository.save(user);
   }
 
-  async getUserInfo(userId: string): Promise<UserInfoDto> {
+  async getUserInfo(
+    userId: string,
+    idFromRequest: string,
+  ): Promise<UserInfoDto> {
+    const userIdToUse = userId && userId.trim() !== '' ? userId : idFromRequest;
+
     const user = await this.usersRepository.findOne({
-      where: { id: userId },
+      where: { id: userIdToUse },
       select: ['id', 'username', 'avatarUrl', 'rating', 'email'],
       relations: ['createdQuizzes', 'participatedQuizzes'],
     });
