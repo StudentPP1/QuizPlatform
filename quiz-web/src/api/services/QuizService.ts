@@ -5,6 +5,7 @@ import { fetch } from "../utils/ApiUtils";
 import { RequestAttributes } from "../utils/RequestAttributes";
 
 export class QuizService {
+  // TODO: Task 9 implement logging using custom decorator => @log(level="INFO")
   static getTopQuizzes = async (): Promise<Quiz[]> => {
     return fetch(
       "/api/quiz/top-rated",

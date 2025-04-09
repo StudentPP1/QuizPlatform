@@ -32,6 +32,7 @@ export class RequestAttributes {
     return this;
   }
 
+  // TODO: show Task 8 (implementation of JWT token in the header)
   addAuthHeader(): this {
     this.headers["Authorization"] = `Bearer ${sessionStorage.getItem(
       ACCESS_TOKEN_NAME

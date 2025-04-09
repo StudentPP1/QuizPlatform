@@ -6,7 +6,7 @@ export async function fetch(
 ): Promise<any> {
   const response = await fetch(`${API_BASE_URL}${url}`, attributes);
   if (response.statusCode !== 200) {
-    throw Error(response.message);
+    throw Error(response.message); // ! send reject promise event
   }
   const json = await response.json();
   return json;

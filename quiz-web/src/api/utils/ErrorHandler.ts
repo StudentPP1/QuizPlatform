@@ -9,7 +9,7 @@ function defaultErrorHandler(errorMessages: string | string[]) {
     }
   }
 }
-
+// TODO: Task 7 (maybe these is implementing of event listeners for errors)
 window.addEventListener("unhandledrejection", (event) => {
   console.error("Unhandled error:", event.reason);
   defaultErrorHandler(event.reason.message);

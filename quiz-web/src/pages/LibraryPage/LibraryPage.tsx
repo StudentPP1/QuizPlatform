@@ -9,6 +9,8 @@ const LibraryPage: FC = () => {
   const navigate = useNavigate();
   const [tab, setTab] = useState<number>(1);
   const { user } = useContext<AuthState>(AuthContext);
+  // TODO: Task 6 => at first load first 10 quizzes from the server 
+  // & then load more quizzes when the user scrolls down
   const quizzes = tab === 1 ? user?.createdQuizzes : user?.participatedQuizzes;
 
   return (

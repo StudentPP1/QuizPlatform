@@ -14,6 +14,8 @@ const HomePage: FC = () => {
     const [topQuizzes, setTopQuizzes] = useState<QuizDTO[]>([]);
     const [topAuthors, setTopAuthors] = useState<CreatorDTO[]>([]);
 
+    // TODO: Task 3 implement (save setTopQuizzes, setTopAuthors to map & create Timer to update them)
+    
     useEffect(() => {
         QuizService.getTopQuizzes().then((result: any) => { setTopQuizzes(result) })
         QuizService.getTopAuthors().then((result: any) => { setTopAuthors(result) })
