@@ -4,6 +4,7 @@ import styles from "./LoginPage.module.scss";
 import { useNavigate } from "react-router-dom";
 import { AuthContext, AuthState } from "../../context/context";
 import { UserService } from "../../api/services/UserService";
+import { ACCESS_TOKEN_NAME } from "../../constants/constants";
 
 const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const { setUser } = useContext<AuthState>(AuthContext);
@@ -14,8 +15,9 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const authenticate = (result: any) => {
-    localStorage.setItem("accessToken", result.accessToken)
+  const authenticate = async (result: any) => {
+    console.log("accessToken: ", result.accessToken)
+    sessionStorage.setItem(ACCESS_TOKEN_NAME, result.accessToken)
     setIsOpen(false)
     UserService.getUser()
       .then((result: any) => { setUser(result) })
@@ -24,10 +26,12 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   }
 
   const login = async () => {
+    console.log("login")
     AuthService.login(email, password).then((result: any) => { authenticate(result) })
   }
 
   const register = async () => {
+    console.log("register")
     AuthService.register(username, email, password).then((result: any) => { authenticate(result) })
   }
 

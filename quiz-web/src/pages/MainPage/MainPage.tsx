@@ -1,11 +1,18 @@
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import styles from "./MainPage.module.scss"
 import { Modal } from "../../components/modal/Modal";
 import LoginPage from "../LoginPage/LoginPage";
+import { AuthContext } from "../../context/context";
+import { ACCESS_TOKEN_NAME } from "../../constants/constants";
 
 export const MainPage: FC = () => {
+  const {user} = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
+  
+  if (user != null && sessionStorage.getItem(ACCESS_TOKEN_NAME) != null) {
+    window.location.href = "/home"
+  }
+  
   return (
     <div className={styles.container}>
 

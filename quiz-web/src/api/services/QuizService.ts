@@ -1,48 +1,48 @@
 import { Creator } from "../../models/Creator";
 import { Quiz } from "../../models/Quiz";
 import { Review } from "../../models/Review";
-import { fetch } from "../utils/ApiUtils";
+import { apiFetch } from "../utils/ApiUtils";
 import { RequestAttributes } from "../utils/RequestAttributes";
 
 export class QuizService {
   // TODO: Task 9 implement logging using custom decorator => @log(level="INFO")
   static getTopQuizzes = async (): Promise<Quiz[]> => {
-    return fetch(
+    return apiFetch(
       "/api/quiz/top-rated",
       RequestAttributes.builder().addAuthHeader().build()
     );
   };
 
   static getTopAuthors = async (): Promise<Creator[]> => {
-    return fetch(
+    return apiFetch(
       "/api/quiz/top-creators",
       RequestAttributes.builder().addAuthHeader().build()
     );
   };
 
   static search = async (text: string): Promise<Quiz[]> => {
-    return fetch(
+    return apiFetch(
       `/api/quiz/search?name=${text}`,
       RequestAttributes.builder().addAuthHeader().build()
     );
   };
 
   static getQuiz = async (id: string): Promise<Quiz> => {
-    return fetch(
+    return apiFetch(
       `/api/quiz?quizId=${id}`,
       RequestAttributes.builder().addAuthHeader().build()
     );
   };
 
   static getReviews = async (id: string): Promise<Review[]> => {
-    return fetch(
+    return apiFetch(
       `/api/review/quiz?quizId=${id}`,
       RequestAttributes.builder().addAuthHeader().build()
     );
   };
 
   static async sendReview(quizId: string, rating: number, text: string | null) {
-    return fetch(
+    return apiFetch(
       `/api/review/${quizId}`,
       RequestAttributes.builder()
         .setMethod("POST")
@@ -56,7 +56,7 @@ export class QuizService {
   }
 
   static async createQuiz(quiz: any) {
-    return fetch(
+    return apiFetch(
       "/api/quiz/create",
       RequestAttributes.builder()
         .setMethod("POST")
@@ -67,7 +67,7 @@ export class QuizService {
   }
 
   static async doneQuiz(quizId: string, score: number) {
-    return fetch(
+    return apiFetch(
       `/api/quiz/${quizId}/results`,
       RequestAttributes.builder()
         .setMethod("POST")

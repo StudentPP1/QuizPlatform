@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 
-function defaultErrorHandler(errorMessages: string | string[]) {
+export function defaultErrorHandler(errorMessages: string | string[]) {
   if (!Array.isArray(errorMessages)) {
     toast.error(errorMessages, { position: "top-right" });
   } else {
@@ -10,12 +10,3 @@ function defaultErrorHandler(errorMessages: string | string[]) {
   }
 }
 // TODO: Task 7 (maybe these is implementing of event listeners for errors)
-window.addEventListener("unhandledrejection", (event) => {
-  console.error("Unhandled error:", event.reason);
-  defaultErrorHandler(event.reason.message);
-});
-
-window.addEventListener("error", (event) => {
-  console.error("Fatal error:", event.error);
-  defaultErrorHandler(event.error.message);
-});

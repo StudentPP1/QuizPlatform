@@ -17,8 +17,10 @@ const HomePage: FC = () => {
     // TODO: Task 3 implement (save setTopQuizzes, setTopAuthors to map & create Timer to update them)
     
     useEffect(() => {
-        QuizService.getTopQuizzes().then((result: any) => { setTopQuizzes(result) })
-        QuizService.getTopAuthors().then((result: any) => { setTopAuthors(result) })
+        setTopQuizzes([])
+        setTopAuthors([])
+        // QuizService.getTopQuizzes().then((result: any) => { setTopQuizzes(result) })
+        // QuizService.getTopAuthors().then((result: any) => { setTopAuthors(result) })
     }, [])
 
     return (

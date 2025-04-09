@@ -1,18 +1,18 @@
 import { Creator } from "../../models/Creator";
-import { fetch } from "../utils/ApiUtils";
+import { apiFetch } from "../utils/ApiUtils";
 import { RequestAttributes } from "../utils/RequestAttributes";
 
 export class UserService {
   static getUser = async (): Promise<Creator> => {
-    return fetch(
-      "/api/users",
+    return apiFetch(
+      "/api/users/profile",
       RequestAttributes.builder().addAuthHeader().build()
     );
   };
 
   static getAuthor = async (id: string): Promise<Creator> => {
-    return fetch(
-      `/api/users?userId=${id}`,
+    return apiFetch(
+      `/api/users/profile?id=${id}`,
       RequestAttributes.builder().addAuthHeader().build()
     );
   };

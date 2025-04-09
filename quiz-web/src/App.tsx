@@ -9,12 +9,14 @@ import { refreshToken } from "./api/services/TokenService";
 import { UserService } from "./api/services/UserService";
 
 export const App: FC = () => {
-  // TODO: test & add loading animation 
+  // TODO: add loading animation (maybe) & test quizzes/library pages
   const [user, setUser] = useState<Creator | null>(null);
 
   useEffect(() => {
+    console.log("refresh Token")
     refreshToken().then(() => {
       if (sessionStorage.getItem(ACCESS_TOKEN_NAME) != null) {
+        console.log("get User")
         UserService.getUser()
           .then((result: any) => { setUser(result) })
           .catch(() => { setUser(null) })
