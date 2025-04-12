@@ -8,7 +8,7 @@ import { ACCESS_TOKEN_NAME } from "../../constants/constants";
 
 const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const { setUser } = useContext<AuthState>(AuthContext);
-  const [isLogin, setIsLogin] = useState<boolean>();
+  const [isLogin, setIsLogin] = useState<boolean>(true);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");

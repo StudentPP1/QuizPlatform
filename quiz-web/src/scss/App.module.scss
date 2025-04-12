@@ -6,8 +6,11 @@
     overflow-x: hidden;
 }
 
-body {
+html, body, #root {
   -ms-overflow-style: none; 
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 ::-webkit-scrollbar {

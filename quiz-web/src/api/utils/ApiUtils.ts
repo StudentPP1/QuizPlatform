@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "../../constants/constants";
-import { defaultErrorHandler } from "./ErrorHandler";
+import { fetchErrorEvent } from "./ErrorHandler";
 
 export async function apiFetch(
   url: string,
@@ -7,10 +7,12 @@ export async function apiFetch(
 ): Promise<any> {
   const response = await fetch(`${API_BASE_URL}${url}`, attributes);
   const json = await response.json();
-  if (response.status !== 200) {
-    console.log("Error: " + json.message);
-    defaultErrorHandler(json.message);
-    throw json;
-  } 
+  if (!response.ok) {
+    fetchErrorEvent.dispatchEvent(
+      new CustomEvent("api-fetch-error", {
+        detail: { status: response.status, messages: json.message },
+      })
+    );
+  }
   return json;
 }
