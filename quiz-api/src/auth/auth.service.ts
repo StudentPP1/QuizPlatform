@@ -1,6 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 
+import { EventEmitterService } from '@events/event-emitter.service';
+import { SendMailOptions } from '@mail/interfaces/send-mail-options.interface';
 import { Tokens } from '@token/interfaces/tokens.payload';
 import { TokenService } from '@token/token.service';
 import { CreateGoogleUserDto } from '@users/dto/create-google-user.dto';
@@ -12,6 +14,7 @@ import { UsersService } from '@users/users.service';
 @Injectable()
 export class AuthService {
   constructor(
+    private readonly emitter: EventEmitterService,
     private readonly usersService: UsersService,
     private readonly tokenService: TokenService,
   ) {}
@@ -24,7 +27,8 @@ export class AuthService {
   }
 
   async signUp(createUserDto: CreateUserDto): Promise<Tokens> {
-    const hashedPassword = await this.hashPassword(createUserDto.password);
+    const { username, email, password } = createUserDto;
+    const hashedPassword = await this.hashPassword(password);
 
     const user = await this.usersService.createUser(
       {
@@ -33,6 +37,11 @@ export class AuthService {
       },
       AuthProvider.LOCAL,
     );
+
+    this.emitter.emit<SendMailOptions>('user.registered', {
+      to: email,
+      username,
+    });
 
     const generator = this.tokenService.getTokenGenerator(user);
 
