@@ -23,6 +23,12 @@ export const configValidationSchema = Joi.object({
   GOOGLE_CLIENT_SECRET: Joi.string().required(),
   GOOGLE_CALLBACK_URL: Joi.string().uri().required(),
 
+  // Mail configuration
+  MAIL_HOST: Joi.string().required(),
+  MAIL_PORT: Joi.number().required(),
+  MAIL_USER: Joi.string().required(),
+  MAIL_PASS: Joi.string().required(),
+
   // Client URL
   CLIENT_URL: Joi.string().uri().required(),
 });
