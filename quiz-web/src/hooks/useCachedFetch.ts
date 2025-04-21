@@ -19,7 +19,7 @@ export function useCachedFetch<T>(
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
-  const isMounted = useRef(true);
+  const isMounted = useRef(true); // Track if the component is loaded in DOM 
 
   useEffect(() => {
     isMounted.current = true;
@@ -35,7 +35,7 @@ export function useCachedFetch<T>(
       } else {
         try {
           const result = await fetcher();
-          if (isMounted.current) {
+          if (isMounted.current) { // Check if the component is still rendering before setting state
             globalCache.set(key, { data: result, timestamp: now });
             setData(result);
           }

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext, AuthState } from "../../context/context";
 import { UserService } from "../../api/services/UserService";
 import { ACCESS_TOKEN_NAME } from "../../constants/constants";
+import { AsyncFunctionQueue } from "../../utils/Queue";
 
 const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const { setUser } = useContext<AuthState>(AuthContext);
@@ -15,25 +16,29 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const authenticate = async (result: any) => {
-    console.log("accessToken: ", result.accessToken)
-    sessionStorage.setItem(ACCESS_TOKEN_NAME, result.accessToken)
-    setIsOpen(false)
-    UserService.getUser()
-      .then((result: any) => { setUser(result) })
-      .then(() => { navigate("/home") })
-      .catch(() => { setUser(null) })
-  }
+  const queue = new AsyncFunctionQueue();
 
-  const login = async () => {
-    console.log("login")
-    AuthService.login(email, password).then((result: any) => { authenticate(result) })
-  }
+  const authenticate = (result: any) => {
+    sessionStorage.setItem(ACCESS_TOKEN_NAME, result.accessToken);
+    setIsOpen(false);
 
-  const register = async () => {
-    console.log("register")
-    AuthService.register(username, email, password).then((result: any) => { authenticate(result) })
-  }
+    queue.enqueue(() => UserService.getUser(), (error: any) => {
+      setUser(null);
+      console.error("Error fetching user:", error);
+    });
+    queue.enqueue((user: any) => setUser(user));
+    queue.enqueue(() => navigate("/home"));
+  };
+
+  const login = () => {
+    queue.enqueue(() => AuthService.login(email, password));
+    queue.enqueue(authenticate);
+  };
+
+  const register = () => {
+    queue.enqueue(() => AuthService.register(username, email, password));
+    queue.enqueue(authenticate);
+  };
 
   const google = async () => {
     AuthService.google()
