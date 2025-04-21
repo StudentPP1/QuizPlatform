@@ -1,10 +1,9 @@
-import { Creator } from "../../models/Creator";
 import { CreatorDTO } from "../../models/CreatorDTO";
 import { Quiz } from "../../models/Quiz";
-import { Review } from "../../models/Review";
 import { apiFetch } from "../utils/ApiUtils";
 import { RequestAttributes } from "../utils/RequestAttributes";
-
+// TODO: Task 6 => 10 first quizzes from context & then load more quizzes when the user scrolls down
+  
 export class QuizService {
   // TODO: Task 9 implement logging using custom decorator => @log(level="INFO")
   static getTopQuizzes = async (): Promise<Quiz[]> => {
@@ -27,7 +26,7 @@ export class QuizService {
       RequestAttributes.builder().addAuthHeader().build()
     );
   };
-
+  
   static getQuiz = async (id: string): Promise<Quiz> => {
     return apiFetch(
       `/api/quiz?quizId=${id}`,
@@ -35,9 +34,16 @@ export class QuizService {
     );
   };
 
-  static getReviews = async (id: string): Promise<Review[]> => {
+  static getCreatedQuizzes = async (from: number, to: number): Promise<Quiz[]> => {
     return apiFetch(
-      `/api/review/quiz?quizId=${id}`,
+      `/api/createdQuizzes?from=${from}&to=${to}`,
+      RequestAttributes.builder().addAuthHeader().build()
+    );
+  };
+
+  static getParticipatedQuizzes = async (from: number, to: number): Promise<Quiz[]> => {
+    return apiFetch(
+      `/api/participatedQuizzes?from=${from}&to=${to}`,
       RequestAttributes.builder().addAuthHeader().build()
     );
   };

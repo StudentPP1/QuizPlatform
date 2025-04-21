@@ -15,7 +15,8 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const [email, setEmail] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
-
+  
+  // TODO: Task 4 implement async function queue
   const queue = new AsyncFunctionQueue();
 
   const authenticate = (result: any) => {

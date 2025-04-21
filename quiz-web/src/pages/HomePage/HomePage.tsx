@@ -1,4 +1,4 @@
-import { FC, useContext } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from "./HomePage.module.scss"
 import Wrapper from "../../components/wrapper/Wrapper";
 import { RecentQuiz } from "../../components/card/card/RecentQuizCard";
@@ -6,14 +6,14 @@ import QuizCard from "../../components/card/card/QuizCard";
 import AuthorCard from "../../components/card/author/AuthorCard";
 import { QuizDTO } from "../../models/QuizDTO";
 import { CreatorDTO } from "../../models/CreatorDTO";
-import { AuthContext } from "../../context/context";
 import { QuizService } from "../../api/services/QuizService";
 import { useCachedFetch } from "../../hooks/useCachedFetch";
 import Loading from "../../components/loading/Loader";
 
 const HomePage: FC = () => {
-    const { user } = useContext(AuthContext);
-    
+    const [quizzes, setQuizzes] = useState<QuizDTO[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+
     // TODO: Task 3 implement (save setTopQuizzes, setTopAuthors to map & create Timer to update them)
     const { data: topQuizzes, loading: loadingQuizzes } = useCachedFetch<QuizDTO[]>(
         "topQuizzes",
@@ -27,13 +27,20 @@ const HomePage: FC = () => {
         // { ttl: 30000 }
     );
 
+    useEffect(() => {
+        QuizService.getParticipatedQuizzes(0, 2).then((data) => {
+            setQuizzes(data);
+            setIsLoading(false);
+        })
+    }, []);
+
     return (
         <Wrapper>
             <section className={styles.section_container}>
                 <div className={styles.recent_container}>
                     <h2>Recent</h2>
                     <div className={styles.items_list}>
-                        {user?.participatedQuizzes.slice(0, 2).map((quiz) =>
+                        {isLoading ? <Loading /> : quizzes?.map((quiz) =>
                             <RecentQuiz key={quiz.id} quiz={quiz} />
                         )}
                     </div>

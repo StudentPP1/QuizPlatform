@@ -1,17 +1,47 @@
-import { FC, useContext, useState } from "react";
+import { FC, useRef, useState, useMemo } from "react";
 import styles from "./LibraryPage.module.scss";
 import { useNavigate } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
 import Avatar from "../../components/avatar/Avatar";
-import { AuthContext, AuthState } from "../../context/context";
+import { useObserver } from "../../hooks/useObserver";
+import { CreatedQuizzesStrategy, ParticipatedQuizzesStrategy, QuizFetchStrategy } from "../../api/services/QuizFetchStrategy";
+import { QuizDTO } from "../../models/QuizDTO";
 
 const LibraryPage: FC = () => {
+  const SIZE = 10;
   const navigate = useNavigate();
-  const [tab, setTab] = useState<number>(1);
-  const { user } = useContext<AuthState>(AuthContext);
-  // TODO: Task 6 => at first load first 10 quizzes from the server 
-  // & then load more quizzes when the user scrolls down
-  const quizzes = tab === 1 ? user?.createdQuizzes : user?.participatedQuizzes;
+  const [isLoading, setLoading] = useState(false);
+  const [tab, setTab] = useState(1);
+  const [from, setFrom] = useState(0);
+  const [to, setTo] = useState(SIZE);
+  const lastElement = useRef<HTMLDivElement | null>(null);
+  const [quizzes, setQuizzes] = useState<QuizDTO[]>([]);
+    
+  // TODO: Task 6 => 10 first quizzes from context & then load more quizzes when the user scrolls down
+  const strategy: QuizFetchStrategy = useMemo(() => {
+    return tab === 1 ? new CreatedQuizzesStrategy() : new ParticipatedQuizzesStrategy();
+  }, [tab]);
+
+  useObserver(lastElement, isLoading, () => {
+    setLoading(true);
+    strategy.fetchQuizzes(from, to).then((data) => {
+      setQuizzes(prev => {
+        if (prev) {
+          return [...prev, ...data];
+        } else {
+          return data;
+        }
+      });
+      setFrom(prev => prev + SIZE);
+      setTo(prev => prev + SIZE);
+    }).finally(() => setLoading(false));
+  });
+
+  function resetPagination() {
+    setQuizzes([]);
+    setFrom(0);
+    setTo(SIZE);
+  }
 
   return (
     <Wrapper>
@@ -20,27 +50,22 @@ const LibraryPage: FC = () => {
         <div className={styles.hot_bar}>
           <nav className={styles.nav_bar}>
             <ul>
-              <li
-                className={tab === 1 ? styles.active : ''}
-                onClick={() => setTab(1)}
-              >Created</li>
-              <li
-                className={tab === 2 ? styles.active : ''}
-                onClick={() => setTab(2)}
-              >History</li>
+              <li className={tab === 1 ? styles.active : ''} onClick={() => { setTab(1); resetPagination(); }}>
+                Created
+              </li>
+              <li className={tab === 2 ? styles.active : ''} onClick={() => { setTab(2); resetPagination(); }}>
+                History
+              </li>
             </ul>
           </nav>
         </div>
 
         <div className={styles.modules}>
           {quizzes?.map((quiz) => (
-            <button
-              className={styles.module_card}
-              onClick={() => {
-                localStorage.setItem("index", "0")
-                navigate(`/quizInfo/${quiz.id}`)
-              }}
-            >
+            <button key={quiz.id} className={styles.module_card} onClick={() => {
+              localStorage.setItem("index", "0");
+              navigate(`/quizInfo/${quiz.id}`);
+            }}>
               <div className={styles.card_content}>
                 <h3 className={styles.name_quest}>{quiz.title}</h3>
                 <div className={styles.top_info}>
@@ -55,6 +80,8 @@ const LibraryPage: FC = () => {
           ))}
         </div>
       </div>
+
+      <div ref={lastElement} className="last" />
     </Wrapper>
   );
 };
