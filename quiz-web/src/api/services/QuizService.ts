@@ -1,48 +1,49 @@
 import { CreatorDTO } from "../../models/CreatorDTO";
 import { Quiz } from "../../models/Quiz";
+import { QuizDTO } from "../../models/QuizDTO";
+import { Review } from "../../models/Review";
 import { apiFetch } from "../utils/ApiUtils";
 import { RequestAttributes } from "../utils/RequestAttributes";
-// TODO: Task 6 => 10 first quizzes from context & then load more quizzes when the user scrolls down
-  
+
 export class QuizService {
   // TODO: Task 9 implement logging using custom decorator => @log(level="INFO")
   static getTopQuizzes = async (): Promise<Quiz[]> => {
-    return apiFetch(
+    return apiFetch<Quiz[]>(
       "/api/quiz/top-rated",
       RequestAttributes.builder().addAuthHeader().build()
     );
   };
 
   static getTopAuthors = async (): Promise<CreatorDTO[]> => {
-    return apiFetch(
+    return apiFetch<CreatorDTO[]>(
       "/api/quiz/top-creators",
       RequestAttributes.builder().addAuthHeader().build()
     );
   };
 
   static search = async (text: string): Promise<Quiz[]> => {
-    return apiFetch(
+    return apiFetch<Quiz[]>(
       `/api/quiz/search?name=${text}`,
       RequestAttributes.builder().addAuthHeader().build()
     );
   };
   
   static getQuiz = async (id: string): Promise<Quiz> => {
-    return apiFetch(
+    return apiFetch<Quiz>(
       `/api/quiz?quizId=${id}`,
       RequestAttributes.builder().addAuthHeader().build()
     );
   };
 
-  static getCreatedQuizzes = async (from: number, to: number): Promise<Quiz[]> => {
-    return apiFetch(
-      `/api/createdQuizzes?from=${from}&to=${to}`,
+  static getCreatedQuizzes = async (userId: string, from: number, to: number): Promise<QuizDTO[]> => {
+    return apiFetch<QuizDTO[]>(
+      `/api/createdQuizzes?userId=${userId}&from=${from}&to=${to}`,
       RequestAttributes.builder().addAuthHeader().build()
     );
   };
 
-  static getParticipatedQuizzes = async (from: number, to: number): Promise<Quiz[]> => {
-    return apiFetch(
+  static getParticipatedQuizzes = async (userId: string, from: number, to: number): Promise<QuizDTO[]> => {
+    return apiFetch<QuizDTO[]>(
       `/api/participatedQuizzes?from=${from}&to=${to}`,
       RequestAttributes.builder().addAuthHeader().build()
     );
@@ -61,9 +62,16 @@ export class QuizService {
         .build()
     );
   }
+  
+  static getReviews = async (id: string): Promise<Review[]> => {
+    return apiFetch<Review[]>(
+      `/api/review/quiz?quizId=${id}`,
+      RequestAttributes.builder().addAuthHeader().build()
+    );
+  };
 
   static async createQuiz(quiz: any) {
-    return apiFetch(
+    return apiFetch<Quiz>(
       "/api/quiz/create",
       RequestAttributes.builder()
         .setMethod("POST")

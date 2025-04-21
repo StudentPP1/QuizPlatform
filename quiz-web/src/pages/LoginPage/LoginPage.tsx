@@ -16,7 +16,7 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
   
-  // TODO: Task 4 implement async function queue
+  // TODO: Task 4 => implement async function queue
   const queue = new AsyncFunctionQueue();
 
   const authenticate = (result: any) => {

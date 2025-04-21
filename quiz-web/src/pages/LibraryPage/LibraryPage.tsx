@@ -1,4 +1,4 @@
-import { FC, useRef, useState, useMemo } from "react";
+import { FC, useRef, useState, useMemo, useContext } from "react";
 import styles from "./LibraryPage.module.scss";
 import { useNavigate } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
@@ -6,8 +6,10 @@ import Avatar from "../../components/avatar/Avatar";
 import { useObserver } from "../../hooks/useObserver";
 import { CreatedQuizzesStrategy, ParticipatedQuizzesStrategy, QuizFetchStrategy } from "../../api/services/QuizFetchStrategy";
 import { QuizDTO } from "../../models/QuizDTO";
+import { AuthContext } from "../../context/context";
 
 const LibraryPage: FC = () => {
+  const {user} = useContext(AuthContext)
   const SIZE = 10;
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
@@ -17,14 +19,15 @@ const LibraryPage: FC = () => {
   const lastElement = useRef<HTMLDivElement | null>(null);
   const [quizzes, setQuizzes] = useState<QuizDTO[]>([]);
     
-  // TODO: Task 6 => 10 first quizzes from context & then load more quizzes when the user scrolls down
+  // TODO: Task 6 => load more quizzes when the user scrolls down
   const strategy: QuizFetchStrategy = useMemo(() => {
     return tab === 1 ? new CreatedQuizzesStrategy() : new ParticipatedQuizzesStrategy();
   }, [tab]);
 
   useObserver(lastElement, isLoading, () => {
     setLoading(true);
-    strategy.fetchQuizzes(from, to).then((data) => {
+    if (user == null) return;
+    strategy.fetchQuizzes(user.userId, from, to).then((data) => {
       setQuizzes(prev => {
         if (prev) {
           return [...prev, ...data];

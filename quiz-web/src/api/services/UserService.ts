@@ -4,14 +4,14 @@ import { RequestAttributes } from "../utils/RequestAttributes";
 
 export class UserService {
   static getUser = async (): Promise<Creator> => {
-    return apiFetch(
+    return apiFetch<Creator>(
       "/api/users/profile",
       RequestAttributes.builder().addAuthHeader().build()
     );
   };
 
   static getAuthor = async (id: string): Promise<Creator> => {
-    return apiFetch(
+    return apiFetch<Creator>(
       `/api/users/profile?id=${id}`,
       RequestAttributes.builder().addAuthHeader().build()
     );

@@ -31,8 +31,8 @@ export class RequestAttributes {
     this.headers[key] = value;
     return this;
   }
-
-  // TODO: show Task 8 (implementation of JWT token in the header)
+  
+  // TODO: Task 8 => show implementation of JWT token in the header
   addAuthHeader(): this {
     this.headers["Authorization"] = `Bearer ${sessionStorage.getItem(ACCESS_TOKEN_NAME)}`;
     console.log("Send header: " + this.headers["Authorization"]);

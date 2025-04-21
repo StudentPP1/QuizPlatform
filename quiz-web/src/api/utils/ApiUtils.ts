@@ -1,10 +1,10 @@
 import { API_BASE_URL } from "../../constants/constants";
 import { fetchErrorEvent } from "./ErrorHandler";
 
-export async function apiFetch(
+export async function apiFetch<T>(
   url: string,
   attributes: RequestInit
-): Promise<any> {
+): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${url}`, attributes);
   const json = await response.json();
   if (!response.ok) {
@@ -14,5 +14,5 @@ export async function apiFetch(
       })
     );
   }
-  return json;
+  return json as T;
 }

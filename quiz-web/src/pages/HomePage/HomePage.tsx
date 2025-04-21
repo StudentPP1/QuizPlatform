@@ -14,7 +14,7 @@ const HomePage: FC = () => {
     const [quizzes, setQuizzes] = useState<QuizDTO[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    // TODO: Task 3 implement (save setTopQuizzes, setTopAuthors to map & create Timer to update them)
+    // TODO: Task 3 => implement (save setTopQuizzes, setTopAuthors to map & create Timer to update them)
     const { data: topQuizzes, loading: loadingQuizzes } = useCachedFetch<QuizDTO[]>(
         "topQuizzes",
         () => QuizService.getTopQuizzes(),

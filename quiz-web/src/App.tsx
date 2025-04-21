@@ -9,7 +9,7 @@ import { refreshToken } from "./api/services/TokenService";
 import { UserService } from "./api/services/UserService";
 
 export const App: FC = () => {
-  // TODO: add loading animation (maybe) & test quizzes/library pages
+  // TODO: test all pages except login
   const [user, setUser] = useState<Creator | null>(null);
 
   useEffect(() => {
