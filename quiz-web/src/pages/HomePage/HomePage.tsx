@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext } from "react";
 import styles from "./HomePage.module.scss"
 import Wrapper from "../../components/wrapper/Wrapper";
 import { RecentQuiz } from "../../components/card/card/RecentQuizCard";
@@ -8,20 +8,24 @@ import { QuizDTO } from "../../models/QuizDTO";
 import { CreatorDTO } from "../../models/CreatorDTO";
 import { AuthContext } from "../../context/context";
 import { QuizService } from "../../api/services/QuizService";
+import { useCachedFetch } from "../../hooks/useCachedFetch";
+import Loading from "../../components/loading/Loader";
 
 const HomePage: FC = () => {
     const { user } = useContext(AuthContext);
-    const [topQuizzes, setTopQuizzes] = useState<QuizDTO[]>([]);
-    const [topAuthors, setTopAuthors] = useState<CreatorDTO[]>([]);
-
-    // TODO: Task 3 implement (save setTopQuizzes, setTopAuthors to map & create Timer to update them)
     
-    useEffect(() => {
-        setTopQuizzes([])
-        setTopAuthors([])
-        // QuizService.getTopQuizzes().then((result: any) => { setTopQuizzes(result) })
-        // QuizService.getTopAuthors().then((result: any) => { setTopAuthors(result) })
-    }, [])
+    // TODO: Task 3 implement (save setTopQuizzes, setTopAuthors to map & create Timer to update them)
+    const { data: topQuizzes, loading: loadingQuizzes } = useCachedFetch<QuizDTO[]>(
+        "topQuizzes",
+        () => QuizService.getTopQuizzes(),
+        // { ttl: 30000 }
+    );
+
+    const { data: topAuthors, loading: loadingAuthors } = useCachedFetch<CreatorDTO[]>(
+        "topAuthors",
+        () => QuizService.getTopAuthors(),
+        // { ttl: 30000 }
+    );
 
     return (
         <Wrapper>
@@ -29,8 +33,8 @@ const HomePage: FC = () => {
                 <div className={styles.recent_container}>
                     <h2>Recent</h2>
                     <div className={styles.items_list}>
-                        {user?.participatedQuizzes.splice(0, 2).map((quiz) =>
-                            <RecentQuiz quiz={quiz} />
+                        {user?.participatedQuizzes.slice(0, 2).map((quiz) =>
+                            <RecentQuiz key={quiz.id} quiz={quiz} />
                         )}
                     </div>
                 </div>
@@ -39,8 +43,9 @@ const HomePage: FC = () => {
             <section className={styles.section_container}>
                 <h2>The best quest rating</h2>
                 <div className={styles.items_list}>
-                    {topQuizzes.map((quiz) =>
+                    {loadingQuizzes ? <Loading /> : topQuizzes?.map((quiz) =>
                         <QuizCard
+                            key={quiz.id}
                             title={quiz.title}
                             count={quiz.numberOfTasks}
                             avatarUrl={quiz.creator.avatarUrl}
@@ -54,13 +59,13 @@ const HomePage: FC = () => {
             <section className={styles.section_container}>
                 <h2>The best author rating</h2>
                 <div className={styles.items_list}>
-                    {topAuthors.map((author) =>
-                        <AuthorCard author={author} />
+                    {loadingAuthors ? <Loading /> : topAuthors?.map((author) =>
+                        <AuthorCard key={author.userId} author={author} />
                     )}
                 </div>
             </section>
         </Wrapper>
-    )
+    );
 }
 
-export default HomePage
+export default HomePage;

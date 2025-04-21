@@ -1,4 +1,5 @@
 import { Creator } from "../../models/Creator";
+import { CreatorDTO } from "../../models/CreatorDTO";
 import { Quiz } from "../../models/Quiz";
 import { Review } from "../../models/Review";
 import { apiFetch } from "../utils/ApiUtils";
@@ -13,7 +14,7 @@ export class QuizService {
     );
   };
 
-  static getTopAuthors = async (): Promise<Creator[]> => {
+  static getTopAuthors = async (): Promise<CreatorDTO[]> => {
     return apiFetch(
       "/api/quiz/top-creators",
       RequestAttributes.builder().addAuthHeader().build()
