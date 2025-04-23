@@ -21,14 +21,14 @@ export class CreateTaskDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  correctAnswers?: string[];
+  correctAnswers?: string[] | null;
 
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  options?: string[];
+  options?: string[] | null;
 
   @IsOptional()
   @IsUrl()
-  image?: string;
+  image?: string | null;
 }

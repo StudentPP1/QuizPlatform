@@ -3,7 +3,7 @@ import { User } from '@users/entities/user.entity';
 export class ProfileDto {
   userId: string;
   username: string;
-  avatarUrl?: string;
+  avatarUrl?: string | null;
   rating: number;
   email: string;
   numberOfQuizzes: number;
