@@ -1,32 +1,32 @@
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { TaskPreviewDto } from '@task/dto/task-preview.dto';
+import { ProfileDto } from '@users/dto/profile.dto';
 
 export class QuizPreviewDto {
   id: string;
   title: string;
-  description: string;
   numberOfTasks: number;
-  timeLimit: number;
+  creator: ProfileDto;
   rating: number;
-  creator: {
-    id: string;
-    username: string;
-    avatarUrl?: string;
-  };
-  tasks: TaskPreviewDto[];
 
   constructor(quiz: Quiz) {
     this.id = quiz.id;
     this.title = quiz.title;
-    this.description = quiz.description;
     this.numberOfTasks = quiz.numberOfTasks;
-    this.timeLimit = quiz.timeLimit;
+    this.creator = new ProfileDto(quiz.creator);
     this.rating = quiz.rating;
-    this.creator = {
-      id: quiz.creator?.id,
-      username: quiz.creator?.username,
-      avatarUrl: quiz.creator?.avatarUrl,
-    };
+  }
+}
+
+export class FullQuizDto extends QuizPreviewDto {
+  description: string;
+  timeLimit: number;
+  tasks: TaskPreviewDto[];
+
+  constructor(quiz: Quiz) {
+    super(quiz);
+    this.description = quiz.description;
+    this.timeLimit = quiz.timeLimit;
     this.tasks = quiz.tasks?.map((task) => new TaskPreviewDto(task)) || [];
   }
 }
