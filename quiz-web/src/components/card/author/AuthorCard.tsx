@@ -2,9 +2,9 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from "./AuthorCard.module.scss";
 import Avatar from '../../avatar/Avatar';
-import { CreatorDTO } from '../../../models/CreatorDTO';
+import { Creator } from '../../../models/Creator';
 
-const AuthorCard: FC<{ author: CreatorDTO }> = ({ author }) => {
+const AuthorCard: FC<{ author: Creator }> = ({ author }) => {
   const navigate = useNavigate();
   return (
     <div

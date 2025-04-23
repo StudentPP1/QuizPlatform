@@ -1,4 +1,4 @@
-import { CreatorDTO } from "../../models/CreatorDTO";
+import { Creator } from "../../models/Creator";
 import { Quiz } from "../../models/Quiz";
 import { QuizDTO } from "../../models/QuizDTO";
 import { Review } from "../../models/Review";
@@ -10,8 +10,8 @@ export class QuizService {
     return apiFetch<Quiz[]>("/api/quiz/top-rated", this.withAuth());
   };
 
-  static getTopAuthors = async (): Promise<CreatorDTO[]> => {
-    return apiFetch<CreatorDTO[]>("/api/quiz/top-creators", this.withAuth());
+  static getTopAuthors = async (): Promise<Creator[]> => {
+    return apiFetch<Creator[]>("/api/quiz/top-creators", this.withAuth());
   };
 
   static search = async (text: string): Promise<Quiz[]> => {

@@ -1,4 +1,4 @@
-import { CreatorDTO } from "./CreatorDTO"
+import { Creator } from "./Creator"
 import { QuizTask } from "./QuizTask"
 
 export type Quiz = {
@@ -9,5 +9,5 @@ export type Quiz = {
     timeLimit: number,
     rating: number,
     tasks: QuizTask[],
-    creator: CreatorDTO
+    creator: Creator
 }

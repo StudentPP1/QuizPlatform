@@ -1,9 +1,9 @@
-import { CreatorDTO } from "./CreatorDTO"
+import { Creator } from "./Creator"
 
 export type QuizDTO = {
     id: string,
     title: string,
     numberOfTasks: number,
-    creator: CreatorDTO,
+    creator: Creator,
     rating: number
 }

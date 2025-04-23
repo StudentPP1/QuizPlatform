@@ -1,7 +1,7 @@
-import { CreatorDTO } from "./CreatorDTO";
+import { Creator } from "./Creator";
 
 export type Review = {
-  creator: CreatorDTO,
+  creator: Creator,
   text: string,
   rating: number
 };

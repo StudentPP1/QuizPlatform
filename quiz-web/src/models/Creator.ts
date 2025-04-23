@@ -4,4 +4,5 @@ export type Creator = {
   avatarUrl: string | null;
   rating: number;
   email: string;
+  numberOfQuizzes: number;
 };

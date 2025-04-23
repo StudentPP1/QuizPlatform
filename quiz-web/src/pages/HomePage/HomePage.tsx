@@ -5,7 +5,7 @@ import { RecentQuiz } from "../../components/card/card/RecentQuizCard";
 import QuizCard from "../../components/card/card/QuizCard";
 import AuthorCard from "../../components/card/author/AuthorCard";
 import { QuizDTO } from "../../models/QuizDTO";
-import { CreatorDTO } from "../../models/CreatorDTO";
+import { Creator } from "../../models/Creator";
 import { QuizService } from "../../api/services/QuizService";
 import { useCachedFetch } from "../../hooks/useCachedFetch";
 import Loading from "../../components/loading/Loader";
@@ -27,7 +27,7 @@ const HomePage: FC = () => {
         // { ttl: 30000 }
     );
 
-    const { data: topAuthors, loading: loadingAuthors } = useCachedFetch<CreatorDTO[]>(
+    const { data: topAuthors, loading: loadingAuthors } = useCachedFetch<Creator[]>(
         "topAuthors",
         () => QuizService.getTopAuthors(),
         // { ttl: 30000 }
