@@ -9,15 +9,17 @@ export class AsyncFunctionQueue {
   }
 
   private async processQueue() {
+    // Prevent re-entrance and check if the queue is empty
     if (this.isProcessing || this.queue.length === 0) return;
 
     this.isProcessing = true;
 
+    // if during execution fn, other fn is added to the queue, we need to process it
     while (this.queue.length > 0) {
       const { fn, catchFn } = this.queue.shift()!;
 
       try {
-        const result = await fn(this.lastResult);
+        const result = await fn(this.lastResult); 
         this.lastResult = result;
       } catch (error) {
         this.lastResult = undefined;

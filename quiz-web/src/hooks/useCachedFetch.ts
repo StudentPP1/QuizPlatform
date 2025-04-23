@@ -5,6 +5,7 @@ type CacheEntry<T> = {
   timestamp: number;
 };
 
+// global cache for all components (available until page reload)
 const globalCache = new Map<string, CacheEntry<any>>();
 
 interface UseCachedFetchOptions {
@@ -35,7 +36,8 @@ export function useCachedFetch<T>(
       } else {
         try {
           const result = await fetcher();
-          if (isMounted.current) { // Check if the component is still rendering before setting state
+          // Check if the component is still rendering before setting state
+          if (isMounted.current) { 
             globalCache.set(key, { data: result, timestamp: now });
             setData(result);
           }
@@ -49,8 +51,10 @@ export function useCachedFetch<T>(
 
     loadData();
 
+    // Set up an interval to refresh the data every `ttl` milliseconds
     const interval = setInterval(loadData, ttl);
 
+    // clean up after the component is unmounted or the key changes
     return () => {
       isMounted.current = false;
       clearInterval(interval);
