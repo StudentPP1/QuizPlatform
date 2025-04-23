@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import styles from "./HomePage.module.scss"
 import Wrapper from "../../components/wrapper/Wrapper";
 import { RecentQuiz } from "../../components/card/card/RecentQuizCard";
@@ -9,10 +9,16 @@ import { CreatorDTO } from "../../models/CreatorDTO";
 import { QuizService } from "../../api/services/QuizService";
 import { useCachedFetch } from "../../hooks/useCachedFetch";
 import Loading from "../../components/loading/Loader";
+import { AuthContext } from "../../context/context";
+import { ParticipatedQuizzesStrategy } from "../../api/services/QuizFetchStrategy";
 
 const HomePage: FC = () => {
+    const { user } = useContext(AuthContext)
     const [quizzes, setQuizzes] = useState<QuizDTO[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const strategy = new ParticipatedQuizzesStrategy();
+    const FROM = 0;
+    const TO = 2;
 
     // TODO: Task 3 => implement (save setTopQuizzes, setTopAuthors to map & create Timer to update them)
     const { data: topQuizzes, loading: loadingQuizzes } = useCachedFetch<QuizDTO[]>(
@@ -28,7 +34,8 @@ const HomePage: FC = () => {
     );
 
     useEffect(() => {
-        QuizService.getParticipatedQuizzes(0, 2).then((data) => {
+        if (!user) return;
+        strategy.fetchQuizzes(user.userId, FROM, TO).then((data) => {
             setQuizzes(data);
             setIsLoading(false);
         })
