@@ -20,7 +20,7 @@ export function useCachedFetch<T>(
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
-  const isMounted = useRef(true); // Track if the component is loaded in DOM 
+  const isMounted = useRef(true); // Track if the component is loaded in DOM
 
   useEffect(() => {
     isMounted.current = true;
@@ -33,12 +33,11 @@ export function useCachedFetch<T>(
       if (cached && now - cached.timestamp < ttl) {
         setData(cached.data);
         setLoading(false);
-      } 
-      else {
+      } else {
         try {
           const result = await fetcher();
           // Check if the component is still rendering before setting state
-          if (isMounted.current) { 
+          if (isMounted.current) {
             globalCache.set(key, { data: result, timestamp: now });
             setData(result);
           }
@@ -48,7 +47,12 @@ export function useCachedFetch<T>(
           if (isMounted.current) setLoading(false);
         }
       }
-      // TODO: find all keys with ttl not valid and delete them
+      // TODO: Task 3 => find all keys with ttl not valid and delete them
+      for (const [key, cacheData] of globalCache.entries()) {
+        if (now - cacheData.timestamp >= ttl) {
+          globalCache.delete(key);
+        }
+      }
     }
 
     loadData();

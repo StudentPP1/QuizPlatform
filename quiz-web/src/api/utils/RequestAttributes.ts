@@ -32,7 +32,6 @@ export class RequestAttributes {
     return this;
   }
   
-  // TODO: Task 8 => create Proxy (if error => refreshToken() => retry)
   addAuthHeader(): this {
     this.headers["Authorization"] = `Bearer ${sessionStorage.getItem(ACCESS_TOKEN_NAME)}`;
     console.log("Send header: " + this.headers["Authorization"]);
