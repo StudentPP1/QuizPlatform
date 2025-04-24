@@ -6,20 +6,20 @@ import { apiFetch } from "../utils/ApiUtils";
 import { RequestAttributes } from "../utils/RequestAttributes";
 
 export class QuizService {
-  static getTopQuizzes = async (): Promise<Quiz[]> => {
-    return apiFetch<Quiz[]>("/api/quiz/top-rated", this.withAuth());
+  static getTopQuizzes = async (limit: number = 3): Promise<QuizDTO[]> => {
+    return apiFetch<QuizDTO[]>(`/api/quiz/top-rated?limit=${limit}`, this.withAuth());
   };
 
-  static getTopAuthors = async (): Promise<Creator[]> => {
-    return apiFetch<Creator[]>("/api/quiz/top-creators", this.withAuth());
+  static getTopAuthors = async (limit: number = 3): Promise<Creator[]> => {
+    return apiFetch<Creator[]>(`/api/users/top-creators?limit=${limit}`, this.withAuth());
   };
 
-  static search = async (text: string): Promise<Quiz[]> => {
-    return apiFetch<Quiz[]>(`/api/quiz/search?name=${text}`, this.withAuth());
+  static search = async (text: string): Promise<QuizDTO[]> => {
+    return apiFetch<QuizDTO[]>(`/api/quiz/search?name=${text}`, this.withAuth());
   };
 
-  static getQuiz = async (id: string): Promise<Quiz> => {
-    return apiFetch<Quiz>(`/api/quiz?quizId=${id}`, this.withAuth());
+  static getQuiz = async (quizId: string): Promise<Quiz> => {
+    return apiFetch<Quiz>(`/api/quiz/${quizId}/info`, this.withAuth());
   };
 
   static getCreatedQuizzes = async (
@@ -79,8 +79,7 @@ export class QuizService {
       RequestAttributes.builder()
         .setMethod("POST")
         .setBody({
-          score: score,
-          passed: true,
+          score: score
         })
         .addAuthHeader()
         .build()

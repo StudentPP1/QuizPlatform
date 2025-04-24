@@ -20,7 +20,7 @@ const HomePage: FC = () => {
     const FROM = 0;
     const TO = 2;
 
-    // TODO: Task 3 => implement (save setTopQuizzes, setTopAuthors to map & create timer to update them)
+    // TODO: Task 3 => implement save results to map & create timer to update them
     const { data: topQuizzes, loading: loadingQuizzes } = useCachedFetch<QuizDTO[]>(
         "topQuizzes",
         () => QuizService.getTopQuizzes()

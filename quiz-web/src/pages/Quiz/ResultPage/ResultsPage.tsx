@@ -26,7 +26,7 @@ const ResultsPage: React.FC = () => {
   
   const handleExit = async () => {
     try {
-      await QuizService.doneQuiz(quiz.id, quizScore);
+      await QuizService.doneQuiz(quiz.id, quizScore());
       toast.success("Quiz done", { position: "top-right" });
       navigate("/home");
     } catch (error) {
@@ -42,7 +42,7 @@ const ResultsPage: React.FC = () => {
 
       <div className={styles.resultsCard}>
         <h1 className={styles.quizTitle}>{quiz.title}</h1>
-        <p className={styles.percentage}>{quizScore} %</p>
+        <p className={styles.percentage}>{quizScore()} %</p>
 
         <div className={styles.ratingSection_container}>
           <div className={styles.ratingSection}>

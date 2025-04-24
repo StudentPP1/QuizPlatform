@@ -19,7 +19,7 @@ const LibraryPage: FC = () => {
   const [from, setFrom] = useState(0);
   const [to, setTo] = useState(SIZE);
 
-  // TODO: Task 6 => load more quizzes when the user scrolls down
+  // TODO: + Task 6 => load more quizzes when the user scrolls down
   const strategy = tab === 1 ? new CreatedQuizzesStrategy() : new ParticipatedQuizzesStrategy();
 
   useObserver(lastElement, isLoading, () => {

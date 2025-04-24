@@ -70,7 +70,10 @@ const QuizInfoPage: FC = () => {
                                     <p className={styles.username}>{review.creator.username}</p>
                                 </div>
                                 <p>{"⭐".repeat(review.rating)}</p>
-                                <p>{review.text}</p>
+                                {review.text !== null
+                                    ? <p className={styles.reviewText}>{review.text}</p>
+                                    : <></>
+                                }
                             </div>
                         ))}
                     </div>

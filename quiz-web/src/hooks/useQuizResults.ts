@@ -6,7 +6,7 @@ const useQuizResults = (quizTasks: QuizTask[], userAnswers: UserAnswers) => {
     let correctUserAnswers = 0;
     let correctAnswers = 0;
     
-    // TODO: Task 1 => implement for ... of loop to iterate over quizTasks
+    // TODO: + Task 1 => implement for ... of loop to iterate over quizTasks 
     for (const question of quizTasks) {
       const userAnswer = userAnswers[question.id];
       const correctAnswer = question.correctAnswers;

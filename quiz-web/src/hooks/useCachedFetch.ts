@@ -33,7 +33,8 @@ export function useCachedFetch<T>(
       if (cached && now - cached.timestamp < ttl) {
         setData(cached.data);
         setLoading(false);
-      } else {
+      } 
+      else {
         try {
           const result = await fetcher();
           // Check if the component is still rendering before setting state
@@ -47,6 +48,7 @@ export function useCachedFetch<T>(
           if (isMounted.current) setLoading(false);
         }
       }
+      // TODO: find all keys with ttl not valid and delete them
     }
 
     loadData();

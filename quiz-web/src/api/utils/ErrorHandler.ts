@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 
-// TODO: Task 7 => create a custom error handler for API error event
+// TODO: + Task 7 => create a custom error handler for API error event
 function defaultErrorHandler(errorMessages: string | string[]) {
   if (!Array.isArray(errorMessages)) {
     toast.error(errorMessages, { position: "top-right" });
