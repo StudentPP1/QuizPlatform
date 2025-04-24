@@ -3,35 +3,61 @@ import { refreshToken } from "../services/TokenService";
 import { fetchErrorEvent } from "./ErrorHandler";
 
 // TODO: Task 8 => create Proxy (if error => refreshToken() => retry)
-export async function apiFetch<T>(
-  url: string,
-  attributes: RequestInit,
-  retry: boolean = true
-): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${url}`, attributes);
-  const json = await response.json();
-  const status = response.status;
+class ApiError {
+  status: number;
+  messages: string[] | string;
 
-  if (!response.ok) {
-    if (retry && (status === 401 || status === 403)) {
-      try {
-        console.log("Token expired, refreshing...");
-        await refreshToken(); // оновлення токена
-        return apiFetch<T>(url, attributes, false); // повтор без циклів
-      } catch (refreshError) {
-        console.error("Token refresh failed", refreshError);
-      }
+  constructor(status: number, messages: string[] | string) {
+    this.status = status;
+    this.messages = messages;
+  }
+}
+
+interface Fetcher {
+  apiFetch<T>(url: string, attributes: RequestInit): Promise<T>;
+}
+
+class ApiFetcher implements Fetcher {
+  async apiFetch<T>(url: string, attributes: RequestInit): Promise<T> {
+    const response = await fetch(`${API_BASE_URL}${url}`, attributes);
+    const json = await response.json();
+    const status = response.status;
+
+    if (!response.ok) {
+      const details = { status, messages: json.message };
+      fetchErrorEvent.dispatchEvent(
+        new CustomEvent("api-fetch-error", {
+          detail: details,
+        })
+      );
+      throw details as ApiError;
     }
 
-    // Викидаємо евент
-    fetchErrorEvent.dispatchEvent(
-      new CustomEvent("api-fetch-error", {
-        detail: { status, messages: json.message },
-      })
-    );
-
-    throw new Error(json.message || "API request failed");
+    return json as T;
   }
+}
 
-  return json as T;
+class ApiFetcherProxy implements Fetcher {
+  private apiFetching: ApiFetcher = new ApiFetcher();
+
+  async apiFetch<T>(url: string, attributes: RequestInit): Promise<T> {
+    try {
+      return await this.apiFetching.apiFetch<T>(url, attributes);
+    } catch (error) {
+      // if token is not valid => return 401 status
+      if (error instanceof ApiError && error.status === 401) {
+        await refreshToken();
+        return this.apiFetching.apiFetch<T>(url, attributes);
+      }
+      throw error;
+    }
+  }
+}
+
+export async function apiFetch<T>(
+  url: string,
+  attributes: RequestInit
+): Promise<T> {
+  const fetcher: Fetcher = new ApiFetcherProxy();
+  return fetcher.apiFetch(url, attributes);
 }
