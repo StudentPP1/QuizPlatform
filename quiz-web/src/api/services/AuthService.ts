@@ -3,7 +3,7 @@ import { log } from "../../utils/Logger";
 import { apiFetch } from "../utils/ApiUtils";
 import { RequestAttributes } from "../utils/RequestAttributes";
 
-// TODO: Task 9 => implement logging using custom decorator => @log(level="INFO")
+// TODO: + Task 9 => implement logging using custom decorator 
 export class AuthService {
   @log
   static async register(username: string, email: string, password: string) {

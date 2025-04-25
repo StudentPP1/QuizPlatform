@@ -6,12 +6,13 @@ enum LogLevel {
 }
 
 export function log(
-  target: Object,
-  propertyKey: string | symbol,
-  descriptor: TypedPropertyDescriptor<any>
+  target: Object, // the class with the method being decorated
+  propertyKey: string | symbol, // The name of the method being decorated
+  descriptor: TypedPropertyDescriptor<any> // contains the method being decorated
 ): TypedPropertyDescriptor<any> | void {
-  const originalMethod = descriptor.value;
+  const originalMethod = descriptor.value; // Save a reference to the original method
 
+  // Change the method to log its execution time and arguments
   descriptor.value = function (...args: any[]) {
     const start = performance.now();
     const time = () => `${(performance.now() - start).toFixed(2)}ms`;
@@ -26,9 +27,10 @@ export function log(
 
     try {
       logMessage(LogLevel.INFO, "Entering method.");
+      // Call the original method with the provided arguments
       const result = originalMethod.apply(this, args);
 
-      // Handle async functions too
+      // Handle async 
       if (result instanceof Promise) {
         return result
           .then((res: any) => {

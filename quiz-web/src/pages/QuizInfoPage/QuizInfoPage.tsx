@@ -9,40 +9,27 @@ import Avatar from "../../components/avatar/Avatar";
 import { QuizService } from "../../api/services/QuizService";
 import { QuizNavigate } from "../../models/QuizNavigate";
 
-// TODO: Task 5 => implement array map function with Promises
+// TODO: + Task 5 => implement async/await or Promise.all()
 const QuizInfoPage: FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [quiz, setQuiz] = useState<Quiz | null>(null)
     const [reviews, setReviews] = useState<Review[]>([])
 
-    async function asyncMap<T, U>(
-        array: T[],
-        callback: (item: T, index: number) => Promise<U>
-    ): Promise<U[]> {
-        return Promise.all(array.map(callback));
-    }
-
     useEffect(() => {
         localStorage.setItem("index", "0");
 
         const fetchData = async () => {
-            if (id != null) {
-                try {
-                    const [quizResult, reviewsResult] = await asyncMap(
-                        [id, id],
-                        async (param, index) => {
-                            return index === 0
-                                ? QuizService.getQuiz(param)
-                                : QuizService.getReviews(param);
-                        }
-                    );
-
-                    setQuiz(quizResult as Quiz);
-                    setReviews(reviewsResult as Review[]);
-                } catch (error) {
-                    console.error("Failed to fetch data:", error);
-                }
+            if (id == null) return
+            try {
+                const [quizResult, reviewsResult] = await Promise.all([
+                    QuizService.getQuiz(id),
+                    QuizService.getReviews(id)
+                ])
+                setQuiz(quizResult as Quiz);
+                setReviews(reviewsResult as Review[]);
+            } catch (error) {
+                console.error("Failed to fetch data:", error);
             }
         };
 

@@ -2,7 +2,7 @@ import { API_BASE_URL } from "../../constants/constants";
 import { refreshToken } from "../services/TokenService";
 import { fetchErrorEvent } from "./ErrorHandler";
 
-// TODO: Task 8 => create Proxy (if error => refreshToken() => retry)
+// TODO: + Task 8 => create Proxy (if error => refreshToken() => retry)
 class ApiError {
   status: number;
   messages: string[] | string;
