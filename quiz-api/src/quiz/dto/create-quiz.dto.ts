@@ -17,10 +17,9 @@ export class CreateQuizDto {
   @IsString()
   title: string;
 
-  @IsNotEmpty()
   @IsString()
   @IsOptional()
-  description?: string;
+  description?: string | null;
 
   @IsNotEmpty()
   @IsInt()

@@ -5,9 +5,9 @@ export class TaskPreviewDto {
   id: string;
   question: string;
   type: TaskType;
-  image?: string;
+  image?: string | null;
   correctAnswers: string[];
-  options?: string[];
+  options?: string[] | null;
 
   constructor(task: Task) {
     this.id = task.id;

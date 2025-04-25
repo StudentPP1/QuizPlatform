@@ -21,5 +21,5 @@ export class CreateGoogleUserDto {
 
   @IsOptional()
   @IsUrl()
-  avatarUrl?: string;
+  avatarUrl?: string | null;
 }

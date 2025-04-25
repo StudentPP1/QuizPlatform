@@ -86,6 +86,11 @@ export class AuthService {
       return user;
     }
 
+    this.emitter.emit<SendMailOptions>('user.registered', {
+      to: data.email,
+      username: data.username,
+    });
+
     return await this.usersService.createUser(data, AuthProvider.GOOGLE);
   }
 

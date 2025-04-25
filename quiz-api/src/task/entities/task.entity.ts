@@ -23,17 +23,17 @@ export class Task {
   type: TaskType;
 
   @Column('json', { nullable: true })
-  correctAnswers?: string[];
+  correctAnswers?: string[] | null;
 
   @Column({ type: 'json', nullable: true })
-  options?: string[];
+  options?: string[] | null;
 
   @ManyToOne(() => Quiz, (quiz) => quiz.tasks, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'quizId' })
   quiz: Quiz;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  image?: string;
+  image?: string | null;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -16,4 +16,27 @@ export class UsersController {
   ) {
     return this.usersService.getUserInfo(userId, req.user.id);
   }
+
+  @Get('created')
+  async getCreatedQuizzes(
+    @Query('userId') userId: string,
+    @Query('from') from: number,
+    @Query('to') to: number,
+  ) {
+    return this.usersService.getCreatedQuizzes(userId, from, to);
+  }
+
+  @Get('participated')
+  async getParticipatedQuizzes(
+    @Query('from') from: number,
+    @Query('to') to: number,
+    @Req() req: Request & { user?: User },
+  ) {
+    return this.usersService.getParticipatedQuizzes(req.user.id, from, to);
+  }
+
+  @Get('top-creators')
+  async getTopCreators(@Query('limit') limit: number = 3) {
+    return this.usersService.getTopCreators(limit);
+  }
 }

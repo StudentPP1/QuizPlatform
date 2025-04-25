@@ -26,16 +26,16 @@ export class User {
   email: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  password?: string;
+  password?: string | null;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  googleId?: string;
+  googleId?: string | null;
 
   @Column({ type: 'enum', enum: AuthProvider })
   authProvider: AuthProvider;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  avatarUrl?: string;
+  avatarUrl?: string | null;
 
   @OneToMany(() => Quiz, (quiz) => quiz.creator)
   createdQuizzes: Quiz[];
