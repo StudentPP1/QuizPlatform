@@ -85,7 +85,7 @@ export class QuizService {
       relations: ['creator', 'creator.createdQuizzes', 'tasks'],
     });
 
-    return quizzes.map((quiz) => new FullQuizDto(quiz));
+    return quizzes.map((quiz) => new QuizPreviewDto(quiz));
   }
 
   async getTopQuizzes(limit: number) {
@@ -97,7 +97,7 @@ export class QuizService {
       take: limit,
     });
 
-    return quizzes.map((quiz) => new FullQuizDto(quiz));
+    return quizzes.map((quiz) => new QuizPreviewDto(quiz));
   }
 
   async getCreatedQuizzes(userId: string, from: number, to: number) {
