@@ -6,14 +6,12 @@ import { AuthService } from '@auth/auth.service';
 import { GoogleStrategy } from '@auth/strategies/google-oauth.strategy';
 import { JwtStrategy } from '@auth/strategies/jwt.strategy';
 import { LocalStrategy } from '@auth/strategies/local.strategy';
-import { EventEmitterModule } from '@events/event-emitter.module';
 import { TokenModule } from '@token/token.module';
 import { UsersModule } from '@users/users.module';
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    EventEmitterModule,
     UsersModule,
     TokenModule,
   ],

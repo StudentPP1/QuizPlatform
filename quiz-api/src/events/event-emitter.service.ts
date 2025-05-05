@@ -3,15 +3,20 @@ import { EventEmitter } from 'events';
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 
 import { ErrorOptions } from '@events/interfaces/error-options.interface';
+import { UpdateAuthorRatingOptions } from '@events/interfaces/update-author-rating-options.interface';
 import { SendMailOptions } from '@mail/interfaces/send-mail-options.interface';
 import { MailService } from '@mail/mail.service';
+import { UsersService } from '@users/users.service';
 
 @Injectable()
 export class EventEmitterService
   extends EventEmitter
   implements OnModuleInit, OnModuleDestroy
 {
-  constructor(private readonly mailService: MailService) {
+  constructor(
+    private readonly mailService: MailService,
+    private readonly usersService: UsersService,
+  ) {
     super();
   }
 
@@ -20,15 +25,27 @@ export class EventEmitterService
     console.error(error.originalError);
   }
 
-  private async handleUserRegistered(
-    sendMailOptions: SendMailOptions,
-  ): Promise<void> {
+  private async handleUserRegistered(options: SendMailOptions): Promise<void> {
     try {
-      await this.mailService.sendWelcomeEmail(sendMailOptions);
+      await this.mailService.sendWelcomeEmail(options);
     } catch (err) {
       this.emit('error', {
         context: 'user.registered',
-        message: `Failed to send welcome email to ${sendMailOptions.to}`,
+        message: `Failed to send welcome email to ${options.to}`,
+        originalError: err,
+      });
+    }
+  }
+
+  private async handleUserRatingUpdated(
+    options: UpdateAuthorRatingOptions,
+  ): Promise<void> {
+    try {
+      await this.usersService.updateAuthorRating(options);
+    } catch (err) {
+      this.emit('error', {
+        context: 'user.rating_updated',
+        message: `Failed to update rating for user ${options.userId}`,
         originalError: err,
       });
     }
@@ -36,11 +53,13 @@ export class EventEmitterService
 
   onModuleInit() {
     this.on('user.registered', this.handleUserRegistered.bind(this));
+    this.on('user.rating_updated', this.handleUserRatingUpdated.bind(this));
     this.on('error', this.handleError.bind(this));
   }
 
   onModuleDestroy() {
     this.removeAllListeners('user.registered');
+    this.removeAllListeners('user.rating_updated');
     this.removeAllListeners('error');
   }
 }
