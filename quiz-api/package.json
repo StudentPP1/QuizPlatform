@@ -77,6 +77,7 @@
     "@task": "dist/task",
     "@token": "dist/token",
     "@users": "dist/users",
+    "@queue": "dist/queue",
     "@quiz": "dist/quiz"
   }
 }

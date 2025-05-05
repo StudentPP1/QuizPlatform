@@ -31,6 +31,7 @@
       "@task/*": ["src/task/*"],
       "@token/*": ["src/token/*"],
       "@users/*": ["src/users/*"],
+      "@queue/*": ["src/queue/*"],
       "@quiz/*": ["src/quiz/*"]
     }
   }
