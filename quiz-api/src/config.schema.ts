@@ -1,9 +1,16 @@
 import * as Joi from 'joi';
 
 export const configValidationSchema = Joi.object({
+  // Port
+  PORT: Joi.number().default(3000),
+
+  // Query configuration
+  QUERY_QUEUE_CONCURRENCY: Joi.number().default(5),
+  QUERY_QUEUE_DELAY_MS: Joi.number().default(500),
+
   // Database configuration
   DB_HOST: Joi.string().required(),
-  DB_PORT: Joi.number().default(5432).required(),
+  DB_PORT: Joi.number().default(5432),
   DB_USERNAME: Joi.string().required(),
   DB_PASSWORD: Joi.string().required(),
   DB_NAME: Joi.string().required(),
