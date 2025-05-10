@@ -15,7 +15,7 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const [email, setEmail] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
-  
+
   // TODO: + Task 4 => implement async function queue
   const queue = new AsyncFunctionQueue();
 
@@ -55,7 +55,8 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   return (
     <div className={styles.container}>
       <div className={styles.left}>
-        <div className={styles.image}></div>
+        <div className={styles.image}>
+        </div>
       </div>
 
       <div className={styles.right}>
@@ -123,6 +124,7 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
                   />
                   <div>
                     <button
+                      className={styles.eye_button}
                       onClick={(event) => {
                         event.preventDefault()
                         setShowPassword(!showPassword)
@@ -130,7 +132,7 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
                     >
                       <img
                         className={styles.img}
-                        src={showPassword ? "../../../public/close-eye.svg" : "../../../public/eye.svg"}
+                        src={showPassword ? "../../../close-eye.svg" : "../../../eye.svg"}
                       />
                     </button>
                   </div>

@@ -38,6 +38,7 @@ export function useCachedFetch<T>(
       setLoading(true);
 
       try {
+        console.log("Fetching data for key:", key);
         const result = await fetcher();
         const currentTime = Date.now();
         globalCache.set(key, { data: result, timestamp: currentTime });

@@ -85,8 +85,8 @@ const CreateQuizPage: FC = () => {
 
         await QuizService.createQuiz(quiz).then((result) => {
             console.log(result)
-            toast.success("Quiz saved!", { position: "top-right" });
-            navigate("/quizInfo/" + result.id)
+            toast.success(result.message, { position: "top-right" });
+            navigate("/quizInfo/" + result.quizId)
         }).catch(() => {
             toast.error("Error saving quiz!", { position: "top-right" })
         })

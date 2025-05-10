@@ -23,12 +23,13 @@ const ResultsPage: React.FC = () => {
       toast.error("Failed to send review", { position: "top-right" });
     }
   };
-  
+
   const handleExit = async () => {
     try {
-      await QuizService.doneQuiz(quiz.id, quizScore());
-      toast.success("Quiz done", { position: "top-right" });
-      navigate("/home");
+      await QuizService.doneQuiz(quiz.id, quizScore()).then((result) => {
+        toast.success(result.message, { position: "top-right" });
+        navigate("/home");
+      })
     } catch (error) {
       toast.error("Error finishing the quiz", { position: "top-right" });
     }

@@ -27,6 +27,7 @@ export function log(
 
     try {
       logMessage(LogLevel.INFO, "Entering method.");
+      logMessage(LogLevel.DEBUG, `Arguments: ${JSON.stringify(args)}`);
       // Call the original method with the provided arguments
       const result = originalMethod.apply(this, args);
 
@@ -35,6 +36,7 @@ export function log(
         return result
           .then((res: any) => {
             logMessage(LogLevel.INFO, "Exiting method.", true);
+            logMessage(LogLevel.INFO, `Result: ${JSON.stringify(res)}`);
             return res;
           })
           .catch((err: any) => {

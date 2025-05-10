@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, use, useContext, useEffect, useState } from "react";
 import styles from "./HomePage.module.scss"
 import Wrapper from "../../components/wrapper/Wrapper";
 import { RecentQuiz } from "../../components/card/card/RecentQuizCard";
@@ -20,24 +20,28 @@ const HomePage: FC = () => {
     const FROM = 0;
     const TO = 2;
 
-    // TODO: + Task 3 => implement save results to map & create timer to update them
-    const { data: topQuizzes, loading: loadingQuizzes } = useCachedFetch<QuizDTO[]>(
-        "topQuizzes",
-        () => QuizService.getTopQuizzes()
-    );
+    useEffect(() => {
+        const fetchQuizzes = async () => {
+            if (!user) return;
+            await strategy.fetchQuizzes(user.userId, FROM, TO).then((data) => {
+                setQuizzes(data);
+                setIsLoading(false);
+            })
+        };
 
+        fetchQuizzes();
+    }, []);
+
+    // TODO: + Task 3 => implement save results to map & create timer to update them
     const { data: topAuthors, loading: loadingAuthors } = useCachedFetch<Creator[]>(
         "topAuthors",
         () => QuizService.getTopAuthors()
     );
 
-    useEffect(() => {
-        if (!user) return;
-        strategy.fetchQuizzes(user.userId, FROM, TO).then((data) => {
-            setQuizzes(data);
-            setIsLoading(false);
-        })
-    }, []);
+    const { data: topQuizzes, loading: loadingQuizzes } = useCachedFetch<QuizDTO[]>(
+        "topQuizzes",
+        () => QuizService.getTopQuizzes()
+    );
 
     return (
         <Wrapper>
