@@ -26,7 +26,12 @@
   max-width: 600px;
   width: 100%;
 }
-
+.filledStar {
+  color: #F2E527;
+}
+.emptyStar {
+  color: #F2F2F2;
+}
 .quizTitle {
   color: #F2E527;
   font-size: 24px;
@@ -42,7 +47,17 @@
 .ratingSection_container {
   padding: 10px;
 }
+.ratingSection {
+  padding: 10px;
+  div {
+    width: 100%;
+    height: 100%;
 
+    span {
+      cursor: pointer;
+    }
+  }
+}
 .commentBox {
   width: 100%;
   padding: 10px;
