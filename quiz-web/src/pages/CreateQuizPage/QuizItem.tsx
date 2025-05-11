@@ -1,12 +1,14 @@
 import { FC } from "react";
 import styles from "./CreateQuizPage.module.scss";
 import { QuestionType } from "../../models/QuestionType";
+import AnswerItem from "./AnswerItem";
 
 const QuizItem: FC<{ question: QuestionType, questions: QuestionType[], setQuestions: any }> = ({
     question,
     questions,
     setQuestions
 }) => {
+    
     const updateQuestionText = (id: number, newText: string) => {
         setQuestions(
             questions.map((q) => (q.id === id ? { ...q, text: newText } : q))
@@ -38,48 +40,8 @@ const QuizItem: FC<{ question: QuestionType, questions: QuestionType[], setQuest
         );
     };
 
-    const updateAnswerText = (questionId: number, answerId: number, newText: string) => {
-        setQuestions(
-            questions.map((q) =>
-                q.id === questionId
-                    ? {
-                        ...q,
-                        answers: q.answers.map((a) =>
-                            a.id === answerId ? { ...a, text: newText } : a
-                        )
-                    }
-                    : q
-            )
-        );
-    };
-
-    const toggleCorrectAnswer = (questionId: number, answerId: number) => {
-        setQuestions(
-            questions.map((q) =>
-                q.id === questionId
-                    ? {
-                        ...q,
-                        answers: q.answers.map((a) =>
-                            a.id === answerId ? { ...a, isCorrect: !a.isCorrect } : a
-                        )
-                    }
-                    : q
-            )
-        );
-    };
-
     const removeQuestion = (id: number) => {
         setQuestions(questions.filter((q) => q.id !== id));
-    };
-
-    const removeAnswer = (questionId: number, answerId: number) => {
-        setQuestions(
-            questions.map((q) =>
-                q.id === questionId
-                    ? { ...q, answers: q.answers.filter((a) => a.id !== answerId) }
-                    : q
-            )
-        );
     };
 
     return (
@@ -110,34 +72,11 @@ const QuizItem: FC<{ question: QuestionType, questions: QuestionType[], setQuest
 
             <div className={styles.answers}>
                 {question.answers.map((answer) => (
-                    <div key={answer.id} className={styles.answerItem}>
-                        <input
-                            type="text"
-                            value={answer.text}
-                            className={styles.answerInput}
-                            onChange={(e) =>
-                                updateAnswerText(question.id, answer.id, e.target.value)
-                            }
-                            placeholder="Answer..."
-                        />
-                        {!question.isOpenEnded &&
-                            <input
-                                type="checkbox"
-                                checked={answer.isCorrect}
-                                onChange={() => toggleCorrectAnswer(question.id, answer.id)}
-                            />
-                        }
-                        {question.answers.indexOf(answer) > 1
-                            ?
-                            <button
-                                className={styles.deleteAnswer}
-                                onClick={() => removeAnswer(question.id, answer.id)}>
-                                ❌
-                            </button>
-                            :
-                            <></>
-                        }
-                    </div>
+                    <AnswerItem
+                        question={question}
+                        setQuestions={setQuestions}
+                        answer={answer}
+                        questions={questions} />
                 ))}
                 {!question.isOpenEnded &&
                     <div className={styles.button_wrapper}>
