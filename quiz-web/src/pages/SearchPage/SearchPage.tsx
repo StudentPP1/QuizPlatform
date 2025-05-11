@@ -15,7 +15,7 @@ const SearchPage: FC = () => {
     if (text != null) {
       QuizService.search(text).then((result) => { setQuizzes(result) })
     }
-  }, [])
+  }, [text])
 
   return (
     <Wrapper>

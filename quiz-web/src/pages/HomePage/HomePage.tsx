@@ -80,6 +80,14 @@ const HomePage: FC = () => {
                     )}
                 </div>
             </section>
+
+            <div className={styles.wrapper}>
+                <footer className={styles.footer_wrapper}>
+                    <div>
+                        <p>© 2025 QuizPlatform, Inc.</p>
+                    </div>
+                </footer>
+            </div>
         </Wrapper>
     );
 }
