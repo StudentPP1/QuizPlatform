@@ -16,7 +16,7 @@ const AuthorPage: React.FC = () => {
     const navigate = useNavigate();
     const SIZE = 10;
     const [isLoading, setLoading] = useState(false);
-    const [from, setFrom] = useState(0);
+    const [from, setFrom] = useState(1);
     const [to, setTo] = useState(SIZE);
     const strategy = new CreatedQuizzesStrategy();
     const lastElement = useRef<HTMLDivElement | null>(null);
@@ -29,8 +29,7 @@ const AuthorPage: React.FC = () => {
 
     useObserver(lastElement, isLoading, () => {
         setLoading(true);
-        if (id == null) return;
-        strategy.fetchQuizzes(id, from, to).then((data) => {
+        strategy.fetchQuizzes(from, to).then((data) => {
             setQuizzes(prev => {
                 if (prev) {
                     return [...prev, ...data];

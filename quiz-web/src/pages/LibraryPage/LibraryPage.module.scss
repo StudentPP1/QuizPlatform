@@ -5,9 +5,11 @@
   color: #f2f2f2;
   font-family: Arial, sans-serif;
 }
-
+.content_container {
+  min-height: 100vw;
+}
 .nav_bar {
-  background-color: v.$second_background;;
+  background-color: v.$second_background;
   padding: 10px 10px 10px 10px;
   border-radius: 20px;
 
@@ -24,6 +26,7 @@
       font-weight: bold;
 
       &.active {
+        pointer-events: none;
         cursor: pointer;
         box-shadow: 0 2px v.$orange;
       }
@@ -40,38 +43,15 @@
   flex-direction: column;
   gap: 10px;
 }
-
-.user_info {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: #0a0a0a;
-}
-
-.user_avatar_small {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-}
-
-.user_name {
-  font-weight: bold;
-}
-
-.term_count {
-  font-size: 40px;
-  font-weight: bold;
-  color: #0a0a0a;
-}
 .name_quest {
   color: v.$orange;
   font-size: 20px;
   font-weight: bold;
   text-align: left;
-  order: -1; 
+  order: -1;
 }
 .module_card {
-  height: 130px;
+  height: 150px;
   pointer-events: auto;
   border-radius: 8px;
   background-color: #262626;

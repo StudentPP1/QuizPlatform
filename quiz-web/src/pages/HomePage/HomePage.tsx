@@ -17,7 +17,7 @@ const HomePage: FC = () => {
     const [quizzes, setQuizzes] = useState<QuizDTO[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const strategy = new ParticipatedQuizzesStrategy();
-    const FROM = 0;
+    const FROM = 1;
     const TO = 2;
 
     useEffect(() => {
