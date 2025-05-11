@@ -1,4 +1,4 @@
-import { FC, use, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import styles from "./HomePage.module.scss"
 import Wrapper from "../../components/wrapper/Wrapper";
 import { RecentQuiz } from "../../components/card/card/RecentQuizCard";
