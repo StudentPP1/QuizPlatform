@@ -14,6 +14,7 @@ const CreateQuizPage: FC = () => {
     const [description, setDescription] = useState<string>("")
     const [timeLimit, setTimeLimit] = useState<string>("");
 
+    // TODO: fix this piece of crap
     const addQuestion = (isOpenEnded: boolean = false) => {
         setQuestions([
             ...questions,
@@ -100,9 +101,10 @@ const CreateQuizPage: FC = () => {
                     numberOfTasks: questions.length,
                     timeLimit: Number.parseInt(timeLimit),
                     tasks: questions.map((question) => {
-                        createQuestion(question)
+                        return createQuestion(question)
                     })
                 }
+                console.dir("quiz: ", quiz)
                 await QuizService.createQuiz(quiz).then((result) => {
                     console.log(result)
                     toast.success(result.message, { position: "top-right" });
