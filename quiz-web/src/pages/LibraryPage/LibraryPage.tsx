@@ -1,4 +1,4 @@
-import { FC, useRef, useState, useContext } from "react";
+import { FC, useRef, useState } from "react";
 import styles from "./LibraryPage.module.scss";
 import { useNavigate } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
@@ -6,13 +6,11 @@ import Avatar from "../../components/avatar/Avatar";
 import { useObserver } from "../../hooks/useObserver";
 import { CreatedQuizzesStrategy, ParticipatedQuizzesStrategy } from "../../api/services/QuizFetchStrategy";
 import { QuizDTO } from "../../models/QuizDTO";
-import { AuthContext } from "../../context/context";
 
 const LibraryPage: FC = () => {
   const SIZE = 10;
   const navigate = useNavigate();
   const lastElement = useRef<HTMLDivElement | null>(null);
-  const { user } = useContext(AuthContext)
   const [isLoading, setLoading] = useState(false);
   const [quizzes, setQuizzes] = useState<QuizDTO[]>([]);
   const [tab, setTab] = useState(1);
@@ -24,8 +22,7 @@ const LibraryPage: FC = () => {
 
   useObserver(lastElement, isLoading, () => {
     setLoading(true);
-    if (user == null) return;
-    strategy.fetchQuizzes(user.userId, from, to).then((data) => {
+    strategy.fetchQuizzes(from, to).then((data) => {
       setQuizzes(prev => {
         if (prev) {
           return [...prev, ...data];

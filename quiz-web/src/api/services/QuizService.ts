@@ -31,19 +31,17 @@ export class QuizService {
 
   @log
   static async getCreatedQuizzes(
-    userId: string,
     from: number,
     to: number
   ): Promise<QuizDTO[]> {
     return apiFetch<QuizDTO[]>(
-      `/api/users/created?userId=${userId}&from=${from}&to=${to}`,
+      `/api/users/created?from=${from}&to=${to}`,
       this.withAuth()
     );
   };
 
   @log
   static async getParticipatedQuizzes(
-    userId: string,
     from: number,
     to: number
   ): Promise<QuizDTO[]> {

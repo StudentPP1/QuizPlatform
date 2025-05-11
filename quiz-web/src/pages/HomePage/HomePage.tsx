@@ -23,7 +23,7 @@ const HomePage: FC = () => {
     useEffect(() => {
         const fetchQuizzes = async () => {
             if (!user) return;
-            await strategy.fetchQuizzes(user.userId, FROM, TO).then((data) => {
+            await strategy.fetchQuizzes(FROM, TO).then((data) => {
                 setQuizzes(data);
                 setIsLoading(false);
             })
