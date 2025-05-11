@@ -88,7 +88,6 @@ const QuizPage: React.FC = () => {
             className={styles.textInput}
             onChange={handleAnswerChange}
           />
-          {option}
         </label>
       ))}
     </>
