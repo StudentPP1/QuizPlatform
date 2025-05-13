@@ -4,7 +4,6 @@ import {
   IsEnum,
   IsOptional,
   IsArray,
-  IsUrl,
 } from 'class-validator';
 
 import { TaskType } from '@task/enum/task-type.enum';
@@ -29,6 +28,5 @@ export class CreateTaskDto {
   options?: string[] | null;
 
   @IsOptional()
-  @IsUrl()
   image?: string | null;
 }
