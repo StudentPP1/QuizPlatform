@@ -6,7 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from '@auth/auth.module';
 import { EventEmitterModule } from '@events/event-emitter.module';
-import { QueryQueueModule } from '@queue/query-queue.module';
 import { QuizModule } from '@quiz/quiz.module';
 import { ReviewModule } from '@review/review.module';
 import { configValidationSchema } from '@src/config.schema';
@@ -39,7 +38,6 @@ import { UsersModule } from '@users/users.module';
     ReviewModule,
     UsersModule,
     QuizModule,
-    QueryQueueModule,
   ],
 })
 export class AppModule {}
