@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
-import { JwtGuard } from '@common/guards/auth.guard';
+import { JwtGuard } from '@common/guards/jwt.guard';
 import { CreateQuizDto } from '@quiz/dto/create-quiz.dto';
 import { SaveQuizResultDto } from '@quiz/dto/save-quiz-result.dto';
 import { QuizService } from '@quiz/quiz.service';
