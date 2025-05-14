@@ -2,15 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
+import { MemoizationCache } from '@common/cache/memoization-cache';
+import { LRUStrategy } from '@common/cache/strategies/lru.strategy';
 import { Payload } from '@token/interfaces/payload.interface';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
 export class TokenService {
-  private tokenGenerators = new Map<
-    string,
-    AsyncGenerator<string, void, unknown>
-  >();
+  private cache = new MemoizationCache(new LRUStrategy(2));
 
   constructor(
     private readonly jwtService: JwtService,
@@ -43,21 +42,18 @@ export class TokenService {
         expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRATION'),
       });
 
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
   }
 
   getTokenGenerator(
     user: Partial<User>,
   ): AsyncGenerator<string, void, unknown> {
-    if (!this.tokenGenerators.has(user.id)) {
-      this.tokenGenerators.set(user.id, this.createTokenGenerator(user));
-    }
-
-    return this.tokenGenerators.get(user.id);
+    const key = user.id;
+    return this.cache.getOrCompute(key, () => this.createTokenGenerator(user));
   }
 
   removeTokenGenerator(userId: string) {
-    this.tokenGenerators.delete(userId);
+    this.cache.remove(userId);
   }
 }

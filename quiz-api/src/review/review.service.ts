@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { MemoizationCache } from '@common/cache/memoization-cache';
+import { TimeStrategy } from '@common/cache/strategies/ttl.strategy';
 import { EventEmitterService } from '@events/event-emitter.service';
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { CreateReviewDto } from '@review/dto/create-review.dto';
@@ -11,6 +13,8 @@ import { User } from '@users/entities/user.entity';
 
 @Injectable()
 export class ReviewService {
+  private cache = new MemoizationCache(new TimeStrategy(120));
+
   constructor(
     @InjectRepository(Review)
     private readonly reviewRepository: Repository<Review>,
@@ -58,16 +62,12 @@ export class ReviewService {
       where: { quiz: { creator: { id: userId } } },
     });
 
-    console.log(reviews);
-
     if (!reviews.length) {
       return 0;
     }
 
     const averageRating =
       reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length;
-
-    console.log(averageRating);
 
     return averageRating;
   }
@@ -87,10 +87,14 @@ export class ReviewService {
   }
 
   async getReviewsForQuiz(quizId: string) {
-    const reviews = await this.reviewRepository.find({
-      where: { quiz: { id: quizId } },
-      relations: ['user', 'user.createdQuizzes'],
-    });
+    const reviews = await this.cache.getOrComputeAsync(
+      `reviews:${quizId}`,
+      () =>
+        this.reviewRepository.find({
+          where: { quiz: { id: quizId } },
+          relations: ['user', 'user.createdQuizzes'],
+        }),
+    );
 
     return reviews.map((review) => new ReviewDto(review));
   }
