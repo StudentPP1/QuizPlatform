@@ -7,7 +7,12 @@ import {
   Param,
   Get,
   Query,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { plainToInstance } from 'class-transformer';
+import { validateOrReject } from 'class-validator';
 import { Request } from 'express';
 
 import { JwtGuard } from '@common/guards/jwt.guard';
@@ -22,10 +27,25 @@ export class QuizController {
   constructor(private readonly quizService: QuizService) {}
 
   @Post('create')
+  @UseInterceptors(AnyFilesInterceptor())
   async createQuiz(
-    @Body() createQuizDto: CreateQuizDto,
+    @Body('quiz') quizRaw: string,
     @Req() req: Request & { user?: User },
+    @UploadedFiles() files: Express.Multer.File[],
   ) {
+    const createQuizDto = plainToInstance(CreateQuizDto, JSON.parse(quizRaw));
+    await validateOrReject(createQuizDto);
+
+    for (const file of files) {
+      const match = file.fieldname.match(/images\[(\d+)\]/);
+      if (match) {
+        const index = parseInt(match[1], 10);
+        if (createQuizDto.tasks[index]) {
+          createQuizDto.tasks[index].image = `/uploads/${file.filename}`;
+        }
+      }
+    }
+
     const quiz = await this.quizService.createQuiz(createQuizDto, req.user);
     return quiz;
   }
