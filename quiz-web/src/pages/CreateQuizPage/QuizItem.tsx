@@ -8,7 +8,7 @@ const QuizItem: FC<{ question: QuestionType, questions: QuestionType[], setQuest
     questions,
     setQuestions
 }) => {
-    
+
     const updateQuestionText = (id: number, newText: string) => {
         setQuestions(
             questions.map((q) => (q.id === id ? { ...q, text: newText } : q))
@@ -18,14 +18,17 @@ const QuizItem: FC<{ question: QuestionType, questions: QuestionType[], setQuest
     const handleImageUpload = (id: number, event: any) => {
         const file = event.target.files[0];
         if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setQuestions(
-                questions.map((q) =>
-                    q.id === id ? { ...q, image: imageUrl } : q
-                )
-            );
-        }
-    };
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64 = reader.result as string;
+                setQuestions(
+                    questions.map((q) =>
+                        q.id === id ? { ...q, image: base64 } : q
+                    )
+                );
+            }
+        };
+    }
 
     const addAnswer = (questionId: number) => {
         setQuestions(

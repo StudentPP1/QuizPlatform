@@ -31,6 +31,7 @@ const QuizPage: React.FC = () => {
 
   const handleAnswerSelection = (question: QuizTask, value: string, checked?: boolean) => {
     setAnswers((prev) => {
+      console.log(question)
       if (question.type === "multiple-choice") {
         const selected = (prev[question.id] as string[]) || [];
         return {
@@ -82,11 +83,13 @@ const QuizPage: React.FC = () => {
   const TextStrategy = (question: QuizTask) => (
     <>
       {question.options?.map((option) => (
-        <label key={option} className={styles.option}>
+        <label key={option} className={styles.option_text}>
           <input
+            autoFocus={true}
             type="text"
             className={styles.textInput}
             onChange={handleAnswerChange}
+            value={(answers[question.id] && answers[question.id][0]) || ""}
           />
         </label>
       ))}
@@ -99,6 +102,7 @@ const QuizPage: React.FC = () => {
     ['text', (question) => TextStrategy(question)],
   ]);
 
+  // TODO: use strategy pattern
   const QuestionStrategy = (question: QuizTask) => {
     return strategies.get(question.type)?.(question);
   };

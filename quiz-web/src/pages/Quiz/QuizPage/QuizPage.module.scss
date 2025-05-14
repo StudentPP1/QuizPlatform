@@ -1,13 +1,15 @@
+@use "../../../scss/variables" as v;
+
 .quizContainer {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #0d0d0d;
+    background-color: v.$background;
 }
 
 .quizCard {
-    background-color: #262626;
+    background-color: v.$second_background;
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -18,13 +20,13 @@
 
 .questionNumber,
 .timer {
-    color: #f2e527;
+    color: v.$orange;
     font-size: 18px;
     font-weight: bold;
 }
 
 .questionText {
-    color: #f2f2f2;
+    color: white;
     font-size: 22px;
     font-weight: bold;
     margin-bottom: 15px;
@@ -45,8 +47,7 @@
 }
 
 .option {
-    background-color: #0d0d0d;
-    color: #f2f2f2;
+    background-color: transparent;
     padding: 10px;
     border-radius: 8px;
     cursor: pointer;
@@ -55,9 +56,18 @@
     align-items: center;
     gap: 10px;
 }
-
+.option_text {
+    background-color: transparent;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 .option:hover {
-    background-color: #f2d64b;
+    background-color: v.$yellow;
     color: #0d0d0d;
 }
 
@@ -66,7 +76,7 @@
     appearance: none;
     width: 18px;
     height: 18px;
-    border: 2px solid #f2e527;
+    border: 2px solid v.$orange;
     border-radius: 50%;
     position: relative;
     cursor: pointer;
@@ -77,7 +87,7 @@
     content: "";
     width: 10px;
     height: 10px;
-    background-color: #f2e527;
+    background-color: v.$orange;
     border-radius: 50%;
     position: absolute;
     top: 50%;
@@ -99,15 +109,14 @@
     width: 100%;
     padding: 10px;
     border-radius: 8px;
-    border: none;
-    background-color: #0d0d0d;
-    color: #f2f2f2;
+    background-color: transparent;
+    color: white;
     font-size: 18px;
 }
 
 .nextButton {
-    background-color: #f2e527;
-    color: #0d0d0d;
+    background-color: v.$orange;
+    color: black;
     border: none;
     padding: 10px 15px;
     border-radius: 8px;
@@ -118,7 +127,7 @@
 }
 
 .nextButton:hover {
-    background-color: #f2d64b;
+    background-color: v.$yellow;
 }
 
 .exitButton {
@@ -128,6 +137,6 @@
     background: none;
     border: none;
     font-size: 24px;
-    color: #f2e527;
+    color:  v.$yellow;
     cursor: pointer;
 }

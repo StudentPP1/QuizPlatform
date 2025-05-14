@@ -14,7 +14,6 @@ const CreateQuizPage: FC = () => {
     const [description, setDescription] = useState<string>("")
     const [timeLimit, setTimeLimit] = useState<string>("");
 
-    // TODO: fix this piece of crap
     const addQuestion = (isOpenEnded: boolean = false) => {
         setQuestions([
             ...questions,
