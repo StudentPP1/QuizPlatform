@@ -1,12 +1,17 @@
 import { EventEmitter } from 'events';
 
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import {
+  Injectable,
+  OnModuleInit,
+  OnModuleDestroy,
+  Inject,
+} from '@nestjs/common';
 
 import { ErrorOptions } from '@events/interfaces/error-options.interface';
 import { UpdateAuthorRatingOptions } from '@events/interfaces/update-author-rating-options.interface';
 import { SendMailOptions } from '@mail/interfaces/send-mail-options.interface';
 import { MailService } from '@mail/mail.service';
-import { UsersService } from '@users/users.service';
+import { IUsersService } from '@users/users-service.interface';
 
 @Injectable()
 export class EventEmitterService
@@ -15,7 +20,7 @@ export class EventEmitterService
 {
   constructor(
     private readonly mailService: MailService,
-    private readonly usersService: UsersService,
+    @Inject('IUsersService') private readonly usersService: IUsersService,
   ) {
     super();
   }

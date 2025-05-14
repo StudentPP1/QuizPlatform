@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 
 import { EventEmitterService } from '@events/event-emitter.service';
@@ -9,13 +9,13 @@ import { CreateGoogleUserDto } from '@users/dto/create-google-user.dto';
 import { CreateUserDto } from '@users/dto/create-user.dto';
 import { User } from '@users/entities/user.entity';
 import { AuthProvider } from '@users/enum/auth-provider.enum';
-import { UsersService } from '@users/users.service';
+import { IUsersService } from '@users/users-service.interface';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly emitter: EventEmitterService,
-    private readonly usersService: UsersService,
+    @Inject('IUsersService') private readonly usersService: IUsersService,
     private readonly tokenService: TokenService,
   ) {}
 
@@ -94,7 +94,7 @@ export class AuthService {
     return await this.usersService.createUser(data, AuthProvider.GOOGLE);
   }
 
-  async logout(userId: string) {
+  async logout(userId: string): Promise<void> {
     this.tokenService.removeTokenGenerator(userId);
   }
 }
