@@ -6,7 +6,6 @@ import {
   IsArray,
 } from 'class-validator';
 
-import { IsCustomUrl } from '@common/decorators/custom-url.decorator';
 import { TaskType } from '@task/enum/task-type.enum';
 
 export class CreateTaskDto {
@@ -29,6 +28,6 @@ export class CreateTaskDto {
   options?: string[] | null;
 
   @IsOptional()
-  @IsCustomUrl()
+  @IsString()
   image?: string | null;
 }
