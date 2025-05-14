@@ -7,7 +7,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 
-import { QueryQueueService } from '@queue/query-queue.service';
+import { MemoizationCache } from '@common/cache/memoization-cache';
+import { LFUStrategy } from '@common/cache/strategies/lfu.strategy';
 import { CreateQuizDto } from '@quiz/dto/create-quiz.dto';
 import { FullQuizDto, QuizPreviewDto } from '@quiz/dto/quiz.dto';
 import { SaveQuizResultDto } from '@quiz/dto/save-quiz-result.dto';
@@ -15,18 +16,18 @@ import { QuizResult } from '@quiz/entities/quiz-result.entity';
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { TaskService } from '@task/task.service';
 import { User } from '@users/entities/user.entity';
-import { UsersService } from '@users/users.service';
+import { IUsersService } from '@users/users-service.interface';
 
 @Injectable()
 export class QuizService {
+  private cache = new MemoizationCache(new LFUStrategy(3));
+
   constructor(
     @InjectRepository(Quiz) private readonly quizRepository: Repository<Quiz>,
     @InjectRepository(QuizResult)
     private readonly quizResultRepository: Repository<QuizResult>,
     private readonly taskService: TaskService,
-    @Inject(forwardRef(() => UsersService))
-    private readonly usersService: UsersService,
-    private readonly queryQueueService: QueryQueueService,
+    @Inject('IUsersService') private readonly usersService: IUsersService,
   ) {}
 
   async createQuiz(createQuizDto: CreateQuizDto, user: User) {
@@ -35,7 +36,7 @@ export class QuizService {
       creator: user,
     });
 
-    await this.queryQueueService.enqueue(() => this.quizRepository.save(quiz));
+    await this.quizRepository.save(quiz);
     await this.taskService.createTasks(createQuizDto.tasks, quiz);
 
     return {
@@ -49,15 +50,11 @@ export class QuizService {
     userId: string,
     saveQuizResultDto: SaveQuizResultDto,
   ): Promise<object> {
-    const user = await this.queryQueueService.enqueue(() =>
-      this.usersService.getUserById(userId),
-    );
-    const quiz = await this.queryQueueService.enqueue(() =>
-      this.quizRepository.findOne({
-        where: { id: quizId },
-        relations: ['participants'],
-      }),
-    );
+    const user = await this.usersService.getUserById(userId);
+    const quiz = await this.quizRepository.findOne({
+      where: { id: quizId },
+      relations: ['participants'],
+    });
 
     if (!quiz) {
       throw new NotFoundException('Quiz not found');
@@ -74,9 +71,7 @@ export class QuizService {
 
     await this.usersService.addQuizParticipation(user, quiz);
 
-    await this.queryQueueService.enqueue(() =>
-      this.quizResultRepository.save(result),
-    );
+    await this.quizResultRepository.save(result);
 
     return {
       message: 'Result successfully saved',
@@ -84,7 +79,7 @@ export class QuizService {
   }
 
   async getQuiz(quizId: string) {
-    const quiz = await this.queryQueueService.enqueue(() =>
+    const quiz = await this.cache.getOrComputeAsync(`quiz:${quizId}`, () =>
       this.quizRepository.findOne({
         where: { id: quizId },
         relations: ['creator', 'creator.createdQuizzes', 'tasks'],
@@ -99,23 +94,21 @@ export class QuizService {
   }
 
   async searchQuizzesByName(name: string) {
-    const quizzes = await this.queryQueueService.enqueue(() =>
-      this.quizRepository.find({
-        where: { title: ILike(`%${name}%`) },
-        relations: ['creator', 'creator.createdQuizzes'],
-      }),
-    );
+    const quizzes = await this.quizRepository.find({
+      where: { title: ILike(`%${name}%`) },
+      relations: ['creator', 'creator.createdQuizzes'],
+    });
 
     return quizzes.map((quiz) => new QuizPreviewDto(quiz));
   }
 
   async getTopQuizzes(limit: number) {
-    const quizzes = await this.queryQueueService.enqueue(() =>
+    const key = `top-quizzes:${limit}`;
+
+    const quizzes = await this.cache.getOrComputeAsync(key, () =>
       this.quizRepository.find({
         relations: ['creator', 'creator.createdQuizzes'],
-        order: {
-          rating: 'DESC',
-        },
+        order: { rating: 'DESC' },
         take: limit,
       }),
     );
@@ -123,30 +116,34 @@ export class QuizService {
     return quizzes.map((quiz) => new QuizPreviewDto(quiz));
   }
 
-  async getCreatedQuizzes(userId: string, from: number, to: number) {
-    const quizzes = await this.queryQueueService.enqueue(() =>
-      this.quizRepository.find({
-        where: { creator: { id: userId } },
-        relations: ['creator', 'creator.createdQuizzes'],
-        skip: from - 1,
-        take: to - from,
-      }),
-    );
+  async getCreatedQuizzes(
+    userId: string,
+    from: number,
+    to: number,
+  ): Promise<QuizPreviewDto[]> {
+    const quizzes = await this.quizRepository.find({
+      where: { creator: { id: userId } },
+      relations: ['creator', 'creator.createdQuizzes'],
+      skip: from - 1,
+      take: to - from,
+    });
 
     return quizzes.map((quiz) => new QuizPreviewDto(quiz));
   }
 
-  async getParticipatedQuizzes(userId: string, from: number, to: number) {
-    const quizzes = await this.queryQueueService.enqueue(() =>
-      this.quizRepository.find({
-        where: {
-          participants: { id: userId },
-        },
-        relations: ['participants', 'creator', 'creator.createdQuizzes'],
-        skip: from - 1,
-        take: to - from,
-      }),
-    );
+  async getParticipatedQuizzes(
+    userId: string,
+    from: number,
+    to: number,
+  ): Promise<QuizPreviewDto[]> {
+    const quizzes = await this.quizRepository.find({
+      where: {
+        participants: { id: userId },
+      },
+      relations: ['participants', 'creator', 'creator.createdQuizzes'],
+      skip: from - 1,
+      take: to - from,
+    });
 
     return quizzes.map((quiz) => new QuizPreviewDto(quiz));
   }
