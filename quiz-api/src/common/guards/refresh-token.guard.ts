@@ -4,15 +4,21 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { Request } from 'express';
 
-import { RefreshTokenStrategy } from '@token/strategies/refresh-token.strategy';
+import { Payload } from '@token/interfaces/payload.interface';
 
 @Injectable()
 export class RefreshTokenGuard implements CanActivate {
-  constructor(private readonly refreshTokenStrategy: RefreshTokenStrategy) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<Request>();
     const refreshToken = request.cookies?.['refresh_token'];
 
     if (!refreshToken) {
@@ -20,10 +26,18 @@ export class RefreshTokenGuard implements CanActivate {
     }
 
     try {
-      request.decoded = await this.refreshTokenStrategy.validate(refreshToken);
+      const payload = await this.validate(refreshToken);
+
+      request.user = payload;
       return true;
     } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }
+  }
+
+  private async validate(refreshToken: string): Promise<Payload> {
+    return this.jwtService.verifyAsync(refreshToken, {
+      secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+    });
   }
 }
