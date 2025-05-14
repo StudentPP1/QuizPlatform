@@ -1,27 +1,19 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { InternalServerErrorException } from '@nestjs/common';
 
-type QueryTask<T = any> = () => Promise<T>;
+type Task<T = any> = () => Promise<T>;
 
-@Injectable()
-export class QueryQueueService {
-  private queue: QueryTask[] = [];
+export class Queue {
+  private queue: Task[] = [];
   private activeTasks = 0;
   private readonly maxConcurrentTasks: number;
   private readonly delayBetweenQueriesMs: number;
 
-  constructor(configService: ConfigService) {
-    this.maxConcurrentTasks = configService.get<number>(
-      'QUERY_QUEUE_CONCURRENCY',
-      2,
-    );
-    this.delayBetweenQueriesMs = configService.get<number>(
-      'QUERY_QUEUE_DELAY_MS',
-      0,
-    );
+  constructor(maxConcurrentTasks: number, delayBetweenQueriesMs: number) {
+    this.maxConcurrentTasks = maxConcurrentTasks;
+    this.delayBetweenQueriesMs = delayBetweenQueriesMs;
   }
 
-  enqueue<T>(task: QueryTask<T>): Promise<T> {
+  enqueue<T>(task: Task<T>): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       this.queue.push(async () => {
         try {
