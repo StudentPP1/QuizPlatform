@@ -54,6 +54,7 @@ const LibraryPage: FC = () => {
     fetchQuizzes();
   });
 
+  // TODO: use strategy pattern
   return (
     <Wrapper>
       <div className={styles.library_container}>

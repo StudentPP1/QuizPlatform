@@ -4,6 +4,7 @@ import {
   DEFAULT_HEADERS,
 } from "../../constants/constants";
 
+// TODO: use builder pattern
 export class RequestAttributes {
   private method: string = "GET";
   private headers: Record<string, string> = DEFAULT_HEADERS;
@@ -31,15 +32,21 @@ export class RequestAttributes {
     this.headers[key] = value;
     return this;
   }
-  
+
   addAuthHeader(): this {
-    this.headers["Authorization"] = `Bearer ${sessionStorage.getItem(ACCESS_TOKEN_NAME)}`;
+    this.headers["Authorization"] = `Bearer ${sessionStorage.getItem(
+      ACCESS_TOKEN_NAME
+    )}`;
     console.log("Send header: " + this.headers["Authorization"]);
     return this;
   }
 
-  setBody(data: any): this {
-    this.body = JSON.stringify(data);
+  setBody(data: any, stringify: boolean = true): this {
+    if (!stringify) {
+      this.body = data;
+    } else {
+      this.body = JSON.stringify(data);
+    }
     return this;
   }
 

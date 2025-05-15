@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import styles from "./CreateQuizPage.module.scss";
 import { QuestionType } from "../../models/QuestionType";
 import AnswerItem from "./AnswerItem";
@@ -8,6 +8,7 @@ const QuizItem: FC<{ question: QuestionType, questions: QuestionType[], setQuest
     questions,
     setQuestions
 }) => {
+    const [image, setImage] = useState<string | null>(null);
 
     const updateQuestionText = (id: number, newText: string) => {
         setQuestions(
@@ -18,15 +19,13 @@ const QuizItem: FC<{ question: QuestionType, questions: QuestionType[], setQuest
     const handleImageUpload = (id: number, event: any) => {
         const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const base64 = reader.result as string;
-                setQuestions(
-                    questions.map((q) =>
-                        q.id === id ? { ...q, image: base64 } : q
-                    )
-                );
-            }
+            const imageUrl = URL.createObjectURL(file);
+            setImage(imageUrl)
+            setQuestions(
+                questions.map((q) =>
+                    q.id === id ? { ...q, image: file } : q
+                )
+            );
         };
     }
 
@@ -71,7 +70,7 @@ const QuizItem: FC<{ question: QuestionType, questions: QuestionType[], setQuest
                     onChange={(e) => handleImageUpload(question.id, e)} />
             </label>
 
-            {question.image && <img src={question.image} className={styles.imagePreview} />}
+            {image != null ? <img src={image} className={styles.imagePreview} /> : <></>}
 
             <div className={styles.answers}>
                 {question.answers.map((answer) => (

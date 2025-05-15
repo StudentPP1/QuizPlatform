@@ -94,6 +94,7 @@ const CreateQuizPage: FC = () => {
             toast.error("Time must be between 1 and 120 minutes!", { position: "top-right" });
         } else {
             if (validateQuestions()) {
+                const formData = new FormData();
                 const quiz = {
                     title: title,
                     description: description,
@@ -103,8 +104,16 @@ const CreateQuizPage: FC = () => {
                         return createQuestion(question)
                     })
                 }
-                console.dir("quiz: ", quiz)
-                await QuizService.createQuiz(quiz).then((result) => {
+                formData.append("quiz", JSON.stringify(quiz));
+                let counter = 0;
+                quiz.tasks.forEach(task => {
+                    if (task.image != null) {
+                        formData.append(`images[${counter}]`, task.image);
+                        counter += 1;
+                    }
+                })
+                console.dir("formData: ", formData)
+                await QuizService.createQuiz(formData).then((result) => {
                     console.log(result)
                     toast.success(result.message, { position: "top-right" });
                     navigate("/quizInfo/" + result.quizId)
