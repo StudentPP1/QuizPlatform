@@ -29,8 +29,8 @@ export class QuizController {
   @Post('create')
   @UseInterceptors(AnyFilesInterceptor())
   async createQuiz(
-    @Body('quiz') quizRaw: string,
     @Req() req: Request & { user?: User },
+    @Body('quiz') quizRaw: string,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
     const createQuizDto = plainToInstance(CreateQuizDto, JSON.parse(quizRaw));

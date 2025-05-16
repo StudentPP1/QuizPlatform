@@ -104,15 +104,17 @@ const CreateQuizPage: FC = () => {
                         return createQuestion(question)
                     })
                 }
-                formData.append("quiz", JSON.stringify(quiz));
-                let counter = 0;
-                quiz.tasks.forEach(task => {
-                    if (task.image != null) {
-                        formData.append(`images[${counter}]`, task.image);
-                        counter += 1;
+
+                for (let i = 0; i < quiz.tasks.length; i++) {
+                    const element = quiz.tasks[i].image;
+                    if (element) {
+                        formData.append(`images[${i}]`, element);
+                        quiz.tasks[i].image = element.fileName;
                     }
-                })
-                console.dir("formData: ", formData)
+                }
+
+                formData.append("quiz", JSON.stringify(quiz));
+
                 await QuizService.createQuiz(formData).then((result) => {
                     console.log(result)
                     toast.success(result.message, { position: "top-right" });

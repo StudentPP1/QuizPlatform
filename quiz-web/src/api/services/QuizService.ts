@@ -77,7 +77,7 @@ export class QuizService {
       "/api/quiz/create",
       RequestAttributes.builder()
         .setMethod("POST")
-        .addHeader("Content-Type", "multipart/form-data")
+        .setEmptyHeader()
         .setBody(quiz, false)
         .addAuthHeader()
         .build()

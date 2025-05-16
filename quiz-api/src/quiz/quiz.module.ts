@@ -17,31 +17,28 @@ import { UsersModule } from '@users/users.module';
   imports: [
     TypeOrmModule.forFeature([Quiz, QuizResult]),
     MulterModule.register({
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (_req, file, cb) => {
-          console.log(file.size);
-
-          const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
-          cb(null, uniqueName);
-        },
-      }),
-      fileFilter(_req, file, cb) {
-        const allowedMimeTypes = [
-          'image/jpeg',
-          'image/png',
-          'image/gif',
-          'image/webp',
-        ];
-        if (!allowedMimeTypes.includes(file.mimetype)) {
-          cb(new BadRequestException('Invalid image type'), false);
+      limits: {
+        fileSize: 5_000_000,
+      },
+      fileFilter: (_req, file, cb) => {
+        if (!file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
+          cb(
+            new BadRequestException(
+              `Unsupported file type ${extname(file.originalname)}`,
+            ),
+            false,
+          );
         }
 
         cb(null, true);
       },
-      limits: {
-        fileSize: 5_000_000,
-      },
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (_req, file, cb) => {
+          const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
+          cb(null, uniqueName);
+        },
+      }),
     }),
     TaskModule,
     forwardRef(() => UsersModule),
