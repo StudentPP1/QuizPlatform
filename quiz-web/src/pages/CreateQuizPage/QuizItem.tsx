@@ -2,13 +2,14 @@ import { FC, useState } from "react";
 import styles from "./CreateQuizPage.module.scss";
 import { QuestionType } from "../../models/QuestionType";
 import AnswerItem from "./AnswerItem";
+import { API_BASE_URL } from "../../constants/constants";
 
 const QuizItem: FC<{ question: QuestionType, questions: QuestionType[], setQuestions: any }> = ({
     question,
     questions,
     setQuestions
 }) => {
-    const [image, setImage] = useState<string | null>(null);
+    const [image, setImage] = useState<string | null>(API_BASE_URL + question.image || null);
 
     const updateQuestionText = (id: number, newText: string) => {
         setQuestions(
@@ -46,6 +47,17 @@ const QuizItem: FC<{ question: QuestionType, questions: QuestionType[], setQuest
         setQuestions(questions.filter((q) => q.id !== id));
     };
 
+    const removeImage = (id: number) => {
+        setQuestions(questions.filter((q) => {
+            if (q.id === id) {
+                q.image = null;
+                setImage(null)
+                return q;
+            }
+            else { return q; }
+        }));
+    };
+
     return (
         <div key={question.id} className={styles.questionBlock}>
             <div className={styles.questionHeader}>
@@ -71,6 +83,13 @@ const QuizItem: FC<{ question: QuestionType, questions: QuestionType[], setQuest
             </label>
 
             {image != null ? <img src={image} className={styles.imagePreview} /> : <></>}
+            {image != null ?
+                <button
+                    className={styles.deleteImage}
+                    onClick={() => removeImage(question.id)}>
+                    🗑️ Delete
+                </button>
+                : <></>}
 
             <div className={styles.answers}>
                 {question.answers.map((answer) => (

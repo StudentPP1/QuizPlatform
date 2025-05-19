@@ -2,17 +2,23 @@ import { FC, useState } from 'react';
 import styles from "./CreateQuizPage.module.scss";
 import { toast } from 'react-toastify';
 import Wrapper from '../../components/wrapper/Wrapper';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { QuizService } from '../../api/services/QuizService';
 import { QuestionType } from '../../models/QuestionType';
 import QuizItem from './QuizItem';
+import { QuizNavigateEdit } from '../../models/QuizNavigateEdit';
 
 const CreateQuizPage: FC = () => {
+    const location = useLocation();
+    let quiz = null;
+    if (location.state) {
+        quiz = (location.state as QuizNavigateEdit).quiz;
+    }
     const navigate = useNavigate()
-    const [questions, setQuestions] = useState<QuestionType[]>([]);
-    const [title, setTitle] = useState<string>("")
-    const [description, setDescription] = useState<string>("")
-    const [timeLimit, setTimeLimit] = useState<string>("");
+    const [questions, setQuestions] = useState<QuestionType[]>(quiz?.questions || []);
+    const [title, setTitle] = useState<string>(quiz?.title || "")
+    const [description, setDescription] = useState<string>(quiz?.description || "")
+    const [timeLimit, setTimeLimit] = useState<string>(quiz?.timeLimit.toString() || "");
 
     const addQuestion = (isOpenEnded: boolean = false) => {
         setQuestions([
@@ -95,7 +101,8 @@ const CreateQuizPage: FC = () => {
         } else {
             if (validateQuestions()) {
                 const formData = new FormData();
-                const quiz = {
+
+                let quizData: any = {
                     title: title,
                     description: description,
                     numberOfTasks: questions.length,
@@ -104,23 +111,37 @@ const CreateQuizPage: FC = () => {
                         return createQuestion(question)
                     })
                 }
+                if (quiz?.id) {
+                    quizData = { id: quiz.id, ...quizData };
+                }
 
-                for (let i = 0; i < quiz.tasks.length; i++) {
-                    const element = quiz.tasks[i].image;
+                for (let i = 0; i < quizData.tasks.length; i++) {
+                    const element = quizData.tasks[i].image;
                     if (element) {
                         formData.append(`images[${i}]`, element);
-                        quiz.tasks[i].image = element.fileName;
+                        quizData.tasks[i].image = element.fileName;
                     }
                 }
 
-                formData.append("quiz", JSON.stringify(quiz));
+                formData.append("quiz", JSON.stringify(quizData));
 
-                await QuizService.createQuiz(formData).then((result) => {
+                await QuizService.createQuiz(formData, quiz != null).then((result) => {
                     console.log(result)
                     toast.success(result.message, { position: "top-right" });
                     navigate("/quizInfo/" + result.quizId)
                 })
+
             }
+        }
+    };
+
+    const deleteQuiz = async () => {
+        if (quiz != null) {
+            await QuizService.deleteQuiz(quiz.id).then((result) => {
+                console.log(result)
+                toast.success(result.message, { position: "top-right" });
+                navigate("/home")
+            })
         }
     };
 
@@ -128,7 +149,7 @@ const CreateQuizPage: FC = () => {
         <Wrapper>
             <main className={styles.content}>
                 <section className={styles.creating_content}>
-                    <h1>Create quiz</h1>
+                    <h1>{quiz ? "Edit" : "Create"} quiz</h1>
                     <input
                         type="text"
                         value={title}
@@ -166,6 +187,11 @@ const CreateQuizPage: FC = () => {
                     {questions.length > 0 && (
                         <div className={styles.button_wrapper}>
                             <button className={styles.button} onClick={saveModule}>Save</button>
+                        </div>
+                    )}
+                    {quiz && (
+                        <div className={styles.button_wrapper}>
+                            <button className={styles.button} onClick={deleteQuiz}>Delete</button>
                         </div>
                     )}
                 </section>

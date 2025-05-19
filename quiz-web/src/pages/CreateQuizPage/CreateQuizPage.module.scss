@@ -168,3 +168,16 @@
         transition: all 0.1s ease-out;
     }
 }
+.deleteImage {
+            background: v.$second_background;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+
+            &:hover {
+                background: #c0392b;
+            }
+        }

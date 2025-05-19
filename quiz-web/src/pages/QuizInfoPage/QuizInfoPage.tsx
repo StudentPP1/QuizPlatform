@@ -1,6 +1,6 @@
-import { FaPlay } from "react-icons/fa";
+import { FaEdit, FaPlay } from "react-icons/fa";
 import styles from "./QuizInfoPage.module.scss";
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
 import { Quiz } from "../../models/Quiz";
@@ -8,9 +8,11 @@ import { Review } from "../../models/Review";
 import Avatar from "../../components/avatar/Avatar";
 import { QuizService } from "../../api/services/QuizService";
 import { QuizNavigate } from "../../models/QuizNavigate";
+import { AuthContext } from "../../context/context";
 
 // TODO: + Task 5 => implement async/await or Promise.all()
 const QuizInfoPage: FC = () => {
+    const { user } = useContext(AuthContext);
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [quiz, setQuiz] = useState<Quiz | null>(null)
@@ -42,13 +44,6 @@ const QuizInfoPage: FC = () => {
                 <div className={styles.quizHeader}>
                     <h1 className={styles.quizTitle}>{quiz?.title}</h1>
 
-                    <div className={styles.userProfile} onClick={() => {
-                        navigate(`/authorInfo/${quiz?.creator.userId}`)
-                    }}>
-                        <Avatar avatarUrl={quiz?.creator.avatarUrl} />
-                        <p className={styles.username}>{quiz?.creator.username}</p>
-                    </div>
-
                     {quiz != null && (
                         <p>{"⭐".repeat(quiz.rating)} ({reviews?.length} reviews)</p>
                     )}
@@ -56,11 +51,18 @@ const QuizInfoPage: FC = () => {
                     <div className={styles.quizDescription}>
                         <p>{quiz?.description}</p>
                     </div>
+
+                    <div className={styles.userProfile} onClick={() => {
+                        navigate(`/authorInfo/${quiz?.creator.userId}`)
+                    }}>
+                        <Avatar avatarUrl={quiz?.creator.avatarUrl} />
+                        <p className={styles.username}>{quiz?.creator.username}</p>
+                    </div>
                 </div>
 
-                <div className={styles.startButtonContainer}>
+                <div className={styles.buttonContainer}>
                     <button
-                        className={styles.startButton}
+                        className={styles.controlButton}
                         onClick={() => {
                             if (quiz != null) {
                                 navigate("/quiz", { state: { quiz } as QuizNavigate })
@@ -69,6 +71,18 @@ const QuizInfoPage: FC = () => {
                         }>
                         <FaPlay /> Start
                     </button>
+                    {quiz?.creator.userId == user?.userId &&
+                        <button
+                            className={styles.controlButton}
+                            onClick={() => {
+                                if (quiz != null) {
+                                    navigate("/edit-quiz", { state: { quiz } as QuizNavigate })
+                                }
+                            }
+                            }>
+                            <FaEdit /> Edit
+                        </button>
+                    }
                 </div>
 
                 <div className={styles.quizReviews}>

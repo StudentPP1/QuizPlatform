@@ -1,7 +1,7 @@
 @use "../../scss/variables" as v;
 
 .quizPage {
-    background-color: #0d0d0d;
+    background-color: v.$background;
     color: #f2f2f2;
     padding: 20px;
     border-radius: 10px;
@@ -11,12 +11,12 @@
 
 .quizHeader {
     text-align: left;
-    background-color: #262626;
+    background-color: v.$second_background;
     padding: 20px;
     border-radius: 10px;
 
     h1 {
-        color: #f2e527;
+        color: v.$orange;
     }
 
     p {
@@ -26,39 +26,43 @@
 
 .quizDescription {
     background-color: v.$second_background;
-    color: #0d0d0d;
     border-radius: 10px;
     text-align: left;
 }
 
-.startButtonContainer {
+.buttonContainer {
+    background-color: v.$background;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
     padding: 15px 0;
 }
-.startButton {
-    background-color: #f2e527;
-    color: #0d0d0d;
+
+.controlButton {
+    display: inline-block;
+    background-color: v.$orange;
     padding: 10px 20px;
+    margin: 0 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    display: block;
     font-size: 16px;
     font-weight: bold;
     text-align: left;
-    margin-left: 0;
 
     &:hover {
-        background-color: #f2d64b;
+        background-color: v.$yellow;
     }
 }
 
 .quizReviews {
-    background-color: #1a1a1a;
+    background-color: v.$second_background;
     padding: 15px;
     border-radius: 10px;
 
     h2 {
-        color: #f2e527;
+        color: v.$orange;
         text-align: left;
     }
 }
@@ -67,8 +71,7 @@
     overflow-y: auto;
 }
 .review {
-    background-color: #262626;
-    color: #f2f2f2;
+    background-color: v.$second_background;
     padding: 10px;
     border-radius: 5px;
     margin: 10px 0;
@@ -94,7 +97,6 @@
     }
 
     .username {
-        color: #f2f2f2;
         font-size: 16px;
         font-weight: bold;
         white-space: nowrap;

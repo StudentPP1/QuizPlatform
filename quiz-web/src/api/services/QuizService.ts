@@ -5,40 +5,47 @@ import { QuizDTO } from "../../models/QuizDTO";
 import { Review } from "../../models/Review";
 import { apiFetch } from "../utils/ApiUtils";
 import { RequestAttributes } from "../utils/RequestAttributes";
-import { DoneQuizResult } from "../../models/DoneQuizResult";
+import { DoneApiResult } from "../../models/DoneApiResult";
 import { log } from "../../utils/Logger";
+import { QuizEdit } from "../../models/QuizEdit";
 
 export class QuizService {
   @log
   static async getTopQuizzes(limit: number = 3): Promise<QuizDTO[]> {
-    return apiFetch<QuizDTO[]>(`/api/quiz/top-rated?limit=${limit}`, this.withAuth());
-  };
+    return apiFetch<QuizDTO[]>(
+      `/api/quiz/top-rated?limit=${limit}`,
+      this.withAuth()
+    );
+  }
 
   @log
   static async getTopAuthors(limit: number = 3): Promise<Creator[]> {
-    return apiFetch<Creator[]>(`/api/users/top-creators?limit=${limit}`, this.withAuth());
-  };
+    return apiFetch<Creator[]>(
+      `/api/users/top-creators?limit=${limit}`,
+      this.withAuth()
+    );
+  }
 
   @log
   static async search(text: string): Promise<QuizDTO[]> {
-    return apiFetch<QuizDTO[]>(`/api/quiz/search?name=${text}`, this.withAuth());
-  };
+    return apiFetch<QuizDTO[]>(
+      `/api/quiz/search?name=${text}`,
+      this.withAuth()
+    );
+  }
 
   @log
   static async getQuiz(quizId: string): Promise<Quiz> {
     return apiFetch<Quiz>(`/api/quiz/${quizId}/info`, this.withAuth());
-  };
+  }
 
   @log
-  static async getCreatedQuizzes(
-    from: number,
-    to: number
-  ): Promise<QuizDTO[]> {
+  static async getCreatedQuizzes(from: number, to: number): Promise<QuizDTO[]> {
     return apiFetch<QuizDTO[]>(
       `/api/users/created?from=${from}&to=${to}`,
       this.withAuth()
     );
-  };
+  }
 
   @log
   static async getParticipatedQuizzes(
@@ -49,7 +56,7 @@ export class QuizService {
       `/api/users/participated?from=${from}&to=${to}`,
       this.withAuth()
     );
-  };
+  }
 
   @log
   static async sendReview(quizId: string, rating: number, text: string | null) {
@@ -67,14 +74,14 @@ export class QuizService {
   }
 
   @log
-  static async getReviews (id: string): Promise<Review[]> {
+  static async getReviews(id: string): Promise<Review[]> {
     return apiFetch<Review[]>(`/api/review?quizId=${id}`, this.withAuth());
-  };
+  }
 
   @log
-  static async createQuiz(quiz: any): Promise<QuizCreatedResult> {
+  static async createQuiz(quiz: any, update: boolean): Promise<QuizCreatedResult> {
     return apiFetch<QuizCreatedResult>(
-      "/api/quiz/create",
+      `/api/quiz/${update ? "update" : "create"}`,
       RequestAttributes.builder()
         .setMethod("POST")
         .setEmptyHeader()
@@ -85,13 +92,21 @@ export class QuizService {
   }
 
   @log
-  static async doneQuiz(quizId: string, score: number): Promise<DoneQuizResult> {
-    return apiFetch<DoneQuizResult>(
+  static deleteQuiz(id: string): Promise<DoneApiResult> {
+    return apiFetch<QuizCreatedResult>(
+      `/api/quiz/delete?id=${id}`,
+      RequestAttributes.builder().setMethod("POST").addAuthHeader().build()
+    );
+  }
+
+  @log
+  static async doneQuiz(quizId: string, score: number): Promise<DoneApiResult> {
+    return apiFetch<DoneApiResult>(
       `/api/quiz/${quizId}/results`,
       RequestAttributes.builder()
         .setMethod("POST")
         .setBody({
-          score: score
+          score: score,
         })
         .addAuthHeader()
         .build()

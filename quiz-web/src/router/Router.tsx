@@ -11,6 +11,7 @@ import SearchPage from "../pages/SearchPage/SearchPage";
 import ProtectedRouters from "./ProtectedRouters";
 import { useContext } from "react";
 import { AuthContext } from "../context/context";
+import EditQuizPage from "../pages/EditQuizPage/EditQuizPage";
 
 const Router = () => {
     const { user } = useContext(AuthContext);
@@ -21,6 +22,7 @@ const Router = () => {
                 <Route element={<ProtectedRouters user={user} />}>
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/library" element={<LibraryPage />} />
+                    <Route path="/edit-quiz" element={<EditQuizPage />} />
                     <Route path="/create-quiz" element={<CreateQuizPage />} />
                     <Route path="/quizInfo/:id" element={<QuizInfoPage />} />
                     <Route path="/quiz" element={<QuizPage />} />
