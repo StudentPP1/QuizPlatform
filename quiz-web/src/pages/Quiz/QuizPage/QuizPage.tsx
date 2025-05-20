@@ -32,7 +32,6 @@ const QuizPage: React.FC = () => {
 
   const handleAnswerSelection = (question: QuizTask, value: string, checked?: boolean) => {
     setAnswers((prev) => {
-      console.log(question)
       if (question.type === "multiple-choice") {
         const selected = (prev[question.id] as string[]) || [];
         return {

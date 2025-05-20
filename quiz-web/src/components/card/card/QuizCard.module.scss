@@ -5,7 +5,7 @@
     background: v.$second_background;
     border-radius: 12px;
     padding: 16px;
-    color: white;
+    color: v.$white;
     font-family: "Inter", sans-serif;
     display: flex;
     flex-direction: column;
@@ -25,7 +25,7 @@
 }
 
 .terms {
-    background: rgba(255, 255, 255, 0.1);
+    background: v.$background;
     padding: 4px 0;
     border-radius: 8px;
     font-size: 14px;

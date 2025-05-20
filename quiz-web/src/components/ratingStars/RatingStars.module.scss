@@ -1,5 +1,7 @@
+@use "../../scss/variables" as v;
+
 .ratingSection {
-    color: #f2f2f2;
+    color: v.$white;
     padding-bottom: 20px;
 }
 
@@ -12,9 +14,9 @@
 }
 
 .filledStar {
-    color: #f2e527;
+    color: v.$orange;
 }
 
 .emptyStar {
-    color: #888;
+    color: v.$white;
 }

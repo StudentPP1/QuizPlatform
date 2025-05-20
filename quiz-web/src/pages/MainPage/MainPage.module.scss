@@ -41,7 +41,7 @@
     border-radius: 10px;
     padding: 10px 20px;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 5px v.$background;
     background: v.$orange;
     color: v.$background;
 
@@ -106,7 +106,7 @@
     width: 600px;
     height: auto;
     border-radius: 30px;
-    box-shadow: 0 18px 50px -15px rgba(25, 42, 89, 0.2);
+    box-shadow: 0 18px 50px -15px v.$background;
 }
 .wrapper {
     padding-bottom: 2rem;

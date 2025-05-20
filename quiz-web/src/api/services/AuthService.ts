@@ -1,6 +1,7 @@
 import { API_BASE_URL } from "../../constants/constants";
 import { log } from "../../utils/Logger";
 import { apiFetch } from "../utils/ApiUtils";
+import { HttpMethod } from "../utils/HttpMethod";
 import { RequestAttributes } from "../utils/RequestAttributes";
 
 // TODO: + Task 9 => implement logging using custom decorator 
@@ -10,7 +11,7 @@ export class AuthService {
     return apiFetch(
       "/api/auth/signup",
       RequestAttributes.builder()
-        .setMethod("POST")
+        .setMethod(HttpMethod.POST)
         .setBody({
           username: username,
           email: email,
@@ -25,7 +26,7 @@ export class AuthService {
     return apiFetch(
       "/api/auth/login",
       RequestAttributes.builder()
-        .setMethod("POST")
+        .setMethod(HttpMethod.POST)
         .setBody({
           email: email,
           password: password,

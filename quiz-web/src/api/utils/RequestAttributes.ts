@@ -3,10 +3,11 @@ import {
   DEFAULT_CREDENTIALS,
   DEFAULT_HEADERS,
 } from "../../constants/constants";
+import { HttpMethod } from "./HttpMethod";
 
 // TODO: use builder pattern
 export class RequestAttributes {
-  private method: string = "GET";
+  private method: string = HttpMethod.GET;
   private headers: Record<string, string> = DEFAULT_HEADERS;
   private credentials: RequestCredentials = DEFAULT_CREDENTIALS;
   private body?: string = undefined;
@@ -37,7 +38,7 @@ export class RequestAttributes {
     this.headers["Authorization"] = `Bearer ${sessionStorage.getItem(
       ACCESS_TOKEN_NAME
     )}`;
-    console.log("Send header: " + this.headers["Authorization"]);
+    console.log("Authorization header: ", this.headers["Authorization"])
     return this;
   }
 

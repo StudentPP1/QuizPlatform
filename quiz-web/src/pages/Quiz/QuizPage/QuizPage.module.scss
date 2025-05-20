@@ -12,7 +12,7 @@
     background-color: v.$second_background;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 10px v.$background;
     text-align: center;
     max-width: 600px;
     width: 100%;
@@ -26,7 +26,7 @@
 }
 
 .questionText {
-    color: white;
+    color: v.$white;
     font-size: 22px;
     font-weight: bold;
     margin-bottom: 15px;
@@ -47,6 +47,7 @@
 }
 
 .option {
+    color: v.$white;
     background-color: transparent;
     padding: 10px;
     border-radius: 8px;
@@ -68,7 +69,7 @@
 }
 .option:hover {
     background-color: v.$yellow;
-    color: #0d0d0d;
+    color: v.$background;
 }
 
 .radioButton,
@@ -110,13 +111,13 @@
     padding: 10px;
     border-radius: 8px;
     background-color: transparent;
-    color: white;
+    color: v.$white;
     font-size: 18px;
 }
 
 .nextButton {
     background-color: v.$orange;
-    color: black;
+    color: v.$background;
     border: none;
     padding: 10px 15px;
     border-radius: 8px;
@@ -137,6 +138,6 @@
     background: none;
     border: none;
     font-size: 24px;
-    color:  v.$yellow;
+    color: v.$yellow;
     cursor: pointer;
 }

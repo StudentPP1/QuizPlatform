@@ -25,8 +25,8 @@
         justify-content: center;
 
         input {
-            background-color: #3e3d49;
-            color: #98958b;
+            background-color: v.$second_background;
+            color: v.$white;
             width: 40%;
             padding: 8px 12px;
             border: none;
@@ -34,7 +34,7 @@
             outline: none;
 
             &:focus {
-                color: white;
+                color: v.$white;
             }
         }
     }

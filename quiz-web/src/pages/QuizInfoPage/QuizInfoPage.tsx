@@ -44,14 +44,14 @@ const QuizInfoPage: FC = () => {
                 <div className={styles.quizHeader}>
                     <h1 className={styles.quizTitle}>{quiz?.title}</h1>
 
-                    {quiz != null && (
-                        <p>{"⭐".repeat(quiz.rating)} ({reviews?.length} reviews)</p>
-                    )}
-
                     <div className={styles.quizDescription}>
                         <p>{quiz?.description}</p>
                     </div>
 
+                    {quiz != null && (
+                        <p>{"⭐".repeat(quiz.rating)} ({reviews?.length} reviews)</p>
+                    )}
+                    
                     <div className={styles.userProfile} onClick={() => {
                         navigate(`/authorInfo/${quiz?.creator.userId}`)
                     }}>

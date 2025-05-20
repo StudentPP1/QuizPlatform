@@ -20,6 +20,11 @@ const CreateQuizPage: FC = () => {
     const [description, setDescription] = useState<string>(quiz?.description || "")
     const [timeLimit, setTimeLimit] = useState<string>(quiz?.timeLimit.toString() || "");
 
+    const showToast = (message: string): boolean => {
+        toast.error(message, { position: "top-right" });
+        return false;
+    };
+
     const addQuestion = (isOpenEnded: boolean = false) => {
         setQuestions([
             ...questions,
@@ -41,109 +46,81 @@ const CreateQuizPage: FC = () => {
     const validateQuestions = () => {
         for (const question of questions) {
             if (!question.text.trim()) {
-                toast.error("Fill in all the fields!", { position: "top-right" });
-                return false;
+                return showToast("Fill in all the fields!");
             }
             if (!question.isOpenEnded && question.answers.some((answer) => !answer.text.trim()) === true) {
-                toast.error("Fill in all the fields!", { position: "top-right" });
-                return false;
+                return showToast("Fill in all the fields!");
             }
             if (!question.isOpenEnded && !question.answers.some((answer) => answer.isCorrect)) {
-                toast.error("Every question should have at least one correct answer!", { position: "top-right" });
-                return false;
+                return showToast("Every question should have at least one correct answer!");
             }
         }
         return true;
     };
 
-    const handleTimeChange = () => {
-        if (/^\d*$/.test(timeLimit)) {
-            const numValue = parseInt(timeLimit, 10);
-            if (!isNaN(numValue) && numValue >= 1 && numValue <= 120) {
-                return true;
-            }
-        }
-        return false;
+    const isTimeValid = () => {
+        const num = parseInt(timeLimit, 10);
+        return /^\d+$/.test(timeLimit) && !isNaN(num) && num >= 1 && num <= 120;
     };
 
-    const createQuestion = (question: QuestionType) => {
-        let type;
-        if (question.isOpenEnded) {
-            type = "text"
-        }
-        else {
-            if (question.answers
-                .filter(answer => answer.isCorrect)
-                .map(answer => answer.text)
-                .length == 1
-            ) {
-                type = "single"
-            }
-            else {
-                type = "multiple-choice"
-            }
-        }
+    const transformQuestion = (question: QuestionType) => {
+        const { text, answers, image, isOpenEnded } = question;
+        const type = isOpenEnded
+            ? "text"
+            : answers.filter(a => a.isCorrect).length === 1
+                ? "single"
+                : "multiple-choice";
         return {
-            question: question.text,
-            type: type,
-            image: question.image,
-            correctAnswers: question.answers
-                .filter(answer => answer.isCorrect)
-                .map(answer => answer.text)
-            ,
-            options: question.answers.map(answer => answer.text)
-        }
-    }
+            question: text,
+            type,
+            image,
+            correctAnswers: answers.filter(a => a.isCorrect).map(a => a.text),
+            options: answers.map(a => a.text)
+        };
+    };
 
-    const saveModule = async () => {
-        if (!handleTimeChange()) {
-            toast.error("Time must be between 1 and 120 minutes!", { position: "top-right" });
-        } else {
-            if (validateQuestions()) {
-                const formData = new FormData();
+    const prepareFormData = () => {
+        const formData = new FormData();
+        const tasks = questions.map(transformQuestion);
 
-                let quizData: any = {
-                    title: title,
-                    description: description,
-                    numberOfTasks: questions.length,
-                    timeLimit: Number.parseInt(timeLimit),
-                    tasks: questions.map((question) => {
-                        return createQuestion(question)
-                    })
-                }
-                if (quiz?.id) {
-                    quizData = { id: quiz.id, ...quizData };
-                }
-
-                for (let i = 0; i < quizData.tasks.length; i++) {
-                    const element = quizData.tasks[i].image;
-                    if (element) {
-                        formData.append(`images[${i}]`, element);
-                        quizData.tasks[i].image = element.fileName;
-                    }
-                }
-
-                formData.append("quiz", JSON.stringify(quizData));
-
-                await QuizService.createQuiz(formData, quiz != null).then((result) => {
-                    console.log(result)
-                    toast.success(result.message, { position: "top-right" });
-                    navigate("/quizInfo/" + result.quizId)
-                })
-
+        tasks.forEach((task, i) => {
+            const file = questions[i].image;
+            if (file) {
+                formData.append(`images[${i}]`, file);
+                task.image = file.fileName;
             }
-        }
+        });
+
+        const quizData = {
+            ...(quiz?.id && { id: quiz.id }),
+            title,
+            description,
+            numberOfTasks: tasks.length,
+            timeLimit: parseInt(timeLimit, 10),
+            tasks
+        };
+
+        formData.append("quiz", JSON.stringify(quizData));
+        return formData;
+    };
+
+    const handleSave = async () => {
+        if (!isTimeValid()) return showToast("Time must be between 1 and 120 minutes!");
+        if (!validateQuestions()) return;
+        const formData = prepareFormData();
+        await QuizService.createQuiz(formData, quiz != null).then((result) => {
+            toast.success(result.message, { position: "top-right" });
+            navigate("/quizInfo/" + result.quizId)
+        });
     };
 
     const deleteQuiz = async () => {
-        if (quiz != null) {
-            await QuizService.deleteQuiz(quiz.id).then((result) => {
-                console.log(result)
-                toast.success(result.message, { position: "top-right" });
-                navigate("/home")
-            })
-        }
-    };
+        if (!quiz) return;
+        await QuizService.deleteQuiz(quiz.id).then((result) => {
+            toast.success(result.message, { position: "top-right" });
+            navigate("/home")
+        })
+    }
 
     return (
         <Wrapper>
@@ -186,7 +163,7 @@ const CreateQuizPage: FC = () => {
 
                     {questions.length > 0 && (
                         <div className={styles.button_wrapper}>
-                            <button className={styles.button} onClick={saveModule}>Save</button>
+                            <button className={styles.button} onClick={handleSave}>Save</button>
                         </div>
                     )}
                     {quiz && (

@@ -41,7 +41,7 @@
 .term_count {
   font-size: 40px;
   font-weight: bold;
-  color: #0a0a0a;
+  color: v.$background;
 }
 .name_quest {
   color: v.$orange;
@@ -54,7 +54,7 @@
   height: 150px;
   pointer-events: auto;
   border-radius: 8px;
-  background-color: #262626;
+  background-color: v.$second_background;
   padding: 16px 16px;
   cursor: pointer;
   transition:
@@ -70,13 +70,13 @@
 }
 
 .module_card:hover {
-  background-color: #262626;
+  background-color: v.$second_background;
   transform: scale(1.01);
 }
 
 .module_card:active,
 .module_card[aria-pressed="true"] {
-  background-color: #262626;
+  background-color: v.$second_background;
   transform: scale(0.97);
 }
 
@@ -94,7 +94,7 @@
 .user_info {
   display: flex;
   align-items: center;
-  color: #ffffff;
+  color: v.$white;
   margin-top: auto;
 }
 
@@ -113,7 +113,7 @@
 .term_count {
   font-size: 14px;
   font-weight: bold;
-  color: #f2f2f2;
+  color: v.$white;
 }
 
 .author {

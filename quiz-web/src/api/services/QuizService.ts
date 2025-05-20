@@ -7,7 +7,7 @@ import { apiFetch } from "../utils/ApiUtils";
 import { RequestAttributes } from "../utils/RequestAttributes";
 import { DoneApiResult } from "../../models/DoneApiResult";
 import { log } from "../../utils/Logger";
-import { QuizEdit } from "../../models/QuizEdit";
+import { HttpMethod } from "../utils/HttpMethod";
 
 export class QuizService {
   @log
@@ -63,7 +63,7 @@ export class QuizService {
     return apiFetch(
       `/api/review/${quizId}`,
       RequestAttributes.builder()
-        .setMethod("POST")
+        .setMethod(HttpMethod.POST)
         .setBody({
           rating: rating,
           text: text,
@@ -79,11 +79,14 @@ export class QuizService {
   }
 
   @log
-  static async createQuiz(quiz: any, update: boolean): Promise<QuizCreatedResult> {
+  static async createQuiz(
+    quiz: any,
+    update: boolean
+  ): Promise<QuizCreatedResult> {
     return apiFetch<QuizCreatedResult>(
       `/api/quiz/${update ? "update" : "create"}`,
       RequestAttributes.builder()
-        .setMethod("POST")
+        .setMethod(update ? HttpMethod.PUT : HttpMethod.POST)
         .setEmptyHeader()
         .setBody(quiz, false)
         .addAuthHeader()
@@ -95,7 +98,10 @@ export class QuizService {
   static deleteQuiz(id: string): Promise<DoneApiResult> {
     return apiFetch<QuizCreatedResult>(
       `/api/quiz/delete?id=${id}`,
-      RequestAttributes.builder().setMethod("POST").addAuthHeader().build()
+      RequestAttributes.builder()
+        .setMethod(HttpMethod.POST)
+        .addAuthHeader()
+        .build()
     );
   }
 
@@ -104,7 +110,7 @@ export class QuizService {
     return apiFetch<DoneApiResult>(
       `/api/quiz/${quizId}/results`,
       RequestAttributes.builder()
-        .setMethod("POST")
+        .setMethod(HttpMethod.POST)
         .setBody({
           score: score,
         })

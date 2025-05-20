@@ -13,10 +13,8 @@ export const App: FC = () => {
 
   useEffect(() => {
     localStorage.setItem("index", "2")
-    console.log("refresh Token")
     refreshToken().then(() => {
       if (sessionStorage.getItem(ACCESS_TOKEN_NAME) != null) {
-        console.log("get User")
         UserService.getUser()
           .then((result: any) => { setUser(result) })
           .catch(() => { setUser(null) })

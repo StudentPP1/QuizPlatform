@@ -23,7 +23,7 @@
   background-color: v.$second_background;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 10px v.$second_background;
   text-align: center;
   max-width: 600px;
   width: 100%;
@@ -32,7 +32,7 @@
   color: v.$yellow;
 }
 .emptyStar {
-  color: white;
+  color: v.$white;
 }
 .quizTitle {
   color: v.$yellow;
@@ -42,7 +42,7 @@
 }
 
 .percentage {
-  color: white;
+  color: v.$white;
   font-size: 20px;
   margin-bottom: 10px;
 }
@@ -50,6 +50,7 @@
   padding: 10px;
 }
 .ratingSection {
+  color: v.$white;
   padding: 10px;
   div {
     width: 100%;
@@ -66,7 +67,7 @@
   border-radius: 8px;
   border: none;
   background-color: v.$background;
-  color: white;
+  color: v.$white;
   font-size: 16px;
   margin-bottom: 15px;
 }
@@ -83,5 +84,5 @@
 }
 
 .submitButton:hover {
-  background-color: v.$orange;
+  background-color: v.$yellow;
 }

@@ -9,7 +9,7 @@ const QuizItem: FC<{ question: QuestionType, questions: QuestionType[], setQuest
     questions,
     setQuestions
 }) => {
-    const [image, setImage] = useState<string | null>(API_BASE_URL + question.image || null);
+    const [image, setImage] = useState<string | null>(question.image ? API_BASE_URL + question.image : null);
 
     const updateQuestionText = (id: number, newText: string) => {
         setQuestions(

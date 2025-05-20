@@ -12,11 +12,8 @@ const Header: FC<{ children: any }> = ({ children }) => {
     };
     return (
         <>
-            {/* Header */}
             <header className={styles.header}>
-                {/* Site Logo */}
                 <div className={styles.logo}>QuizPlatform</div>
-                {/* Search Input */}
                 <div className={styles.search_box}>
                     <input
                         onChange={(event) => { setText(event.target.value) }}
