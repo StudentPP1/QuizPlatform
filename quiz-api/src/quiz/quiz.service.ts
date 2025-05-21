@@ -89,6 +89,8 @@ export class QuizService implements IQuizService {
       throw new ForbiddenException('You are not the creator of this quiz');
     }
 
+    if (this.cache.has(`quiz:${quiz.id}`)) this.cache.remove(`quiz:${quiz.id}`);
+
     quiz.participants = [];
     await this.quizRepository.save(quiz);
     await this.taskService.deleteTasks(quiz.tasks);
