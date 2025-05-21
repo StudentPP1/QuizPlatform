@@ -37,7 +37,9 @@ export class Quiz {
   @JoinColumn({ name: 'creatorId' })
   creator: User;
 
-  @OneToMany(() => Task, (task) => task.quiz, { onDelete: 'CASCADE' })
+  @OneToMany(() => Task, (task) => task.quiz, {
+    onDelete: 'CASCADE',
+  })
   tasks: Task[];
 
   @OneToMany(() => QuizResult, (quizResult) => quizResult.quiz, {
@@ -49,7 +51,9 @@ export class Quiz {
   @JoinTable()
   participants: User[];
 
-  @OneToMany(() => Review, (review) => review.quiz, { onDelete: 'CASCADE' })
+  @OneToMany(() => Review, (review) => review.quiz, {
+    onDelete: 'CASCADE',
+  })
   reviews: Review[];
 
   @Column({ type: 'int', default: 0 })
