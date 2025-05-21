@@ -91,6 +91,10 @@ export class MemoizationCache {
     }
   }
 
+  has(key: string): boolean {
+    return this.cache.has(key);
+  }
+
   remove(key: string): void {
     this.cache.delete(key);
   }
