@@ -9,6 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
+import { USERS_SERVICE } from '@common/constants/user.token';
 import { Payload } from '@token/interfaces/payload.interface';
 import { IUsersService } from '@users/users-service.interface';
 
@@ -17,7 +18,7 @@ export class JwtGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-    @Inject('IUsersService') private readonly usersService: IUsersService,
+    @Inject(USERS_SERVICE) private readonly usersService: IUsersService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

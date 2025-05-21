@@ -6,8 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 
+import { BASE_QUIZ_SERVICE, IQUIZ_SERVICE } from '@common/constants/quiz.token';
 import { QuizResult } from '@quiz/entities/quiz-result.entity';
 import { Quiz } from '@quiz/entities/quiz.entity';
+import { LoggingQuizDecorator } from '@quiz/logging-quiz.decorator';
 import { QuizController } from '@quiz/quiz.controller';
 import { QuizService } from '@quiz/quiz.service';
 import { TaskModule } from '@task/task.module';
@@ -44,7 +46,17 @@ import { UsersModule } from '@users/users.module';
     forwardRef(() => UsersModule),
   ],
   controllers: [QuizController],
-  providers: [QuizService],
-  exports: [QuizService],
+  providers: [
+    {
+      provide: BASE_QUIZ_SERVICE,
+      useClass: QuizService,
+    },
+    {
+      provide: IQUIZ_SERVICE,
+      useFactory: (baseService) => new LoggingQuizDecorator(baseService),
+      inject: [BASE_QUIZ_SERVICE],
+    },
+  ],
+  exports: [IQUIZ_SERVICE],
 })
 export class QuizModule {}

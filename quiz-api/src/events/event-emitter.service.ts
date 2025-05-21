@@ -7,6 +7,7 @@ import {
   Inject,
 } from '@nestjs/common';
 
+import { USERS_SERVICE } from '@common/constants/user.token';
 import { ErrorOptions } from '@events/interfaces/error-options.interface';
 import { UpdateAuthorRatingOptions } from '@events/interfaces/update-author-rating-options.interface';
 import { SendMailOptions } from '@mail/interfaces/send-mail-options.interface';
@@ -20,7 +21,7 @@ export class EventEmitterService
 {
   constructor(
     private readonly mailService: MailService,
-    @Inject('IUsersService') private readonly usersService: IUsersService,
+    @Inject(USERS_SERVICE) private readonly usersService: IUsersService,
   ) {
     super();
   }

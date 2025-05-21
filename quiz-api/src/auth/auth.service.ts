@@ -1,6 +1,7 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 
+import { USERS_SERVICE } from '@common/constants/user.token';
 import { EventEmitterService } from '@events/event-emitter.service';
 import { SendMailOptions } from '@mail/interfaces/send-mail-options.interface';
 import { Tokens } from '@token/interfaces/tokens.payload';
@@ -15,7 +16,7 @@ import { IUsersService } from '@users/users-service.interface';
 export class AuthService {
   constructor(
     private readonly emitter: EventEmitterService,
-    @Inject('IUsersService') private readonly usersService: IUsersService,
+    @Inject(USERS_SERVICE) private readonly usersService: IUsersService,
     private readonly tokenService: TokenService,
   ) {}
 

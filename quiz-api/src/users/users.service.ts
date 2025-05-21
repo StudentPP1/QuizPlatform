@@ -6,12 +6,13 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 
+import { IQUIZ_SERVICE } from '@common/constants/quiz.token';
 import { UpdateAuthorRatingOptions } from '@events/interfaces/update-author-rating-options.interface';
 import { QuizPreviewDto } from '@quiz/dto/quiz.dto';
 import { Quiz } from '@quiz/entities/quiz.entity';
-import { QuizService } from '@quiz/quiz.service';
+import { IQuizService } from '@quiz/quiz-service.interface';
 import { CreateGoogleUserDto } from '@users/dto/create-google-user.dto';
 import { CreateUserDto } from '@users/dto/create-user.dto';
 import { ProfileDto } from '@users/dto/profile.dto';
@@ -23,8 +24,8 @@ import { IUsersService } from '@users/users-service.interface';
 export class RealUsersService implements IUsersService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
-    @Inject(forwardRef(() => QuizService))
-    private readonly quizSerivce: QuizService,
+    @Inject(forwardRef(() => IQUIZ_SERVICE))
+    private readonly quizService: IQuizService,
   ) {}
 
   async getUserById(id: string): Promise<User | null> {
@@ -77,7 +78,7 @@ export class RealUsersService implements IUsersService {
     from: number,
     to: number,
   ): Promise<QuizPreviewDto[]> {
-    return this.quizSerivce.getCreatedQuizzes(userId, from, to);
+    return this.quizService.getCreatedQuizzes(userId, from, to);
   }
 
   async getParticipatedQuizzes(
@@ -85,7 +86,7 @@ export class RealUsersService implements IUsersService {
     from: number,
     to: number,
   ): Promise<QuizPreviewDto[]> {
-    return this.quizSerivce.getParticipatedQuizzes(userId, from, to);
+    return this.quizService.getParticipatedQuizzes(userId, from, to);
   }
 
   async addQuizParticipation(user: User, quiz: Quiz): Promise<void> {
@@ -95,6 +96,7 @@ export class RealUsersService implements IUsersService {
 
   async getTopCreators(limit: number) {
     const users = await this.usersRepository.find({
+      where: { rating: MoreThan(0) },
       relations: ['createdQuizzes'],
       order: {
         rating: 'DESC',

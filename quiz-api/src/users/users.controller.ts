@@ -1,15 +1,15 @@
 import { Controller, Get, Inject, Query, Req, UseGuards } from '@nestjs/common';
 
+import { USERS_SERVICE } from '@common/constants/user.token';
 import { JwtGuard } from '@common/guards/jwt.guard';
 import { User } from '@users/entities/user.entity';
-
-import { IUsersService } from './users-service.interface';
+import { IUsersService } from '@users/users-service.interface';
 
 @UseGuards(JwtGuard)
 @Controller('users')
 export class UsersController {
   constructor(
-    @Inject('IUsersService') private readonly usersService: IUsersService,
+    @Inject(USERS_SERVICE) private readonly usersService: IUsersService,
   ) {}
 
   @Get('/profile')
