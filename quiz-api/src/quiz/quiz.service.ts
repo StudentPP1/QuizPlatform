@@ -1,25 +1,29 @@
 import {
+  ForbiddenException,
   forwardRef,
   Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
+import { ILike, MoreThan, Repository } from 'typeorm';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
 import { LFUStrategy } from '@common/cache/strategies/lfu.strategy';
+import { USERS_SERVICE } from '@common/constants/user.token';
 import { CreateQuizDto } from '@quiz/dto/create-quiz.dto';
 import { FullQuizDto, QuizPreviewDto } from '@quiz/dto/quiz.dto';
 import { SaveQuizResultDto } from '@quiz/dto/save-quiz-result.dto';
+import { UpdateQuizDto } from '@quiz/dto/update-quiz.dto';
 import { QuizResult } from '@quiz/entities/quiz-result.entity';
 import { Quiz } from '@quiz/entities/quiz.entity';
+import { IQuizService } from '@quiz/quiz-service.interface';
 import { TaskService } from '@task/task.service';
 import { User } from '@users/entities/user.entity';
 import { IUsersService } from '@users/users-service.interface';
 
 @Injectable()
-export class QuizService {
+export class QuizService implements IQuizService {
   private cache = new MemoizationCache(new LFUStrategy(3));
 
   constructor(
@@ -27,7 +31,8 @@ export class QuizService {
     @InjectRepository(QuizResult)
     private readonly quizResultRepository: Repository<QuizResult>,
     private readonly taskService: TaskService,
-    @Inject('IUsersService') private readonly usersService: IUsersService,
+    @Inject(forwardRef(() => USERS_SERVICE))
+    private readonly usersService: IUsersService,
   ) {}
 
   async createQuiz(createQuizDto: CreateQuizDto, user: User) {
@@ -43,6 +48,53 @@ export class QuizService {
       quizId: quiz.id,
       message: 'Quiz successfully created',
     };
+  }
+
+  async updateQuiz(quizId: string, updateQuizDto: UpdateQuizDto, user: User) {
+    const quiz = await this.quizRepository.findOne({
+      where: { id: quizId },
+      relations: ['creator', 'tasks'],
+    });
+
+    if (!quiz) throw new NotFoundException('Quiz not found');
+    if (quiz.creator.id !== user.id)
+      throw new ForbiddenException('Not your quiz');
+
+    if (this.cache.has(`quiz:${quizId}`)) this.cache.remove(`quiz:${quizId}`);
+
+    Object.assign(quiz, updateQuizDto);
+    await this.quizRepository.save(quiz);
+
+    if (updateQuizDto.tasks) {
+      await this.taskService.updateTasks(quiz, updateQuizDto.tasks);
+    }
+
+    return {
+      quizId: quiz.id,
+      message: 'Quiz successfully updated',
+    };
+  }
+
+  async deleteQuiz(id: string, user: User) {
+    const quiz = await this.quizRepository.findOne({
+      where: { id },
+      relations: ['creator', 'participants', 'tasks', 'results', 'reviews'],
+    });
+
+    if (!quiz) {
+      throw new NotFoundException('Quiz not found');
+    }
+
+    if (quiz.creator.id !== user.id) {
+      throw new ForbiddenException('You are not the creator of this quiz');
+    }
+
+    quiz.participants = [];
+    await this.quizRepository.save(quiz);
+    await this.taskService.deleteTasks(quiz.tasks);
+    await this.quizRepository.remove(quiz);
+
+    return { message: 'Quiz deleted successfully' };
   }
 
   async saveResult(
@@ -107,6 +159,7 @@ export class QuizService {
 
     const quizzes = await this.cache.getOrComputeAsync(key, () =>
       this.quizRepository.find({
+        where: { rating: MoreThan(0) },
         relations: ['creator', 'creator.createdQuizzes'],
         order: { rating: 'DESC' },
         take: limit,

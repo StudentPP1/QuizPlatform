@@ -9,22 +9,29 @@ import {
   Query,
   UseInterceptors,
   UploadedFiles,
+  Inject,
+  Put,
+  Delete,
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { plainToInstance } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
 import { Request } from 'express';
 
+import { IQUIZ_SERVICE } from '@common/constants/quiz.token';
 import { JwtGuard } from '@common/guards/jwt.guard';
 import { CreateQuizDto } from '@quiz/dto/create-quiz.dto';
 import { SaveQuizResultDto } from '@quiz/dto/save-quiz-result.dto';
-import { QuizService } from '@quiz/quiz.service';
+import { UpdateQuizDto } from '@quiz/dto/update-quiz.dto';
+import { IQuizService } from '@quiz/quiz-service.interface';
 import { User } from '@users/entities/user.entity';
 
 @UseGuards(JwtGuard)
 @Controller('quiz')
 export class QuizController {
-  constructor(private readonly quizService: QuizService) {}
+  constructor(
+    @Inject(IQUIZ_SERVICE) private readonly quizService: IQuizService,
+  ) {}
 
   @Post('create')
   @UseInterceptors(AnyFilesInterceptor())
@@ -48,6 +55,43 @@ export class QuizController {
 
     const quiz = await this.quizService.createQuiz(createQuizDto, req.user);
     return quiz;
+  }
+
+  @Put('update/:id')
+  @UseInterceptors(AnyFilesInterceptor())
+  async updateQuiz(
+    @Param('id') id: string,
+    @Req() req: Request & { user?: User },
+    @Body('quiz') quizRaw: string,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    const updateQuizDto = plainToInstance(UpdateQuizDto, JSON.parse(quizRaw));
+    await validateOrReject(updateQuizDto);
+
+    for (const file of files) {
+      const match = file.fieldname.match(/images\[(\d+)\]/);
+      if (match) {
+        const index = parseInt(match[1], 10);
+        if (updateQuizDto.tasks?.[index]) {
+          updateQuizDto.tasks[index].image = `/uploads/${file.filename}`;
+        }
+      }
+    }
+
+    const result = await this.quizService.updateQuiz(
+      id,
+      updateQuizDto,
+      req.user,
+    );
+    return result;
+  }
+
+  @Delete('delete/:id')
+  async deleteQuiz(
+    @Param('id') id: string,
+    @Req() req: Request & { user?: User },
+  ) {
+    return await this.quizService.deleteQuiz(id, req.user);
   }
 
   @Post(':quizId/results')
