@@ -9,10 +9,10 @@ import {
   JoinTable,
 } from 'typeorm';
 
+import { AuthProvider } from '@common/enums/auth-provider.enum';
 import { QuizResult } from '@quiz/entities/quiz-result.entity';
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { Review } from '@review/entities/review.entity';
-import { AuthProvider } from '@users/enum/auth-provider.enum';
 
 @Entity()
 export class User {

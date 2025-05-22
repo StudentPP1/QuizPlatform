@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
+import { CreateReviewDto } from '@common/dto/create-review.dto';
 import { JwtGuard } from '@common/guards/jwt.guard';
-import { CreateReviewDto } from '@review/dto/create-review.dto';
 import { ReviewService } from '@review/review.service';
 import { User } from '@users/entities/user.entity';
 

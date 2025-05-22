@@ -1,9 +1,9 @@
 import { Controller, Get, Inject, Query, Req, UseGuards } from '@nestjs/common';
 
 import { USERS_SERVICE } from '@common/constants/user.token';
+import { IUsersService } from '@common/contracts/users-service.contract';
 import { JwtGuard } from '@common/guards/jwt.guard';
 import { User } from '@users/entities/user.entity';
-import { IUsersService } from '@users/users-service.interface';
 
 @UseGuards(JwtGuard)
 @Controller('users')

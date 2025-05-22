@@ -9,7 +9,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { UpdateTaskDto } from '@task/dto/update-task.dto';
+import { UpdateTaskDto } from '@common/dto/update-task.dto';
 
 export class UpdateQuizDto {
   @IsOptional()

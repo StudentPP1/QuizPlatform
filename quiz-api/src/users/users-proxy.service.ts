@@ -2,16 +2,16 @@ import { Injectable } from '@nestjs/common';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
 import { TimeStrategy } from '@common/cache/strategies/ttl.strategy';
+import { IUsersService } from '@common/contracts/users-service.contract';
+import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
+import { CreateUserDto } from '@common/dto/create-user.dto';
+import { ProfileDto } from '@common/dto/profile.dto';
+import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
+import { AuthProvider } from '@common/enums/auth-provider.enum';
 import { UpdateAuthorRatingOptions } from '@common/interfaces/update-author-rating-options.interface';
 import { Queue } from '@common/queue/queue';
-import { QuizPreviewDto } from '@quiz/dto/quiz.dto';
 import { Quiz } from '@quiz/entities/quiz.entity';
-import { CreateGoogleUserDto } from '@users/dto/create-google-user.dto';
-import { CreateUserDto } from '@users/dto/create-user.dto';
-import { ProfileDto } from '@users/dto/profile.dto';
 import { User } from '@users/entities/user.entity';
-import { AuthProvider } from '@users/enum/auth-provider.enum';
-import { IUsersService } from '@users/users-service.interface';
 import { RealUsersService } from '@users/users.service';
 
 @Injectable()

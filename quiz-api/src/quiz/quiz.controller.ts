@@ -19,11 +19,11 @@ import { validateOrReject } from 'class-validator';
 import { Request } from 'express';
 
 import { IQUIZ_SERVICE } from '@common/constants/quiz.token';
+import { IQuizService } from '@common/contracts/quiz-service.contract';
+import { CreateQuizDto } from '@common/dto/create-quiz.dto';
+import { SaveQuizResultDto } from '@common/dto/save-quiz-result.dto';
+import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
 import { JwtGuard } from '@common/guards/jwt.guard';
-import { CreateQuizDto } from '@quiz/dto/create-quiz.dto';
-import { SaveQuizResultDto } from '@quiz/dto/save-quiz-result.dto';
-import { UpdateQuizDto } from '@quiz/dto/update-quiz.dto';
-import { IQuizService } from '@quiz/quiz-service.interface';
 import { User } from '@users/entities/user.entity';
 
 @UseGuards(JwtGuard)

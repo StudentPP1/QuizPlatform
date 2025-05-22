@@ -4,10 +4,10 @@ import { Repository } from 'typeorm';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
 import { TimeStrategy } from '@common/cache/strategies/ttl.strategy';
+import { CreateReviewDto } from '@common/dto/create-review.dto';
+import { ReviewDto } from '@common/dto/review.dto';
 import { EventEmitterService } from '@events/event-emitter.service';
 import { Quiz } from '@quiz/entities/quiz.entity';
-import { CreateReviewDto } from '@review/dto/create-review.dto';
-import { ReviewDto } from '@review/dto/review.dto';
 import { Review } from '@review/entities/review.entity';
 import { User } from '@users/entities/user.entity';
 

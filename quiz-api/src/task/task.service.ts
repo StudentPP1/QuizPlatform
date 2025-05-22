@@ -3,11 +3,11 @@ import { join } from 'path';
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateTaskDto } from '@common/dto/create-task.dto';
+import { UpdateTaskDto } from '@common/dto/update-task.dto';
 import { Repository } from 'typeorm';
 
 import { Quiz } from '@quiz/entities/quiz.entity';
-import { CreateTaskDto } from '@task/dto/create-task.dto';
-import { UpdateTaskDto } from '@task/dto/update-task.dto';
 import { Task } from '@task/entities/task.entity';
 
 @Injectable()

@@ -9,16 +9,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, Repository } from 'typeorm';
 
 import { IQUIZ_SERVICE } from '@common/constants/quiz.token';
+import { IQuizService } from '@common/contracts/quiz-service.contract';
+import { IUsersService } from '@common/contracts/users-service.contract';
+import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
+import { CreateUserDto } from '@common/dto/create-user.dto';
+import { ProfileDto } from '@common/dto/profile.dto';
+import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
+import { AuthProvider } from '@common/enums/auth-provider.enum';
 import { UpdateAuthorRatingOptions } from '@common/interfaces/update-author-rating-options.interface';
-import { QuizPreviewDto } from '@quiz/dto/quiz.dto';
 import { Quiz } from '@quiz/entities/quiz.entity';
-import { IQuizService } from '@quiz/quiz-service.interface';
-import { CreateGoogleUserDto } from '@users/dto/create-google-user.dto';
-import { CreateUserDto } from '@users/dto/create-user.dto';
-import { ProfileDto } from '@users/dto/profile.dto';
 import { User } from '@users/entities/user.entity';
-import { AuthProvider } from '@users/enum/auth-provider.enum';
-import { IUsersService } from '@users/users-service.interface';
 
 @Injectable()
 export class RealUsersService implements IUsersService {

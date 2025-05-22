@@ -11,16 +11,17 @@ import { ILike, MoreThan, Repository } from 'typeorm';
 import { MemoizationCache } from '@common/cache/memoization-cache';
 import { LFUStrategy } from '@common/cache/strategies/lfu.strategy';
 import { USERS_SERVICE } from '@common/constants/user.token';
-import { CreateQuizDto } from '@quiz/dto/create-quiz.dto';
-import { FullQuizDto, QuizPreviewDto } from '@quiz/dto/quiz.dto';
-import { SaveQuizResultDto } from '@quiz/dto/save-quiz-result.dto';
-import { UpdateQuizDto } from '@quiz/dto/update-quiz.dto';
+import { IQuizService } from '@common/contracts/quiz-service.contract';
+import { IUsersService } from '@common/contracts/users-service.contract';
+import { CreateQuizDto } from '@common/dto/create-quiz.dto';
+import { FullQuizDto } from '@common/dto/full-quiz.dto';
+import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
+import { SaveQuizResultDto } from '@common/dto/save-quiz-result.dto';
+import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
 import { QuizResult } from '@quiz/entities/quiz-result.entity';
 import { Quiz } from '@quiz/entities/quiz.entity';
-import { IQuizService } from '@quiz/quiz-service.interface';
 import { TaskService } from '@task/task.service';
 import { User } from '@users/entities/user.entity';
-import { IUsersService } from '@users/users-service.interface';
 
 @Injectable()
 export class QuizService implements IQuizService {

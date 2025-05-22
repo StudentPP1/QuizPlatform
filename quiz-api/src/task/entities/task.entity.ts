@@ -8,8 +8,8 @@ import {
   JoinColumn,
 } from 'typeorm';
 
+import { TaskType } from '@common/enums/task-type.enum';
 import { Quiz } from '@quiz/entities/quiz.entity';
-import { TaskType } from '@task/enum/task-type.enum';
 
 @Entity()
 export class Task {

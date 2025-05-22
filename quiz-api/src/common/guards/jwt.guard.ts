@@ -10,8 +10,8 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
 import { USERS_SERVICE } from '@common/constants/user.token';
+import { IUsersService } from '@common/contracts/users-service.contract';
 import { Payload } from '@common/interfaces/payload.interface';
-import { IUsersService } from '@users/users-service.interface';
 
 @Injectable()
 export class JwtGuard implements CanActivate {

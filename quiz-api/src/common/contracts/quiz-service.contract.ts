@@ -1,7 +1,8 @@
-import { CreateQuizDto } from '@quiz/dto/create-quiz.dto';
-import { FullQuizDto, QuizPreviewDto } from '@quiz/dto/quiz.dto';
-import { SaveQuizResultDto } from '@quiz/dto/save-quiz-result.dto';
-import { UpdateQuizDto } from '@quiz/dto/update-quiz.dto';
+import { CreateQuizDto } from '@common/dto/create-quiz.dto';
+import { FullQuizDto } from '@common/dto/full-quiz.dto';
+import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
+import { SaveQuizResultDto } from '@common/dto/save-quiz-result.dto';
+import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
 import { User } from '@users/entities/user.entity';
 
 export interface IQuizService {

@@ -10,7 +10,7 @@ import {
   IsOptional,
 } from 'class-validator';
 
-import { CreateTaskDto } from '@task/dto/create-task.dto';
+import { CreateTaskDto } from '@common/dto/create-task.dto';
 
 export class CreateQuizDto {
   @IsNotEmpty()

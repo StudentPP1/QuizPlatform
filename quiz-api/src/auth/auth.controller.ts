@@ -13,10 +13,10 @@ import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 
 import { AuthService } from '@auth/auth.service';
+import { CreateUserDto } from '@common/dto/create-user.dto';
 import { GoogleOAuthGuard } from '@common/guards/google-oauth.guard';
 import { JwtGuard } from '@common/guards/jwt.guard';
 import { LocalAuthGuard } from '@common/guards/local-auth.guard';
-import { CreateUserDto } from '@users/dto/create-user.dto';
 import { User } from '@users/entities/user.entity';
 
 @Controller('auth')

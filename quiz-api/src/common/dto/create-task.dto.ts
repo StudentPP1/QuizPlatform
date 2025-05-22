@@ -6,7 +6,7 @@ import {
   IsArray,
 } from 'class-validator';
 
-import { TaskType } from '@task/enum/task-type.enum';
+import { TaskType } from '@common/enums/task-type.enum';
 
 export class CreateTaskDto {
   @IsNotEmpty()

@@ -2,15 +2,15 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 
 import { USERS_SERVICE } from '@common/constants/user.token';
+import { IUsersService } from '@common/contracts/users-service.contract';
+import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
+import { CreateUserDto } from '@common/dto/create-user.dto';
+import { AuthProvider } from '@common/enums/auth-provider.enum';
 import { SendMailOptions } from '@common/interfaces/send-mail-options.interface';
 import { Tokens } from '@common/interfaces/tokens.payload';
 import { EventEmitterService } from '@events/event-emitter.service';
 import { TokenService } from '@token/token.service';
-import { CreateGoogleUserDto } from '@users/dto/create-google-user.dto';
-import { CreateUserDto } from '@users/dto/create-user.dto';
 import { User } from '@users/entities/user.entity';
-import { AuthProvider } from '@users/enum/auth-provider.enum';
-import { IUsersService } from '@users/users-service.interface';
 
 @Injectable()
 export class AuthService {

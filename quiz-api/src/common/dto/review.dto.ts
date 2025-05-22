@@ -1,5 +1,5 @@
+import { ProfileDto } from '@common/dto/profile.dto';
 import { Review } from '@review/entities/review.entity';
-import { ProfileDto } from '@users/dto/profile.dto';
 
 export class ReviewDto {
   creator: ProfileDto;
