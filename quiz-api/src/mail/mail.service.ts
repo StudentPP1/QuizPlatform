@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createTransport, Transporter } from 'nodemailer';
 
-import { SendMailOptions } from '@mail/interfaces/send-mail-options.interface';
+import { SendMailOptions } from '@common/interfaces/send-mail-options.interface';
 
 @Injectable()
 export class MailService {

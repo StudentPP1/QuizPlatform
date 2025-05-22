@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, Repository } from 'typeorm';
 
 import { IQUIZ_SERVICE } from '@common/constants/quiz.token';
-import { UpdateAuthorRatingOptions } from '@events/interfaces/update-author-rating-options.interface';
+import { UpdateAuthorRatingOptions } from '@common/interfaces/update-author-rating-options.interface';
 import { QuizPreviewDto } from '@quiz/dto/quiz.dto';
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { IQuizService } from '@quiz/quiz-service.interface';

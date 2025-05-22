@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
 import { TimeStrategy } from '@common/cache/strategies/ttl.strategy';
+import { UpdateAuthorRatingOptions } from '@common/interfaces/update-author-rating-options.interface';
 import { Queue } from '@common/queue/queue';
-import { UpdateAuthorRatingOptions } from '@events/interfaces/update-author-rating-options.interface';
 import { QuizPreviewDto } from '@quiz/dto/quiz.dto';
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { CreateGoogleUserDto } from '@users/dto/create-google-user.dto';

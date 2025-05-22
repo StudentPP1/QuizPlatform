@@ -1,4 +1,4 @@
-import { UpdateAuthorRatingOptions } from '@events/interfaces/update-author-rating-options.interface';
+import { UpdateAuthorRatingOptions } from '@common/interfaces/update-author-rating-options.interface';
 import { QuizPreviewDto } from '@quiz/dto/quiz.dto';
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { CreateGoogleUserDto } from '@users/dto/create-google-user.dto';

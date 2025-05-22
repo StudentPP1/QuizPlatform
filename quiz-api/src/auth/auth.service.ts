@@ -2,9 +2,9 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 
 import { USERS_SERVICE } from '@common/constants/user.token';
+import { SendMailOptions } from '@common/interfaces/send-mail-options.interface';
+import { Tokens } from '@common/interfaces/tokens.payload';
 import { EventEmitterService } from '@events/event-emitter.service';
-import { SendMailOptions } from '@mail/interfaces/send-mail-options.interface';
-import { Tokens } from '@token/interfaces/tokens.payload';
 import { TokenService } from '@token/token.service';
 import { CreateGoogleUserDto } from '@users/dto/create-google-user.dto';
 import { CreateUserDto } from '@users/dto/create-user.dto';

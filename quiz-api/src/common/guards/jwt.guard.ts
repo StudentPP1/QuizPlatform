@@ -10,7 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
 import { USERS_SERVICE } from '@common/constants/user.token';
-import { Payload } from '@token/interfaces/payload.interface';
+import { Payload } from '@common/interfaces/payload.interface';
 import { IUsersService } from '@users/users-service.interface';
 
 @Injectable()

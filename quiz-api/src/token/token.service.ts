@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
 import { LRUStrategy } from '@common/cache/strategies/lru.strategy';
-import { Payload } from '@token/interfaces/payload.interface';
+import { Payload } from '@common/interfaces/payload.interface';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
