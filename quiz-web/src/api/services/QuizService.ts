@@ -81,10 +81,11 @@ export class QuizService {
   @log
   static async createQuiz(
     quiz: any,
-    update: boolean
+    update: boolean,
+    quizId?: string
   ): Promise<QuizCreatedResult> {
     return apiFetch<QuizCreatedResult>(
-      `/api/quiz/${update ? `update/${quiz.id}` : "create"}`,
+      `/api/quiz/${update ? `update/${quizId}` : "create"}`,
       RequestAttributes.builder()
         .setMethod(update ? HttpMethod.PUT : HttpMethod.POST)
         .setEmptyHeader()
@@ -99,7 +100,7 @@ export class QuizService {
     return apiFetch<QuizCreatedResult>(
       `/api/quiz/delete/${id}`,
       RequestAttributes.builder()
-        .setMethod(HttpMethod.POST)
+        .setMethod(HttpMethod.DELETE)
         .addAuthHeader()
         .build()
     );

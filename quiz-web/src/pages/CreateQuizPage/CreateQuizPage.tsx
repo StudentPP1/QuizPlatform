@@ -100,6 +100,7 @@ const CreateQuizPage: FC = () => {
             tasks
         };
 
+        console.log("quiz: ", quizData)
         formData.append("quiz", JSON.stringify(quizData));
         return formData;
     };
@@ -108,7 +109,7 @@ const CreateQuizPage: FC = () => {
         if (!isTimeValid()) return showToast("Time must be between 1 and 120 minutes!");
         if (!validateQuestions()) return;
         const formData = prepareFormData();
-        await QuizService.createQuiz(formData, quiz != null).then((result) => {
+        await QuizService.createQuiz(formData, quiz != null, quiz?.id).then((result) => {
             toast.success(result.message, { position: "top-right" });
             navigate("/quizInfo/" + result.quizId)
         });
