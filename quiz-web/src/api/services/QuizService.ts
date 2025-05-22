@@ -84,7 +84,7 @@ export class QuizService {
     update: boolean
   ): Promise<QuizCreatedResult> {
     return apiFetch<QuizCreatedResult>(
-      `/api/quiz/${update ? "update" : "create"}`,
+      `/api/quiz/${update ? `update/${quiz.id}` : "create"}`,
       RequestAttributes.builder()
         .setMethod(update ? HttpMethod.PUT : HttpMethod.POST)
         .setEmptyHeader()
@@ -97,7 +97,7 @@ export class QuizService {
   @log
   static deleteQuiz(id: string): Promise<DoneApiResult> {
     return apiFetch<QuizCreatedResult>(
-      `/api/quiz/delete?id=${id}`,
+      `/api/quiz/delete/${id}`,
       RequestAttributes.builder()
         .setMethod(HttpMethod.POST)
         .addAuthHeader()
