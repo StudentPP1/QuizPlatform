@@ -68,8 +68,12 @@
     gap: 10px;
 }
 .option:hover {
-    background-color: v.$yellow;
+    background-color: v.$orange;
     color: v.$background;
+
+    & > .checkBox {
+        background-color: v.$background;
+    }
 }
 
 .radioButton,
@@ -77,7 +81,7 @@
     appearance: none;
     width: 18px;
     height: 18px;
-    border: 2px solid v.$orange;
+    border: 2px solid v.$white;
     border-radius: 50%;
     position: relative;
     cursor: pointer;
@@ -116,19 +120,26 @@
 }
 
 .nextButton {
-    background-color: v.$orange;
-    color: v.$background;
+    width: 30%;
+    font-size: 16px;
+    font-weight: bold;
     border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
-    font-size: 18px;
+    border-radius: 5px;
+    margin-top: 20px;
+    padding: 10px 10px;
     cursor: pointer;
-    margin-top: 15px;
-    transition: background 0.3s;
+    box-shadow: 0 2px 5px v.$background;
+    background: v.$orange;
+    color: v.$background;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: all 0.1s ease-out;
+    }
 }
 
 .nextButton:hover {
-    background-color: v.$yellow;
+    background-color: v.$orange;
 }
 
 .exitButton {
@@ -138,6 +149,6 @@
     background: none;
     border: none;
     font-size: 24px;
-    color: v.$yellow;
+    color: v.$orange;
     cursor: pointer;
 }

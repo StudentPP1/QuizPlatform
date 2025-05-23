@@ -5,7 +5,7 @@
     position: fixed;
     right: 5px;
     top: 65px;
-    background: v.$second_background;
+    background: v.$background;
     color: v.$white;
     outline: 1px solid v.$white;
     width: 300px;
@@ -17,7 +17,7 @@
         display: flex;
         width: fit-content;
         padding: 15px;
-        background: v.$second_background;
+        background: v.$background;
 
         .userInfo {
             margin-left: 10px;
@@ -43,7 +43,7 @@
         font-weight: bold;
 
         &:hover {
-            background: v.$background;
+            background: v.$second_background;
         }
     }
 }

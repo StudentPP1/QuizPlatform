@@ -12,11 +12,14 @@
     top: 0;
     z-index: 3;
 
-    .logo {
+     .logo {
+        pointer-events: none;
         font-size: 22px;
         font-weight: bold;
         color: v.$orange;
+        user-select: none;
     }
+
 
     .empty_box {
         flex: 1;

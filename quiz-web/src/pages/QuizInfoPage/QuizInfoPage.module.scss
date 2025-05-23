@@ -43,16 +43,20 @@
     display: inline-block;
     background-color: v.$orange;
     padding: 10px 20px;
+    border-radius: 10px;
     margin: 0 20px;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
     text-align: left;
+    box-shadow: 0 2px 5px v.$background;
+    background: v.$orange;
+    color: v.$background;
 
     &:hover {
-        background-color: v.$yellow;
+        transform: scale(1.05);
+        transition: all 0.1s ease-out;
     }
 }
 

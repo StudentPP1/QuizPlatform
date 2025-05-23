@@ -65,22 +65,35 @@
   width: 100%;
   padding: 10px;
   border-radius: 8px;
-  border: none;
-  background-color: v.$background;
+  border: v.$white 2px solid;
+  background-color: v.$second_background;
   color: v.$white;
   font-size: 16px;
   margin-bottom: 15px;
+
+  &:focus {
+    outline: none;
+    border-color: v.$orange;
+  }
 }
 
 .submitButton {
-  background-color: v.$orange;
-  color: v.$background;
+  width: 30%;
+  font-size: 16px;
+  font-weight: bold;
   border: none;
-  padding: 10px 15px;
-  border-radius: 8px;
-  font-size: 18px;
+  border-radius: 5px;
+  margin-top: 10px;
+  padding: 10px 10px;
   cursor: pointer;
-  transition: background 0.3s;
+  box-shadow: 0 2px 5px v.$background;
+  background: v.$orange;
+  color: v.$background;
+
+  &:hover {
+    transform: scale(1.05);
+    transition: all 0.1s ease-out;
+  }
 }
 
 .submitButton:hover {

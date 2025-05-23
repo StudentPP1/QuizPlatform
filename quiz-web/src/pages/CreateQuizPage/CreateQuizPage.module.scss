@@ -1,6 +1,8 @@
 @use "../../scss/variables" as v;
+@import "../../scss/share";
 
 .container {
+    
     z-index: 0;
     padding: 60px 80px 0 100px;
     margin: 0 auto;
@@ -151,23 +153,6 @@
     gap: 20px; 
 }
 
-.button {
-    width: 30%;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
-    box-shadow: 0 2px 5px v.$background;
-    background: v.$orange;
-    color: v.$background;
-
-    &:hover {
-        transform: scale(1.05);
-        transition: all 0.1s ease-out;
-    }
-}
 .deleteImage {
             background: v.$second_background;
             color: v.$white;

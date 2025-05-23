@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./ResultsPage.module.scss";
-import { FaTimes } from "react-icons/fa";
+import { FaStar, FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { QuizResultState } from "../../../models/QuizResultState";
 import { QuizService } from "../../../api/services/QuizService";
@@ -50,7 +50,6 @@ const ResultsPage: React.FC = () => {
 
         <div className={styles.ratingSection_container}>
           <div className={styles.ratingSection}>
-            <p>Rate the quiz:</p>
             <div className={styles.stars}>
               {[1, 2, 3, 4, 5].map((star) => (
                 <span
@@ -58,7 +57,7 @@ const ResultsPage: React.FC = () => {
                   className={star <= quizRating ? styles.filledStar : styles.emptyStar}
                   onClick={() => setQuizRating(star)}
                 >
-                  ★
+                  <FaStar/>
                 </span>
               ))}
             </div>

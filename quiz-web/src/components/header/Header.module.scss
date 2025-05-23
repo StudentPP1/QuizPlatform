@@ -17,6 +17,8 @@
         font-size: 22px;
         font-weight: bold;
         color: v.$orange;
+        cursor: pointer;
+        user-select: none;
     }
 
     .search_box {
@@ -25,6 +27,8 @@
         justify-content: center;
 
         input {
+            caret-shape: bar;
+            caret-color: v.$white;
             background-color: v.$second_background;
             color: v.$white;
             width: 40%;
@@ -32,10 +36,6 @@
             border: none;
             border-radius: 20px;
             outline: none;
-
-            &:focus {
-                color: v.$white;
-            }
         }
     }
 }
