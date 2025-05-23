@@ -1,38 +1,31 @@
 import { promises as fs } from 'fs';
 import { join } from 'path';
 
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Inject, Injectable } from '@nestjs/common';
+
+import { TASK_REPOSITORY } from '@common/constants/task.constants';
+import { ITaskRepository } from '@common/contracts/repositories/task.repository.contract';
 import { CreateTaskDto } from '@common/dto/create-task.dto';
 import { UpdateTaskDto } from '@common/dto/update-task.dto';
-import { Repository } from 'typeorm';
-
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { Task } from '@task/entities/task.entity';
 
 @Injectable()
 export class TaskService {
   constructor(
-    @InjectRepository(Task)
-    private readonly taskRepository: Repository<Task>,
+    @Inject(TASK_REPOSITORY)
+    private readonly taskRepository: ITaskRepository,
   ) {}
 
   async createTasks(createTaskDtos: CreateTaskDto[], quiz: Quiz) {
-    const taskEntities = createTaskDtos.map((taskDto) => {
-      const task = this.taskRepository.create({
-        ...taskDto,
-        quiz,
-      });
-      return task;
-    });
-
-    await this.taskRepository.save(taskEntities);
+    for (const taskDto of createTaskDtos) {
+      const task = this.taskRepository.create(taskDto, quiz);
+      await this.taskRepository.save(task);
+    }
   }
 
   async updateTasks(quiz: Quiz, updateTaskDtos: UpdateTaskDto[]) {
-    const existingTasks = await this.taskRepository.find({
-      where: { quiz: { id: quiz.id } },
-    });
+    const existingTasks = await this.taskRepository.findByQuizId(quiz.id);
 
     for (let i = 0; i < updateTaskDtos.length; i++) {
       const dto = updateTaskDtos[i];
@@ -41,7 +34,7 @@ export class TaskService {
         Object.assign(task, dto);
         await this.taskRepository.save(task);
       } else {
-        const newTask = this.taskRepository.create({ ...dto, quiz });
+        const newTask = this.taskRepository.create(dto, quiz);
         await this.taskRepository.save(newTask);
       }
     }

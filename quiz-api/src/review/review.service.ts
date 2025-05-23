@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
 import { TimeStrategy } from '@common/cache/strategies/ttl.strategy';
+import { QUIZ_REPOSITORY } from '@common/constants/quiz.constants';
+import { REVIEW_REPOSITORY } from '@common/constants/review.constants';
+import { IQuizRepository } from '@common/contracts/repositories/quiz.repository.contract';
+import { IReviewRepository } from '@common/contracts/repositories/review.repository.contract';
 import { CreateReviewDto } from '@common/dto/create-review.dto';
 import { ReviewDto } from '@common/dto/review.dto';
 import { EventEmitterService } from '@events/event-emitter.service';
@@ -16,10 +18,10 @@ export class ReviewService {
   private cache = new MemoizationCache(new TimeStrategy(120));
 
   constructor(
-    @InjectRepository(Review)
-    private readonly reviewRepository: Repository<Review>,
-    @InjectRepository(Quiz)
-    private quizRepository: Repository<Quiz>,
+    @Inject(REVIEW_REPOSITORY)
+    private readonly reviewRepository: IReviewRepository,
+    @Inject(QUIZ_REPOSITORY)
+    private quizRepository: IQuizRepository,
     private readonly eventEmitterService: EventEmitterService,
   ) {}
 
@@ -28,25 +30,18 @@ export class ReviewService {
     user: User,
     createReviewDto: CreateReviewDto,
   ) {
-    const quiz = await this.quizRepository.findOne({
-      where: { id: quizId },
-      relations: ['creator'],
-    });
+    const quiz = await this.quizRepository.findOneByIdWithRelations(quizId, [
+      'creator',
+    ]);
 
-    const review = this.reviewRepository.create({
-      quiz,
-      user,
-      rating: createReviewDto.rating,
-      comment: createReviewDto.text,
-    });
-
-    await this.reviewRepository.save(review);
+    const review = this.reviewRepository.create(user, quiz, createReviewDto);
 
     const newAuthorRating = await this.calculateAuthorAverageRating(
       quiz.creator.id,
     );
 
     await Promise.all([
+      this.reviewRepository.save(review),
       this.updateQuizRating(quiz),
       this.eventEmitterService.emit('user.rating_updated', {
         userId: quiz.creator.id,
@@ -58,9 +53,7 @@ export class ReviewService {
   }
 
   private async calculateAuthorAverageRating(userId: string): Promise<number> {
-    const reviews = await this.reviewRepository.find({
-      where: { quiz: { creator: { id: userId } } },
-    });
+    const reviews = await this.reviewRepository.findByQuizCreatorId(userId);
 
     if (!reviews.length) {
       return 0;
@@ -73,9 +66,7 @@ export class ReviewService {
   }
 
   private async updateQuizRating(quiz: Quiz): Promise<void> {
-    const reviews = await this.reviewRepository.find({
-      where: { quiz: { id: quiz.id } },
-    });
+    const reviews = await this.reviewRepository.findByQuizId(quiz.id);
 
     if (!reviews.length) return;
 
@@ -86,16 +77,12 @@ export class ReviewService {
     await this.quizRepository.save(quiz);
   }
 
-  async getReviewsForQuiz(quizId: string) {
+  async getReviewsForQuiz(quizId: string): Promise<ReviewDto[]> {
     const reviews = await this.cache.getOrComputeAsync(
       `reviews:${quizId}`,
-      () =>
-        this.reviewRepository.find({
-          where: { quiz: { id: quizId } },
-          relations: ['user', 'user.createdQuizzes'],
-        }),
+      () => this.reviewRepository.findByQuizId(quizId),
     );
 
-    return reviews.map((review) => new ReviewDto(review));
+    return reviews.map((review: Review) => new ReviewDto(review));
   }
 }
