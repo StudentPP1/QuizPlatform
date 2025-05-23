@@ -10,8 +10,8 @@ import { User } from '@users/entities/user.entity';
 export interface IUsersService {
   getUserById(id: string): Promise<User | null>;
   getUserByEmail(email: string): Promise<User | null>;
-  createUser<T extends CreateUserDto | CreateGoogleUserDto>(
-    userDto: T,
+  createUser(
+    userDto: CreateUserDto | CreateGoogleUserDto,
     authProvider: AuthProvider,
   ): Promise<User>;
   getUserInfo(userId: string): Promise<ProfileDto>;
