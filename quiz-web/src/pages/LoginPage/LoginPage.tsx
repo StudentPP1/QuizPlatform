@@ -6,6 +6,7 @@ import { AuthContext, AuthState } from "../../context/context";
 import { UserService } from "../../api/services/UserService";
 import { ACCESS_TOKEN_NAME } from "../../constants/constants";
 import { AsyncFunctionQueue } from "../../utils/Queue";
+import { globalCache } from "../../hooks/useCachedFetch";
 
 const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const { setUser } = useContext<AuthState>(AuthContext);
@@ -28,7 +29,11 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
       console.error("Error fetching user:", error);
     });
     queue.enqueue((user: any) => setUser(user));
-    queue.enqueue(() => navigate("/home"));
+    queue.enqueue(() => {
+      globalCache.delete("topAuthors");
+      console.log("Delete cache topAuthors: ", JSON.stringify(globalCache));
+      navigate("/home")
+    });
   };
 
   const login = () => {
@@ -42,6 +47,7 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   };
 
   const google = async () => {
+    globalCache.delete("topAuthors");
     AuthService.google()
   }
 

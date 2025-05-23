@@ -14,11 +14,19 @@ class ApiError {
 }
 
 interface Fetcher {
-  apiFetch<T>(url: string, attributes: RequestInit): Promise<T>;
+  apiFetch<T>(
+    url: string,
+    attributes: RequestInit,
+    customHandler?: Function
+  ): Promise<T>;
 }
 
 class ApiFetcher implements Fetcher {
-  async apiFetch<T>(url: string, attributes: RequestInit): Promise<T> {
+  async apiFetch<T>(
+    url: string,
+    attributes: RequestInit,
+    customHandler?: Function
+  ): Promise<T> {
     const response = await fetch(`${API_BASE_URL}${url}`, attributes);
     const json = await response.json();
     const status = response.status;
@@ -30,6 +38,9 @@ class ApiFetcher implements Fetcher {
           detail: details,
         })
       );
+      if (status === 404) {
+        customHandler && customHandler();
+      }
       throw details as ApiError;
     }
 
@@ -40,14 +51,18 @@ class ApiFetcher implements Fetcher {
 class ApiFetcherProxy implements Fetcher {
   private apiFetching: ApiFetcher = new ApiFetcher();
 
-  async apiFetch<T>(url: string, attributes: RequestInit): Promise<T> {
+  async apiFetch<T>(
+    url: string,
+    attributes: RequestInit,
+    customHandler?: Function
+  ): Promise<T> {
     try {
-      return await this.apiFetching.apiFetch<T>(url, attributes);
+      return await this.apiFetching.apiFetch<T>(url, attributes, customHandler);
     } catch (error) {
       // if token is not valid => return 401 status
       if (error instanceof ApiError && error.status === 401) {
         await refreshToken();
-        return this.apiFetching.apiFetch<T>(url, attributes);
+        return this.apiFetching.apiFetch<T>(url, attributes, customHandler);
       }
       throw error;
     }
@@ -56,8 +71,9 @@ class ApiFetcherProxy implements Fetcher {
 
 export async function apiFetch<T>(
   url: string,
-  attributes: RequestInit
+  attributes: RequestInit,
+  customHandler?: Function
 ): Promise<T> {
   const fetcher: Fetcher = new ApiFetcherProxy();
-  return fetcher.apiFetch(url, attributes);
+  return fetcher.apiFetch(url, attributes, customHandler);
 }

@@ -36,7 +36,11 @@ export class QuizService {
 
   @log
   static async getQuiz(quizId: string): Promise<Quiz> {
-    return apiFetch<Quiz>(`/api/quiz/${quizId}/info`, this.withAuth());
+    return apiFetch<Quiz>(
+      `/api/quiz/${quizId}/info`,
+      this.withAuth(),
+      this.handleNotFound
+    );
   }
 
   @log
@@ -91,7 +95,8 @@ export class QuizService {
         .setEmptyHeader()
         .setBody(quiz, false)
         .addAuthHeader()
-        .build()
+        .build(),
+      this.handleNotFound
     );
   }
 
@@ -102,7 +107,8 @@ export class QuizService {
       RequestAttributes.builder()
         .setMethod(HttpMethod.DELETE)
         .addAuthHeader()
-        .build()
+        .build(),
+      this.handleNotFound
     );
   }
 
@@ -122,5 +128,10 @@ export class QuizService {
 
   private static withAuth() {
     return RequestAttributes.builder().addAuthHeader().build();
+  }
+
+  private static handleNotFound() {
+    localStorage.setItem("index", "2");
+    window.location.href = "/home";
   }
 }

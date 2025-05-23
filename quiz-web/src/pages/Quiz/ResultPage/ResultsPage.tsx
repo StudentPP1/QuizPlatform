@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { QuizResultState } from "../../../models/QuizResultState";
 import { QuizService } from "../../../api/services/QuizService";
 import useQuizResults from "../../../hooks/useQuizResults";
+import { globalCache } from "../../../hooks/useCachedFetch";
 
 const ResultsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -18,6 +19,8 @@ const ResultsPage: React.FC = () => {
   const handleSubmit = async () => {
     try {
       await QuizService.sendReview(quiz.id, quizRating, comment);
+      globalCache.delete("topQuizzes");
+      console.log("Delete cache topQuizzes: ", JSON.stringify(globalCache));
       toast.success("Review was sent", { position: "top-right" });
     } catch (error) {
       toast.error("Failed to send review", { position: "top-right" });

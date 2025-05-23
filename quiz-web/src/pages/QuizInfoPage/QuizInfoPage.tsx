@@ -51,7 +51,7 @@ const QuizInfoPage: FC = () => {
                     {quiz != null && (
                         <p>{"⭐".repeat(quiz.rating)} ({reviews?.length} reviews)</p>
                     )}
-                    
+
                     <div className={styles.userProfile} onClick={() => {
                         navigate(`/authorInfo/${quiz?.creator.userId}`)
                     }}>

@@ -7,6 +7,7 @@ import { QuizService } from '../../api/services/QuizService';
 import { QuestionType } from '../../models/QuestionType';
 import QuizItem from './QuizItem';
 import { QuizNavigateEdit } from '../../models/QuizNavigateEdit';
+import { globalCache } from '../../hooks/useCachedFetch';
 
 const CreateQuizPage: FC = () => {
     const location = useLocation();
@@ -110,6 +111,8 @@ const CreateQuizPage: FC = () => {
         if (!validateQuestions()) return;
         const formData = prepareFormData();
         await QuizService.createQuiz(formData, quiz != null, quiz?.id).then((result) => {
+            globalCache.delete("topQuizzes");
+            console.log("Delete cache topQuizzes: ", JSON.stringify(globalCache));
             toast.success(result.message, { position: "top-right" });
             navigate("/quizInfo/" + result.quizId)
         });
@@ -118,6 +121,8 @@ const CreateQuizPage: FC = () => {
     const deleteQuiz = async () => {
         if (!quiz) return;
         await QuizService.deleteQuiz(quiz.id).then((result) => {
+            globalCache.delete("topQuizzes");
+            console.log("Delete cache topQuizzes: ", JSON.stringify(globalCache));
             toast.success(result.message, { position: "top-right" });
             navigate("/home")
         })

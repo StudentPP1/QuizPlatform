@@ -6,7 +6,7 @@ type CacheEntry<T> = {
 };
 
 // global cache for all components (available until page reload)
-const globalCache = new Map<string, CacheEntry<any>>();
+export const globalCache = new Map<string, CacheEntry<any>>();
 
 interface UseCachedFetchOptions {
   ttl?: number;
@@ -28,9 +28,11 @@ export function useCachedFetch<T>(
     async function loadData() {
       setLoading(true);
       const cached = globalCache.get(key);
+      console.log("Cached data for key:", key, cached);
       const now = Date.now();
 
       if (cached && now - cached.timestamp < ttl) {
+        console.log("Using cached data for key:", key);
         setData(cached.data);
         setLoading(false);
         return;

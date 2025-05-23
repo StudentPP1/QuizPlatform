@@ -36,11 +36,11 @@ export function log(
         return result
           .then((res: any) => {
             logMessage(LogLevel.INFO, "Exiting method.", true);
-            logMessage(LogLevel.INFO, `Result: ${JSON.stringify(res)}`);
+            logMessage(LogLevel.DEBUG, `Result: ${JSON.stringify(res)}`);
             return res;
           })
           .catch((err: any) => {
-            logMessage(LogLevel.ERROR, err.message || err, true);
+            logMessage(LogLevel.ERROR, JSON.stringify(err), true);
             throw err;
           });
       }
