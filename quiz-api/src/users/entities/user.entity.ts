@@ -6,7 +6,6 @@ import {
   UpdateDateColumn,
   OneToMany,
   ManyToMany,
-  JoinTable,
 } from 'typeorm';
 
 import { AuthProvider } from '@common/enums/auth-provider.enum';
@@ -41,7 +40,6 @@ export class User {
   createdQuizzes: Quiz[];
 
   @ManyToMany(() => Quiz, (quiz) => quiz.participants)
-  @JoinTable()
   participatedQuizzes: Quiz[];
 
   @OneToMany(() => QuizResult, (quizResult) => quizResult.user)
