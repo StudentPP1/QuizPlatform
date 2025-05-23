@@ -46,14 +46,18 @@ export class TaskService {
   }
 
   async deleteTasks(tasks: Task[]) {
-    for (const task of tasks) {
-      const imagePath = join(process.cwd(), task.image);
-      try {
-        await fs.unlink(imagePath);
-        console.log(`Deleted: ${imagePath}`);
-      } catch (err) {
-        console.error(`Failed to delete image: ${imagePath}`, err.message);
-      }
-    }
+    const tasksToDelete = tasks
+      .filter((task) => task.image)
+      .map(async (task) => {
+        const imagePath = join(process.cwd(), task.image);
+        try {
+          await fs.unlink(imagePath);
+          console.log(`Deleted: ${imagePath}`);
+        } catch (err) {
+          console.error(`Failed to delete image: ${imagePath}`, err.message);
+        }
+      });
+
+    await Promise.all(tasksToDelete);
   }
 }
