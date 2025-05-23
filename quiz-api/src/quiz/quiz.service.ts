@@ -149,11 +149,6 @@ export class QuizService implements IQuizService {
 
   async searchQuizzesByName(name: string) {
     const quizzes = await this.quizRepository.findByName(name);
-
-    if (!quizzes || quizzes.length === 0) {
-      throw new NotFoundException('No quizzes found');
-    }
-
     return quizzes.map((quiz) => new QuizPreviewDto(quiz));
   }
 
@@ -162,10 +157,6 @@ export class QuizService implements IQuizService {
     const quizzes = await this.cache.getOrComputeAsync(key, () =>
       this.quizRepository.findTopQuizzes(limit),
     );
-
-    if (!quizzes || quizzes.length === 0) {
-      throw new NotFoundException('No quizzes found');
-    }
 
     return quizzes.map((quiz: Quiz) => new QuizPreviewDto(quiz));
   }
@@ -177,10 +168,6 @@ export class QuizService implements IQuizService {
       to,
     );
 
-    if (!quizzes || quizzes.length === 0) {
-      throw new NotFoundException('No quizzes found');
-    }
-
     return quizzes.map((quiz) => new QuizPreviewDto(quiz));
   }
 
@@ -190,11 +177,6 @@ export class QuizService implements IQuizService {
       from,
       to,
     );
-
-    if (!quizzes || quizzes.length === 0) {
-      // Чи є на клієнті обробка пустого масиву?
-      throw new NotFoundException('No quizzes found');
-    }
 
     return quizzes.map((quiz) => new QuizPreviewDto(quiz));
   }
