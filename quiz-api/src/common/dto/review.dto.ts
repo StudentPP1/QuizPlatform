@@ -8,7 +8,7 @@ export class ReviewDto {
 
   constructor(review: Review) {
     this.creator = new ProfileDto(review.user);
-    this.text = review.comment;
+    this.text = review.text;
     this.rating = review.rating;
   }
 }
