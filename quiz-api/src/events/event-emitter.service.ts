@@ -7,8 +7,8 @@ import {
   Inject,
 } from '@nestjs/common';
 
-import { USERS_SERVICE } from '@common/constants/user.token';
-import { IUsersService } from '@common/contracts/users-service.contract';
+import { USERS_SERVICE } from '@common/constants/users.constants';
+import { IUsersService } from '@common/contracts/services/users.service.contract';
 import { ErrorOptions } from '@common/interfaces/error-options.interface';
 import { SendMailOptions } from '@common/interfaces/send-mail-options.interface';
 import { UpdateAuthorRatingOptions } from '@common/interfaces/update-author-rating-options.interface';

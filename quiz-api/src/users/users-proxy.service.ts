@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
 import { TimeStrategy } from '@common/cache/strategies/ttl.strategy';
-import { IUsersService } from '@common/contracts/users-service.contract';
+import { IUsersService } from '@common/contracts/services/users.service.contract';
 import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
 import { CreateUserDto } from '@common/dto/create-user.dto';
 import { ProfileDto } from '@common/dto/profile.dto';
@@ -33,8 +33,8 @@ export class ProxyUsersService implements IUsersService {
     );
   }
 
-  async createUser<T extends CreateUserDto | CreateGoogleUserDto>(
-    userDto: T,
+  async createUser(
+    userDto: CreateUserDto | CreateGoogleUserDto,
     authProvider: AuthProvider,
   ): Promise<User> {
     return await this.queue.enqueue(() =>

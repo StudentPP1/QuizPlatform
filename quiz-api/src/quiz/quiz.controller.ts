@@ -18,8 +18,8 @@ import { plainToInstance } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
 import { Request } from 'express';
 
-import { IQUIZ_SERVICE } from '@common/constants/quiz.token';
-import { IQuizService } from '@common/contracts/quiz-service.contract';
+import { QUIZ_SERVICE } from '@common/constants/quiz.constants';
+import { IQuizService } from '@common/contracts/services/quiz.service.contract';
 import { CreateQuizDto } from '@common/dto/create-quiz.dto';
 import { SaveQuizResultDto } from '@common/dto/save-quiz-result.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
@@ -30,7 +30,7 @@ import { User } from '@users/entities/user.entity';
 @Controller('quiz')
 export class QuizController {
   constructor(
-    @Inject(IQUIZ_SERVICE) private readonly quizService: IQuizService,
+    @Inject(QUIZ_SERVICE) private readonly quizService: IQuizService,
   ) {}
 
   @Post('create')

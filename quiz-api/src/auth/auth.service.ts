@@ -1,8 +1,8 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 
-import { USERS_SERVICE } from '@common/constants/user.token';
-import { IUsersService } from '@common/contracts/users-service.contract';
+import { USERS_SERVICE } from '@common/constants/users.constants';
+import { IUsersService } from '@common/contracts/services/users.service.contract';
 import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
 import { CreateUserDto } from '@common/dto/create-user.dto';
 import { AuthProvider } from '@common/enums/auth-provider.enum';
