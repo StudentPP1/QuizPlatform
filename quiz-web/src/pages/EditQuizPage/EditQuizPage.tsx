@@ -9,7 +9,6 @@ import { QuizNavigate } from "../../models/QuizNavigate"
 import { QuizNavigateEdit } from "../../models/QuizNavigateEdit"
 
 const EditQuizPage: FC = () => {
-    // TODO: Quiz  => QuizEdit => CreateQuiz (+update/delete) + handle if user is creator
     const location = useLocation();
     const { quiz } = location.state as QuizNavigate;
 
