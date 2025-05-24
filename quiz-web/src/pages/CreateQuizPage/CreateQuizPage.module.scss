@@ -1,8 +1,23 @@
 @use "../../scss/variables" as v;
-@import "../../scss/share";
 
+.button {
+    width: 30%;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px v.$background;
+    background: v.$orange;
+    color: v.$background;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: all 0.1s ease-out;
+    }
+}
 .container {
-    
     z-index: 0;
     padding: 60px 80px 0 100px;
     margin: 0 auto;
@@ -149,20 +164,20 @@
 }
 .button_wrapper {
     margin: 20px;
-    display: flex; 
-    gap: 20px; 
+    display: flex;
+    gap: 20px;
 }
 
 .deleteImage {
-            background: v.$second_background;
-            color: v.$white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
+    background: v.$second_background;
+    color: v.$white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
 
-            &:hover {
-                background: v.$red;
-            }
-        }
+    &:hover {
+        background: v.$red;
+    }
+}
