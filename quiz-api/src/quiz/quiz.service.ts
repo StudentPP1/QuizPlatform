@@ -114,19 +114,33 @@ export class QuizService implements IQuizService {
       throw new NotFoundException('Quiz not found');
     }
 
-    const quizResult = this.quizResultRepository.create(
-      saveQuizResultDto,
-      user,
-      quiz,
+    const exestingResult = await this.quizResultRepository.findByQuizAndUserId(
+      quizId,
+      userId,
     );
 
-    quiz.participants.push(user);
+    if (exestingResult) {
+      const newResult = this.quizResultRepository.updateResult(
+        exestingResult,
+        saveQuizResultDto,
+      );
 
-    await Promise.all([
-      this.quizRepository.save(quiz),
-      this.usersService.addQuizParticipation(user, quiz),
-      this.quizResultRepository.save(quizResult),
-    ]);
+      await this.quizResultRepository.save(newResult);
+    } else {
+      const quizResult = this.quizResultRepository.create(
+        saveQuizResultDto,
+        user,
+        quiz,
+      );
+
+      quiz.participants.push(user);
+
+      await Promise.all([
+        this.quizRepository.save(quiz),
+        this.usersService.addQuizParticipation(user, quiz),
+        this.quizResultRepository.save(quizResult),
+      ]);
+    }
 
     return {
       message: 'Result successfully saved',

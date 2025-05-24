@@ -28,4 +28,17 @@ export class QuizResultRepository implements IQuizResultRepository {
   async save(quizResult: QuizResult): Promise<void> {
     await this.repository.save(quizResult);
   }
+
+  findByQuizAndUserId(
+    quizId: string,
+    userId: string,
+  ): Promise<QuizResult | null> {
+    return this.repository.findOne({
+      where: { quiz: { id: quizId }, user: { id: userId } },
+    });
+  }
+
+  updateResult(quizResult: QuizResult, dto: SaveQuizResultDto): QuizResult {
+    return this.repository.merge(quizResult, dto);
+  }
 }
