@@ -24,15 +24,7 @@ export class MemoizationCache {
     try {
       const value = computeFn();
 
-      this.strategy.evict(this.cache);
-
-      this.cache.set(key, {
-        value,
-        frequency: 1,
-        lastAccessed: Date.now(),
-        createdAt: Date.now(),
-      });
-
+      this.set(key, value);
       return value;
     } catch (error) {
       throw new HttpException(
@@ -67,15 +59,7 @@ export class MemoizationCache {
     try {
       const value = await computeFn();
 
-      this.strategy.evict(this.cache);
-
-      this.cache.set(key, {
-        value,
-        frequency: 1,
-        lastAccessed: Date.now(),
-        createdAt: Date.now(),
-      });
-
+      this.set(key, value);
       return value;
     } catch (error) {
       throw new HttpException(
@@ -97,5 +81,16 @@ export class MemoizationCache {
 
   remove(key: string): void {
     this.cache.delete(key);
+  }
+
+  set(key: string, value: unknown): void {
+    this.strategy.evict(this.cache);
+
+    this.cache.set(key, {
+      value,
+      frequency: 1,
+      lastAccessed: Date.now(),
+      createdAt: Date.now(),
+    });
   }
 }
