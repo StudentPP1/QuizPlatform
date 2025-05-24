@@ -40,6 +40,9 @@ export class ReviewService {
       quiz.creator.id,
     );
 
+    const updatedReviews = await this.reviewRepository.findByQuizId(quizId);
+    this.cache.set(`reviews:${quizId}`, updatedReviews);
+
     await Promise.all([
       this.reviewRepository.save(review),
       this.updateQuizRating(quiz),
