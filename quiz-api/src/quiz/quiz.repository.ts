@@ -36,14 +36,14 @@ export class QuizRepository implements IQuizRepository {
   findByName(name: string): Promise<Quiz[]> {
     return this.repository.find({
       where: { title: ILike(`%${name}%`) },
-      relations: ['creator', 'creator.createdQuizzes'],
+      relations: ['tasks', 'creator', 'creator.createdQuizzes'],
     });
   }
 
   findTopQuizzes(limit: number): Promise<Quiz[]> {
     return this.repository.find({
       where: { rating: MoreThan(0) },
-      relations: ['creator', 'creator.createdQuizzes'],
+      relations: ['tasks', 'creator', 'creator.createdQuizzes'],
       order: { rating: 'DESC' },
       take: limit,
     });
@@ -56,7 +56,7 @@ export class QuizRepository implements IQuizRepository {
   ): Promise<Quiz[]> {
     return this.repository.find({
       where: { creator: { id: userId } },
-      relations: ['creator', 'creator.createdQuizzes'],
+      relations: ['tasks', 'creator', 'creator.createdQuizzes'],
       skip: from - 1,
       take: to - from,
     });
@@ -69,7 +69,7 @@ export class QuizRepository implements IQuizRepository {
   ): Promise<Quiz[]> {
     return this.repository.find({
       where: { participants: { id: userId } },
-      relations: ['participants', 'creator', 'creator.createdQuizzes'],
+      relations: ['tasks', 'participants', 'creator', 'creator.createdQuizzes'],
       skip: from - 1,
       take: to - from,
     });

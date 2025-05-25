@@ -11,7 +11,7 @@ export class QuizPreviewDto {
   constructor(quiz: Quiz) {
     this.id = quiz.id;
     this.title = quiz.title;
-    this.numberOfTasks = quiz.numberOfTasks;
+    this.numberOfTasks = quiz.tasks.length;
     this.creator = new ProfileDto(quiz.creator);
     this.rating = quiz.rating;
   }
