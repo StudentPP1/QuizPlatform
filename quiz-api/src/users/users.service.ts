@@ -45,10 +45,7 @@ export class RealUsersService implements IUsersService {
       throw new ConflictException('User with this email already exists');
     }
 
-    const user = this.usersRepository.create({
-      ...userDto,
-      authProvider,
-    });
+    const user = this.usersRepository.create(userDto, authProvider);
 
     await this.usersRepository.save(user);
     return user;

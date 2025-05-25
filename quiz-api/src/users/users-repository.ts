@@ -2,6 +2,9 @@ import { Inject, Injectable } from '@nestjs/common';
 import { DataSource, MoreThan, Repository } from 'typeorm';
 
 import { IUsersRepository } from '@common/contracts/repositories/users.repository.contract';
+import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
+import { CreateUserDto } from '@common/dto/create-user.dto';
+import { AuthProvider } from '@common/enums/auth-provider.enum';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
@@ -23,8 +26,11 @@ export class UsersRepository implements IUsersRepository {
     return this.repository.findOneBy({ email });
   }
 
-  create(data: Partial<User>): User {
-    const user = this.repository.create(data);
+  create(
+    userDto: CreateUserDto | CreateGoogleUserDto,
+    authProvider: AuthProvider,
+  ): User {
+    const user = this.repository.create({ ...userDto, authProvider });
     return user;
   }
 
