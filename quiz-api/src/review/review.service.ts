@@ -41,7 +41,9 @@ export class ReviewService {
     );
 
     const updatedReviews = await this.reviewRepository.findByQuizId(quizId);
-    this.cache.set(`reviews:${quizId}`, updatedReviews);
+
+    if (this.cache.has(`reviews:${quizId}`))
+      this.cache.set(`reviews:${quizId}`, updatedReviews);
 
     await Promise.all([
       this.reviewRepository.save(review),
