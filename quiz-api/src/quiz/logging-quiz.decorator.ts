@@ -33,15 +33,20 @@ export class LoggingQuizDecorator implements IQuizService {
     }
   }
 
-  createQuiz(dto: CreateQuizDto, user: User) {
+  createQuiz(dto: CreateQuizDto, user: User, files: Express.Multer.File[]) {
     return this.logMethod('createQuiz', [dto, user], () =>
-      this.wrapped.createQuiz(dto, user),
+      this.wrapped.createQuiz(dto, user, files),
     );
   }
 
-  updateQuiz(quizId: string, updateQuizDto: UpdateQuizDto, user: User) {
+  updateQuiz(
+    quizId: string,
+    updateQuizDto: UpdateQuizDto,
+    user: User,
+    files: Express.Multer.File[],
+  ) {
     return this.logMethod('updateQuiz', [quizId, updateQuizDto, user], () =>
-      this.wrapped.updateQuiz(quizId, updateQuizDto, user),
+      this.wrapped.updateQuiz(quizId, updateQuizDto, user, files),
     );
   }
 

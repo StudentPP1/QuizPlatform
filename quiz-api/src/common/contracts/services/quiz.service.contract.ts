@@ -6,11 +6,16 @@ import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
 import { User } from '@users/entities/user.entity';
 
 export interface IQuizService {
-  createQuiz(dto: CreateQuizDto, user: User): Promise<object>;
+  createQuiz(
+    dto: CreateQuizDto,
+    user: User,
+    files: Express.Multer.File[],
+  ): Promise<object>;
   updateQuiz(
     quizId: string,
     updateQuizDto: UpdateQuizDto,
     user: User,
+    files: Express.Multer.File[],
   ): Promise<object>;
   deleteQuiz(quizId: string, user: User): Promise<object>;
   saveResult(
