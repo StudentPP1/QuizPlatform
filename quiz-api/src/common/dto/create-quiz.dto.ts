@@ -24,11 +24,6 @@ export class CreateQuizDto {
   @IsNotEmpty()
   @IsInt()
   @Min(1)
-  numberOfTasks: number;
-
-  @IsNotEmpty()
-  @IsInt()
-  @Min(1)
   @Max(120)
   timeLimit: number;
 

@@ -28,9 +28,6 @@ export class Quiz {
   description: string;
 
   @Column({ type: 'int' })
-  numberOfTasks: number;
-
-  @Column({ type: 'int' })
   timeLimit: number;
 
   @ManyToOne(() => User, (user) => user.createdQuizzes)
