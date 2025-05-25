@@ -43,17 +43,12 @@ export class QuizController {
     const createQuizDto = plainToInstance(CreateQuizDto, JSON.parse(quizRaw));
     await validateOrReject(createQuizDto);
 
-    for (const file of files) {
-      const match = file.fieldname.match(/images\[(\d+)\]/);
-      if (match) {
-        const index = parseInt(match[1], 10);
-        if (createQuizDto.tasks[index]) {
-          createQuizDto.tasks[index].image = `/uploads/${file.filename}`;
-        }
-      }
-    }
+    const quiz = await this.quizService.createQuiz(
+      createQuizDto,
+      req.user,
+      files,
+    );
 
-    const quiz = await this.quizService.createQuiz(createQuizDto, req.user);
     return quiz;
   }
 
@@ -68,21 +63,13 @@ export class QuizController {
     const updateQuizDto = plainToInstance(UpdateQuizDto, JSON.parse(quizRaw));
     await validateOrReject(updateQuizDto);
 
-    for (const file of files) {
-      const match = file.fieldname.match(/images\[(\d+)\]/);
-      if (match) {
-        const index = parseInt(match[1], 10);
-        if (updateQuizDto.tasks?.[index]) {
-          updateQuizDto.tasks[index].image = `/uploads/${file.filename}`;
-        }
-      }
-    }
-
     const result = await this.quizService.updateQuiz(
       id,
       updateQuizDto,
       req.user,
+      files,
     );
+
     return result;
   }
 

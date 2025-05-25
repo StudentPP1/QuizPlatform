@@ -40,7 +40,12 @@ export class QuizService implements IQuizService {
     private readonly usersService: IUsersService,
   ) {}
 
-  async createQuiz(createQuizDto: CreateQuizDto, user: User) {
+  async createQuiz(
+    createQuizDto: CreateQuizDto,
+    user: User,
+    files: Express.Multer.File[],
+  ) {
+    createQuizDto.tasks = this.attachImagesToTasks(createQuizDto.tasks, files);
     const quiz = this.quizRepository.create(createQuizDto, user);
     await this.quizRepository.save(quiz);
 
@@ -52,7 +57,13 @@ export class QuizService implements IQuizService {
     };
   }
 
-  async updateQuiz(quizId: string, dto: UpdateQuizDto, user: User) {
+  async updateQuiz(
+    quizId: string,
+    dto: UpdateQuizDto,
+    user: User,
+    files: Express.Multer.File[],
+  ) {
+    dto.tasks = this.attachImagesToTasks(dto.tasks, files);
     const quiz = await this.quizRepository.findOneByIdWithRelations(quizId, [
       'creator',
       'creator.createdQuizzes',
@@ -77,6 +88,23 @@ export class QuizService implements IQuizService {
       quizId: quiz.id,
       message: 'Quiz successfully updated',
     };
+  }
+
+  private attachImagesToTasks<T extends { image?: string }>(
+    tasks: T[],
+    files: Express.Multer.File[],
+  ): T[] {
+    for (const file of files) {
+      const match = file.fieldname.match(/images\[(\d+)\]/);
+      if (match) {
+        const index = parseInt(match[1], 10);
+        if (tasks[index]) {
+          tasks[index].image = `/uploads/${file.filename}`;
+        }
+      }
+    }
+
+    return tasks;
   }
 
   async deleteQuiz(id: string, user: User) {
