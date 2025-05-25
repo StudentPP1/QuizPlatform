@@ -24,6 +24,10 @@ export class MemoizationCache {
     try {
       const value = computeFn();
 
+      if (!value || (Array.isArray(value) && !value?.length)) {
+        return value;
+      }
+
       this.set(key, value);
       return value;
     } catch (error) {
@@ -58,6 +62,10 @@ export class MemoizationCache {
 
     try {
       const value = await computeFn();
+
+      if (!value || (Array.isArray(value) && !value?.length)) {
+        return value;
+      }
 
       this.set(key, value);
       return value;
