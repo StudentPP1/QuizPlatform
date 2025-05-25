@@ -18,7 +18,7 @@ export class TokenService {
 
   private createPayload(user: Partial<User>): Payload {
     const payload = {
-      userId: user.id,
+      id: user.id,
       username: user.username,
       email: user.email,
     };
