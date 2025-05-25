@@ -55,6 +55,7 @@ export class QuizService implements IQuizService {
   async updateQuiz(quizId: string, dto: UpdateQuizDto, user: User) {
     const quiz = await this.quizRepository.findOneByIdWithRelations(quizId, [
       'creator',
+      'creator.createdQuizzes',
       'tasks',
     ]);
 
@@ -62,14 +63,15 @@ export class QuizService implements IQuizService {
     if (quiz.creator.id !== user.id)
       throw new ForbiddenException('You are not the creator of this quiz');
 
-    if (this.cache.has(`quiz:${quizId}`)) this.cache.remove(`quiz:${quizId}`);
-
     Object.assign(quiz, dto);
     await this.quizRepository.save(quiz);
 
     if (dto.tasks) {
       await this.taskService.updateTasks(quiz, dto.tasks);
     }
+
+    if (this.cache.has(`quiz:${quiz.id}`))
+      this.cache.set(`quiz:${quiz.id}`, quiz);
 
     return {
       quizId: quiz.id,
