@@ -17,7 +17,7 @@ import { RealUsersService } from '@users/users.service';
 @Injectable()
 export class ProxyUsersService implements IUsersService {
   private queue = new Queue(10, 100);
-  private cache = new MemoizationCache(new TimeStrategy(3600));
+  private cache = new MemoizationCache(new TimeStrategy(15 * 60 * 1000));
 
   constructor(private readonly usersService: RealUsersService) {}
 

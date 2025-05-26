@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
-import { TimeStrategy } from '@common/cache/strategies/ttl.strategy';
+import { LRUStrategy } from '@common/cache/strategies/lru.strategy';
 import { QUIZ_REPOSITORY } from '@common/constants/quiz.constants';
 import { REVIEW_REPOSITORY } from '@common/constants/review.constants';
 import { IQuizRepository } from '@common/contracts/repositories/quiz.repository.contract';
@@ -15,7 +15,7 @@ import { User } from '@users/entities/user.entity';
 
 @Injectable()
 export class ReviewService {
-  private cache = new MemoizationCache(new TimeStrategy(120));
+  private cache = new MemoizationCache(new LRUStrategy(15));
 
   constructor(
     @Inject(REVIEW_REPOSITORY)

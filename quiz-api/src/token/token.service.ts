@@ -3,13 +3,13 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
-import { LRUStrategy } from '@common/cache/strategies/lru.strategy';
+import { LFUStrategy } from '@common/cache/strategies/lfu.strategy';
 import { Payload } from '@common/interfaces/payload.interface';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
 export class TokenService {
-  private cache = new MemoizationCache(new LRUStrategy(2));
+  private cache = new MemoizationCache(new LFUStrategy(15));
 
   constructor(
     private readonly jwtService: JwtService,

@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
-import { LFUStrategy } from '@common/cache/strategies/lfu.strategy';
+import { TimeStrategy } from '@common/cache/strategies/ttl.strategy';
 import {
   QUIZ_REPOSITORY,
   QUIZ_RESULT_REPOSITORY,
@@ -28,7 +28,7 @@ import { User } from '@users/entities/user.entity';
 
 @Injectable()
 export class QuizService implements IQuizService {
-  private cache = new MemoizationCache(new LFUStrategy(3));
+  private cache = new MemoizationCache(new TimeStrategy(15 * 60 * 1000));
 
   constructor(
     @Inject(QUIZ_REPOSITORY)
