@@ -27,7 +27,7 @@ export class TokenService {
     return payload;
   }
 
-  async *createTokenGenerator(
+  private async *createTokenGenerator(
     user: Partial<User>,
   ): AsyncGenerator<string, void, unknown> {
     const payload = this.createPayload(user);
@@ -55,7 +55,7 @@ export class TokenService {
     };
   }
 
-  getTokenGenerator(
+  private getTokenGenerator(
     user: Partial<User>,
   ): AsyncGenerator<string, void, unknown> {
     const key = user.id;
