@@ -3,7 +3,9 @@ import { CreateQuizDto } from '@common/dto/create-quiz.dto';
 import { SaveQuizResultDto } from '@common/dto/save-quiz-result.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
 import { quizServiceLogger } from '@common/logging/logger';
+import { FullQuizDto } from '@common/dto/full-quiz.dto';
 import { User } from '@users/entities/user.entity';
+import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 
 export class LoggingQuizDecorator implements IQuizService {
   private readonly logger = quizServiceLogger;
@@ -33,7 +35,11 @@ export class LoggingQuizDecorator implements IQuizService {
     }
   }
 
-  createQuiz(dto: CreateQuizDto, user: User, files: Express.Multer.File[]) {
+  createQuiz(
+    dto: CreateQuizDto,
+    user: User,
+    files: Express.Multer.File[],
+  ): Promise<object> {
     return this.logMethod('createQuiz', [dto, user], () =>
       this.wrapped.createQuiz(dto, user, files),
     );
@@ -44,47 +50,63 @@ export class LoggingQuizDecorator implements IQuizService {
     updateQuizDto: UpdateQuizDto,
     user: User,
     files: Express.Multer.File[],
-  ) {
+  ): Promise<object> {
     return this.logMethod('updateQuiz', [quizId, updateQuizDto, user], () =>
       this.wrapped.updateQuiz(quizId, updateQuizDto, user, files),
     );
   }
 
-  deleteQuiz(quizId: string, user: User) {
+  deleteQuiz(quizId: string, user: User): Promise<object> {
     return this.logMethod('deleteQuiz', [quizId, user], () =>
       this.wrapped.deleteQuiz(quizId, user),
     );
   }
 
-  saveResult(quizId: string, userId: string, dto: SaveQuizResultDto) {
+  saveResult(
+    quizId: string,
+    userId: string,
+    dto: SaveQuizResultDto,
+  ): Promise<object> {
     return this.logMethod('saveResult', [quizId, userId, dto], () =>
       this.wrapped.saveResult(quizId, userId, dto),
     );
   }
 
-  getQuiz(id: string) {
+  getQuiz(id: string): Promise<FullQuizDto> {
     return this.logMethod('getQuiz', [id], () => this.wrapped.getQuiz(id));
   }
 
-  searchQuizzesByName(name: string, from: number, to: number) {
+  searchQuizzesByName(
+    name: string,
+    from: number,
+    to: number,
+  ): Promise<QuizPreviewDto[]> {
     return this.logMethod('searchQuizzesByName', [name], () =>
       this.wrapped.searchQuizzesByName(name, from, to),
     );
   }
 
-  getTopQuizzes(limit: number) {
+  getTopQuizzes(limit: number): Promise<QuizPreviewDto[]> {
     return this.logMethod('getTopQuizzes', [limit], () =>
       this.wrapped.getTopQuizzes(limit),
     );
   }
 
-  getCreatedQuizzes(userId: string, from: number, to: number) {
+  getCreatedQuizzes(
+    userId: string,
+    from: number,
+    to: number,
+  ): Promise<QuizPreviewDto[]> {
     return this.logMethod('getCreatedQuizzes', [userId, from, to], () =>
       this.wrapped.getCreatedQuizzes(userId, from, to),
     );
   }
 
-  getParticipatedQuizzes(userId: string, from: number, to: number) {
+  getParticipatedQuizzes(
+    userId: string,
+    from: number,
+    to: number,
+  ): Promise<QuizPreviewDto[]> {
     return this.logMethod('getParticipatedQuizzes', [userId, from, to], () =>
       this.wrapped.getParticipatedQuizzes(userId, from, to),
     );
