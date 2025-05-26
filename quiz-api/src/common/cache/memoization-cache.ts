@@ -15,7 +15,7 @@ export class MemoizationCache {
       if (this.strategy.isStale?.(entry)) {
         this.remove(key);
       } else {
-        entry.frequency += 1;
+        entry.usageCount += 1;
         entry.lastAccessed = Date.now();
         return entry.value;
       }
@@ -54,7 +54,7 @@ export class MemoizationCache {
       if (this.strategy.isStale?.(entry)) {
         this.remove(key);
       } else {
-        entry.frequency += 1;
+        entry.usageCount += 1;
         entry.lastAccessed = Date.now();
         return entry.value;
       }
@@ -96,7 +96,7 @@ export class MemoizationCache {
 
     this.cache.set(key, {
       value,
-      frequency: 1,
+      usageCount: 1,
       lastAccessed: Date.now(),
       createdAt: Date.now(),
     });

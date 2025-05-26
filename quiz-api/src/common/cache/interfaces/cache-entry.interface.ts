@@ -1,6 +1,6 @@
 export interface CacheEntry {
   value: any;
-  frequency: number;
+  usageCount: number;
   lastAccessed: number;
   createdAt: number;
 }
