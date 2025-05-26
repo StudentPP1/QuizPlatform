@@ -1,11 +1,11 @@
 import { IQuizService } from '@common/contracts/services/quiz.service.contract';
 import { CreateQuizDto } from '@common/dto/create-quiz.dto';
+import { FullQuizDto } from '@common/dto/full-quiz.dto';
+import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { SaveQuizResultDto } from '@common/dto/save-quiz-result.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
 import { quizServiceLogger } from '@common/logging/logger';
-import { FullQuizDto } from '@common/dto/full-quiz.dto';
 import { User } from '@users/entities/user.entity';
-import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 
 export class LoggingQuizDecorator implements IQuizService {
   private readonly logger = quizServiceLogger;
