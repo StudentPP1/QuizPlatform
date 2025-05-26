@@ -11,6 +11,7 @@ import {
   QUIZ_REPOSITORY,
   QUIZ_RESULT_REPOSITORY,
 } from '@common/constants/quiz.constants';
+import { IQuizService } from '@common/contracts/services/quiz.service.contract';
 import { LoggingQuizDecorator } from '@quiz/logging-quiz.decorator';
 import { QuizResultRepository } from '@quiz/quiz-result.repository';
 import { QuizController } from '@quiz/quiz.controller';
@@ -56,7 +57,8 @@ import { UsersModule } from '@users/users.module';
     },
     {
       provide: QUIZ_SERVICE,
-      useFactory: (baseService) => new LoggingQuizDecorator(baseService),
+      useFactory: (baseService: IQuizService) =>
+        new LoggingQuizDecorator(baseService),
       inject: [BASE_QUIZ_SERVICE],
     },
     { provide: QUIZ_REPOSITORY, useClass: QuizRepository },

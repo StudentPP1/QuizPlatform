@@ -53,8 +53,11 @@ export class TaskService {
         try {
           await fs.unlink(imagePath);
           console.log(`Deleted: ${imagePath}`);
-        } catch (err) {
-          console.error(`Failed to delete image: ${imagePath}`, err.message);
+        } catch (error) {
+          console.error(
+            `Failed to delete image: ${imagePath}`,
+            (error as Error).message,
+          );
         }
       });
 

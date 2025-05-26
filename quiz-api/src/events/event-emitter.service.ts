@@ -34,11 +34,11 @@ export class EventEmitterService
   private async handleUserRegistered(options: SendMailOptions): Promise<void> {
     try {
       await this.mailService.sendWelcomeEmail(options);
-    } catch (err) {
+    } catch (error) {
       this.emit('error', {
         context: 'user.registered',
         message: `Failed to send welcome email to ${options.to}`,
-        originalError: err,
+        originalError: error as Error,
       });
     }
   }
@@ -48,19 +48,25 @@ export class EventEmitterService
   ): Promise<void> {
     try {
       await this.usersService.updateAuthorRating(options);
-    } catch (err) {
+    } catch (error) {
       this.emit('error', {
         context: 'user.rating_updated',
         message: `Failed to update rating for user ${options.userId}`,
-        originalError: err,
+        originalError: error as Error,
       });
     }
   }
 
   onModuleInit() {
-    this.on('user.registered', this.handleUserRegistered.bind(this));
-    this.on('user.rating_updated', this.handleUserRatingUpdated.bind(this));
-    this.on('error', this.handleError.bind(this));
+    this.on(
+      'user.registered',
+      this.handleUserRegistered.bind(this) as (...args: any[]) => void,
+    );
+    this.on(
+      'user.rating_updated',
+      this.handleUserRatingUpdated.bind(this) as (...args: any[]) => void,
+    );
+    this.on('error', this.handleError.bind(this) as (...args: any[]) => void);
   }
 
   onModuleDestroy() {

@@ -57,7 +57,7 @@ export class AuthController {
 
   @Get('google')
   @UseGuards(GoogleOAuthGuard)
-  async googleAuth() {
+  googleAuth() {
     return;
   }
 
@@ -80,11 +80,8 @@ export class AuthController {
   @Get('logout')
   @UseGuards(JwtGuard)
   @HttpCode(200)
-  async logout(
-    @Req() request: Request & { user?: User },
-    @Res() response: Response,
-  ) {
-    await this.authService.logout(request.user.id);
+  logout(@Req() request: Request & { user?: User }, @Res() response: Response) {
+    this.authService.logout(request.user.id);
 
     response.clearCookie('refresh_token', {
       httpOnly: true,

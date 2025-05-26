@@ -59,8 +59,9 @@ export class AuthService {
       throw new UnauthorizedException('Incorrect email or password');
     }
 
-    const { password: _, ...result } = user;
-    return result;
+    delete user.password;
+
+    return user;
   }
 
   async login(user: User): Promise<Tokens> {
@@ -95,7 +96,7 @@ export class AuthService {
     return await this.usersService.createUser(data, AuthProvider.GOOGLE);
   }
 
-  async logout(userId: string): Promise<void> {
+  logout(userId: string): void {
     this.tokenService.removeTokenGenerator(userId);
   }
 }

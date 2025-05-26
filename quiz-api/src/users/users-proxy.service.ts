@@ -84,6 +84,8 @@ export class ProxyUsersService implements IUsersService {
   }
 
   async updateAuthorRating(options: UpdateAuthorRatingOptions): Promise<void> {
-    this.queue.enqueue(() => this.usersService.updateAuthorRating(options));
+    await this.queue.enqueue(() =>
+      this.usersService.updateAuthorRating(options),
+    );
   }
 }
