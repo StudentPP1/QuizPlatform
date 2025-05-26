@@ -66,9 +66,9 @@ export class LoggingQuizDecorator implements IQuizService {
     return this.logMethod('getQuiz', [id], () => this.wrapped.getQuiz(id));
   }
 
-  searchQuizzesByName(name: string) {
+  searchQuizzesByName(name: string, from: number, to: number) {
     return this.logMethod('searchQuizzesByName', [name], () =>
-      this.wrapped.searchQuizzesByName(name),
+      this.wrapped.searchQuizzesByName(name, from, to),
     );
   }
 

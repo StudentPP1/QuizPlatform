@@ -40,10 +40,7 @@ export class ReviewService {
       quiz.creator.id,
     );
 
-    const updatedReviews = await this.reviewRepository.findByQuizId(quizId);
-
-    if (this.cache.has(`reviews:${quizId}`))
-      this.cache.set(`reviews:${quizId}`, updatedReviews);
+    this.cache.deleteByPrefix(`reviews:${quizId}`);
 
     await Promise.all([
       this.reviewRepository.save(review),
@@ -82,10 +79,14 @@ export class ReviewService {
     await this.quizRepository.save(quiz);
   }
 
-  async getReviewsForQuiz(quizId: string): Promise<ReviewDto[]> {
+  async getReviewsForQuiz(
+    quizId: string,
+    from: number,
+    to: number,
+  ): Promise<ReviewDto[]> {
     const reviews = await this.cache.getOrComputeAsync(
-      `reviews:${quizId}`,
-      () => this.reviewRepository.findByQuizId(quizId),
+      `reviews:${quizId}:${from}:${to}`,
+      () => this.reviewRepository.findByQuizId(quizId, from, to),
     );
 
     return reviews.map((review: Review) => new ReviewDto(review));

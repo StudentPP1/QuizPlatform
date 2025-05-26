@@ -96,8 +96,12 @@ export class QuizController {
   }
 
   @Get('search')
-  async searchQuizzes(@Query('name') name: string) {
-    return this.quizService.searchQuizzesByName(name);
+  async searchQuizzes(
+    @Query('name') name: string,
+    @Query('from') from: number,
+    @Query('to') to: number,
+  ) {
+    return this.quizService.searchQuizzesByName(name, from, to);
   }
 
   @Get('top-rated')

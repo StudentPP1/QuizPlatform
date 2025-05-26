@@ -30,7 +30,11 @@ export class ReviewController {
   }
 
   @Get()
-  async getReviewsForQuiz(@Query('quizId') quizId: string) {
-    return this.reviewService.getReviewsForQuiz(quizId);
+  async getReviewsForQuiz(
+    @Query('quizId') quizId: string,
+    @Query('from') from: number,
+    @Query('to') to: number,
+  ) {
+    return this.reviewService.getReviewsForQuiz(quizId, from, to);
   }
 }

@@ -10,7 +10,7 @@ export interface IQuizRepository {
   create(createQuizDto: CreateQuizDto, creator: User): Quiz;
   save(quiz: Quiz): Promise<void>;
   remove(quiz: Quiz): Promise<void>;
-  findByName(name: string): Promise<Quiz[]>;
+  findByName(name: string, from: number, to: number): Promise<Quiz[]>;
   findTopQuizzes(limit: number): Promise<Quiz[]>;
   findCreatedByUserId(
     userId: string,

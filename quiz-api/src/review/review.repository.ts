@@ -29,10 +29,16 @@ export class ReviewRepository implements IReviewRepository {
     await this.repository.save(review);
   }
 
-  findByQuizId(quizId: string): Promise<Review[]> {
+  findByQuizId(quizId: string, from?: number, to?: number): Promise<Review[]> {
+    const skip = from != null && to != null ? from - 1 : undefined;
+    const take = from != null && to != null ? to - from : undefined;
+
     return this.repository.find({
       where: { quiz: { id: quizId } },
       relations: ['user', 'user.createdQuizzes'],
+      order: { createdAt: 'DESC' },
+      skip,
+      take,
     });
   }
 

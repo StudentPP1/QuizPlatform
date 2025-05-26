@@ -24,7 +24,11 @@ export interface IQuizService {
     dto: SaveQuizResultDto,
   ): Promise<any>;
   getQuiz(id: string): Promise<FullQuizDto>;
-  searchQuizzesByName(name: string): Promise<QuizPreviewDto[]>;
+  searchQuizzesByName(
+    name: string,
+    from: number,
+    to: number,
+  ): Promise<QuizPreviewDto[]>;
   getTopQuizzes(limit: number): Promise<QuizPreviewDto[]>;
   getCreatedQuizzes(
     userId: string,

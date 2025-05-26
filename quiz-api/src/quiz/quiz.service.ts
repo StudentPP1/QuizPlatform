@@ -191,8 +191,8 @@ export class QuizService implements IQuizService {
     return new FullQuizDto(quiz);
   }
 
-  async searchQuizzesByName(name: string) {
-    const quizzes = await this.quizRepository.findByName(name);
+  async searchQuizzesByName(name: string, from: number, to: number) {
+    const quizzes = await this.quizRepository.findByName(name, from, to);
     return quizzes.map((quiz) => new QuizPreviewDto(quiz));
   }
 
