@@ -44,12 +44,7 @@ export class AuthService {
       username,
     });
 
-    const generator = this.tokenService.getTokenGenerator(user);
-
-    return {
-      accessToken: (await generator.next()).value as string,
-      refreshToken: (await generator.next()).value as string,
-    };
+    return this.tokenService.generateTokens(user);
   }
 
   async validateUser(email: string, password: string): Promise<User> {
@@ -59,29 +54,19 @@ export class AuthService {
       throw new UnauthorizedException('Incorrect email or password');
     }
 
-    delete user.password;
-
-    return user;
+    const { password: _, ...result } = user;
+    return result;
   }
 
-  async login(user: User): Promise<Tokens> {
-    const generator = this.tokenService.getTokenGenerator(user);
-
-    return {
-      accessToken: (await generator.next()).value as string,
-      refreshToken: (await generator.next()).value as string,
-    };
+  login(user: User): Promise<Tokens> {
+    return this.tokenService.generateTokens(user);
   }
 
-  async googleLogin(user: User) {
-    const generator = this.tokenService.getTokenGenerator(user);
-
-    await generator.next();
-
-    return (await generator.next()).value as string;
+  googleLogin(user: User): Promise<Tokens> {
+    return this.login(user);
   }
 
-  async validateGoogleUser(data: CreateGoogleUserDto) {
+  async validateGoogleUser(data: CreateGoogleUserDto): Promise<User> {
     const user = await this.usersService.getUserByEmail(data.email);
 
     if (user) {
@@ -93,7 +78,7 @@ export class AuthService {
       username: data.username,
     });
 
-    return await this.usersService.createUser(data, AuthProvider.GOOGLE);
+    return this.usersService.createUser(data, AuthProvider.GOOGLE);
   }
 
   logout(userId: string): void {

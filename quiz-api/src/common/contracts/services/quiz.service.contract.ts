@@ -22,7 +22,7 @@ export interface IQuizService {
     quizId: string,
     userId: string,
     dto: SaveQuizResultDto,
-  ): Promise<any>;
+  ): Promise<object>;
   getQuiz(id: string): Promise<FullQuizDto>;
   searchQuizzesByName(
     name: string,

@@ -7,13 +7,15 @@ import {
   Param,
   Req,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
-import { Request } from 'express';
 
 import { CreateReviewDto } from '@common/dto/create-review.dto';
+import { ReviewDto } from '@common/dto/review.dto';
 import { JwtGuard } from '@common/guards/jwt.guard';
+import { RequestWithUser } from '@common/interfaces/request-with-user.interface';
+import { Review } from '@review/entities/review.entity';
 import { ReviewService } from '@review/review.service';
-import { User } from '@users/entities/user.entity';
 
 @UseGuards(JwtGuard)
 @Controller('review')
@@ -21,20 +23,20 @@ export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
   @Post(':quizId')
-  async addReview(
+  addReview(
     @Param('quizId') quizId: string,
     @Body() createReviewDto: CreateReviewDto,
-    @Req() req: Request & { user?: User },
-  ) {
-    return this.reviewService.addReview(quizId, req.user, createReviewDto);
+    @Req() request: RequestWithUser,
+  ): Promise<Review> {
+    return this.reviewService.addReview(quizId, request.user, createReviewDto);
   }
 
   @Get()
-  async getReviewsForQuiz(
+  getReviewsForQuiz(
     @Query('quizId') quizId: string,
-    @Query('from') from: number,
-    @Query('to') to: number,
-  ) {
+    @Query('from', ParseIntPipe) from: number,
+    @Query('to', ParseIntPipe) to: number,
+  ): Promise<ReviewDto[]> {
     return this.reviewService.getReviewsForQuiz(quizId, from, to);
   }
 }

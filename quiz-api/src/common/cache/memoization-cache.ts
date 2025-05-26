@@ -102,7 +102,7 @@ export class MemoizationCache {
     });
   }
 
-  deleteByPrefix(prefix: string) {
+  deleteByPrefix(prefix: string): void {
     for (const key of this.cache.keys()) {
       if (key.startsWith(prefix)) {
         this.cache.delete(key);

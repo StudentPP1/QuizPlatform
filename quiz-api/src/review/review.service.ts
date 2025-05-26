@@ -29,7 +29,7 @@ export class ReviewService {
     quizId: string,
     user: User,
     createReviewDto: CreateReviewDto,
-  ) {
+  ): Promise<Review> {
     const quiz = await this.quizRepository.findOneByIdWithRelations(quizId, [
       'creator',
     ]);

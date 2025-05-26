@@ -10,7 +10,7 @@ import { TokenModule } from '@token/token.module';
 import { UsersModule } from '@users/users.module';
 
 @Module({
-  imports: [PassportModule.register({}), UsersModule, TokenModule],
+  imports: [PassportModule, UsersModule, TokenModule],
   controllers: [AuthController],
   providers: [AuthService, JwtGuard, LocalStrategy, GoogleStrategy],
 })

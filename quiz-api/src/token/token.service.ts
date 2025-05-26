@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { MemoizationCache } from '@common/cache/memoization-cache';
 import { LFUStrategy } from '@common/cache/strategies/lfu.strategy';
 import { Payload } from '@common/interfaces/payload.interface';
+import { Tokens } from '@common/interfaces/tokens.payload';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
@@ -46,6 +47,14 @@ export class TokenService {
     }
   }
 
+  async generateTokens(user: User): Promise<Tokens> {
+    const generator = this.getTokenGenerator(user);
+    return {
+      accessToken: (await generator.next()).value as string,
+      refreshToken: (await generator.next()).value as string,
+    };
+  }
+
   getTokenGenerator(
     user: Partial<User>,
   ): AsyncGenerator<string, void, unknown> {
@@ -53,7 +62,7 @@ export class TokenService {
     return this.cache.getOrCompute(key, () => this.createTokenGenerator(user));
   }
 
-  removeTokenGenerator(userId: string) {
+  removeTokenGenerator(userId: string): void {
     this.cache.remove(userId);
   }
 }

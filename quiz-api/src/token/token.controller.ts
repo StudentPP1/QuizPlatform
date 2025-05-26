@@ -1,10 +1,10 @@
 import { Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 
 import { RefreshTokenGuard } from '@common/guards/refresh-token.guard';
+import { RequestWithUser } from '@common/interfaces/request-with-user.interface';
 import { TokenService } from '@token/token.service';
-import { User } from '@users/entities/user.entity';
 
 @Controller('token')
 export class TokenController {
@@ -16,9 +16,9 @@ export class TokenController {
   @Post('update')
   @UseGuards(RefreshTokenGuard)
   async updateTokens(
-    @Req() request: Request & { decoded?: User },
+    @Req() request: RequestWithUser,
     @Res() response: Response,
-  ) {
+  ): Promise<void> {
     const generator = this.tokenService.getTokenGenerator(request.user);
 
     const accessToken = (await generator.next()).value;

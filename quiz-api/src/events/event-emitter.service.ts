@@ -26,7 +26,7 @@ export class EventEmitterService
     super();
   }
 
-  private handleError(error: ErrorOptions) {
+  private handleError(error: ErrorOptions): void {
     console.error(`[${error.context}] ${error.message}`);
     console.error(error.originalError);
   }

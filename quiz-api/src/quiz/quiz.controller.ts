@@ -12,19 +12,22 @@ import {
   Inject,
   Put,
   Delete,
+  ParseIntPipe,
+  BadRequestException,
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { plainToInstance } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
-import { Request } from 'express';
 
 import { QUIZ_SERVICE } from '@common/constants/quiz.constants';
 import { IQuizService } from '@common/contracts/services/quiz.service.contract';
 import { CreateQuizDto } from '@common/dto/create-quiz.dto';
+import { FullQuizDto } from '@common/dto/full-quiz.dto';
+import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { SaveQuizResultDto } from '@common/dto/save-quiz-result.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
 import { JwtGuard } from '@common/guards/jwt.guard';
-import { User } from '@users/entities/user.entity';
+import { RequestWithUser } from '@common/interfaces/request-with-user.interface';
 
 @UseGuards(JwtGuard)
 @Controller('quiz')
@@ -36,76 +39,80 @@ export class QuizController {
   @Post('create')
   @UseInterceptors(AnyFilesInterceptor())
   async createQuiz(
-    @Req() req: Request & { user?: User },
+    @Req() request: RequestWithUser,
     @Body('quiz') quizRaw: string,
     @UploadedFiles() files: Express.Multer.File[],
-  ) {
-    const createQuizDto = plainToInstance(CreateQuizDto, JSON.parse(quizRaw));
-    await validateOrReject(createQuizDto);
+  ): Promise<object> {
+    try {
+      const createQuizDto = plainToInstance(CreateQuizDto, JSON.parse(quizRaw));
+      await validateOrReject(createQuizDto);
 
-    const quiz = await this.quizService.createQuiz(
-      createQuizDto,
-      req.user,
-      files,
-    );
-
-    return quiz;
+      return this.quizService.createQuiz(createQuizDto, request.user, files);
+    } catch (error) {
+      throw new BadRequestException('Invalid quiz data');
+    }
   }
 
   @Put('update/:id')
   @UseInterceptors(AnyFilesInterceptor())
   async updateQuiz(
     @Param('id') id: string,
-    @Req() req: Request & { user?: User },
+    @Req() request: RequestWithUser,
     @Body('quiz') quizRaw: string,
     @UploadedFiles() files: Express.Multer.File[],
-  ) {
-    const updateQuizDto = plainToInstance(UpdateQuizDto, JSON.parse(quizRaw));
-    await validateOrReject(updateQuizDto);
+  ): Promise<object> {
+    try {
+      const updateQuizDto = plainToInstance(UpdateQuizDto, JSON.parse(quizRaw));
+      await validateOrReject(updateQuizDto);
 
-    const result = await this.quizService.updateQuiz(
-      id,
-      updateQuizDto,
-      req.user,
-      files,
-    );
-
-    return result;
+      return this.quizService.updateQuiz(
+        id,
+        updateQuizDto,
+        request.user,
+        files,
+      );
+    } catch (error) {
+      throw new BadRequestException('Invalid quiz data');
+    }
   }
 
   @Delete('delete/:id')
-  async deleteQuiz(
+  deleteQuiz(
     @Param('id') id: string,
-    @Req() req: Request & { user?: User },
-  ) {
-    return await this.quizService.deleteQuiz(id, req.user);
+    @Req() request: RequestWithUser,
+  ): Promise<object> {
+    return this.quizService.deleteQuiz(id, request.user);
   }
 
   @Post(':quizId/results')
-  async saveResult(
+  saveResult(
     @Param('quizId') quizId: string,
     @Body() saveQuizResultDto: SaveQuizResultDto,
-    @Req() req: Request & { user?: User },
-  ) {
-    return this.quizService.saveResult(quizId, req.user.id, saveQuizResultDto);
+    @Req() request: RequestWithUser,
+  ): Promise<object> {
+    return this.quizService.saveResult(
+      quizId,
+      request.user.id,
+      saveQuizResultDto,
+    );
   }
 
   @Get(':quizId/info')
-  async getQuiz(@Param('quizId') quizId: string) {
+  getQuiz(@Param('quizId') quizId: string): Promise<FullQuizDto> {
     return this.quizService.getQuiz(quizId);
   }
 
   @Get('search')
-  async searchQuizzes(
+  searchQuizzes(
     @Query('name') name: string,
-    @Query('from') from: number,
-    @Query('to') to: number,
-  ) {
+    @Query('from', ParseIntPipe) from: number,
+    @Query('to', ParseIntPipe) to: number,
+  ): Promise<QuizPreviewDto[]> {
     return this.quizService.searchQuizzesByName(name, from, to);
   }
 
   @Get('top-rated')
-  async getTopQuizzes(@Query('limit') limit: number = 3) {
+  getTopQuizzes(@Query('limit') limit: number = 3): Promise<QuizPreviewDto[]> {
     return this.quizService.getTopQuizzes(limit);
   }
 }

@@ -44,7 +44,7 @@ export class QuizService implements IQuizService {
     createQuizDto: CreateQuizDto,
     user: User,
     files: Express.Multer.File[],
-  ) {
+  ): Promise<object> {
     createQuizDto.tasks = this.attachImagesToTasks(createQuizDto.tasks, files);
     const quiz = this.quizRepository.create(createQuizDto, user);
     await this.quizRepository.save(quiz);
@@ -62,7 +62,7 @@ export class QuizService implements IQuizService {
     dto: UpdateQuizDto,
     user: User,
     files: Express.Multer.File[],
-  ) {
+  ): Promise<object> {
     dto.tasks = this.attachImagesToTasks(dto.tasks, files);
     const quiz = await this.quizRepository.findOneByIdWithRelations(quizId, [
       'creator',
@@ -107,7 +107,7 @@ export class QuizService implements IQuizService {
     return tasks;
   }
 
-  async deleteQuiz(id: string, user: User) {
+  async deleteQuiz(id: string, user: User): Promise<object> {
     const quiz = await this.quizRepository.findOneByIdWithRelations(id, [
       'creator',
       'tasks',
@@ -177,7 +177,7 @@ export class QuizService implements IQuizService {
     };
   }
 
-  async getQuiz(id: string) {
+  async getQuiz(id: string): Promise<FullQuizDto> {
     const quiz = await this.cache.getOrComputeAsync(`quiz:${id}`, () =>
       this.quizRepository.findOneByIdWithRelations(id, [
         'creator',
@@ -191,12 +191,16 @@ export class QuizService implements IQuizService {
     return new FullQuizDto(quiz);
   }
 
-  async searchQuizzesByName(name: string, from: number, to: number) {
+  async searchQuizzesByName(
+    name: string,
+    from: number,
+    to: number,
+  ): Promise<QuizPreviewDto[]> {
     const quizzes = await this.quizRepository.findByName(name, from, to);
     return quizzes.map((quiz) => new QuizPreviewDto(quiz));
   }
 
-  async getTopQuizzes(limit: number) {
+  async getTopQuizzes(limit: number): Promise<QuizPreviewDto[]> {
     const key = `top-quizzes:${limit}`;
     const quizzes = await this.cache.getOrComputeAsync(key, () =>
       this.quizRepository.findTopQuizzes(limit),
@@ -205,7 +209,11 @@ export class QuizService implements IQuizService {
     return quizzes.map((quiz: Quiz) => new QuizPreviewDto(quiz));
   }
 
-  async getCreatedQuizzes(userId: string, from: number, to: number) {
+  async getCreatedQuizzes(
+    userId: string,
+    from: number,
+    to: number,
+  ): Promise<QuizPreviewDto[]> {
     const quizzes = await this.quizRepository.findCreatedByUserId(
       userId,
       from,
@@ -215,7 +223,11 @@ export class QuizService implements IQuizService {
     return quizzes.map((quiz) => new QuizPreviewDto(quiz));
   }
 
-  async getParticipatedQuizzes(userId: string, from: number, to: number) {
+  async getParticipatedQuizzes(
+    userId: string,
+    from: number,
+    to: number,
+  ): Promise<QuizPreviewDto[]> {
     const quizzes = await this.quizRepository.findParticipatedByUserId(
       userId,
       from,

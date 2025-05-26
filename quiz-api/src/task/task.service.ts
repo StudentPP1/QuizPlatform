@@ -17,14 +17,20 @@ export class TaskService {
     private readonly taskRepository: ITaskRepository,
   ) {}
 
-  async createTasks(createTaskDtos: CreateTaskDto[], quiz: Quiz) {
+  async createTasks(
+    createTaskDtos: CreateTaskDto[],
+    quiz: Quiz,
+  ): Promise<void> {
     for (const taskDto of createTaskDtos) {
       const task = this.taskRepository.create(taskDto, quiz);
       await this.taskRepository.save(task);
     }
   }
 
-  async updateTasks(quiz: Quiz, updateTaskDtos: UpdateTaskDto[]) {
+  async updateTasks(
+    quiz: Quiz,
+    updateTaskDtos: UpdateTaskDto[],
+  ): Promise<void> {
     const existingTasks = await this.taskRepository.findByQuizId(quiz.id);
 
     for (let i = 0; i < updateTaskDtos.length; i++) {
@@ -45,7 +51,7 @@ export class TaskService {
     }
   }
 
-  async deleteTasks(tasks: Task[]) {
+  async deleteTasks(tasks: Task[]): Promise<void> {
     const tasksToDelete = tasks
       .filter((task) => task.image)
       .map(async (task) => {
