@@ -19,10 +19,8 @@ export class TokenController {
     @Req() request: RequestWithUser,
     @Res() response: Response,
   ): Promise<void> {
-    const generator = this.tokenService.getTokenGenerator(request.user);
-
-    const accessToken = (await generator.next()).value;
-    const refreshToken = (await generator.next()).value;
+    const { accessToken, refreshToken } =
+      await this.tokenService.generateTokens(request.user);
 
     response.cookie('refresh_token', refreshToken, {
       httpOnly: true,
