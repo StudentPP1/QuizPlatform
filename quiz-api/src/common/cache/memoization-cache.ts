@@ -101,4 +101,12 @@ export class MemoizationCache {
       createdAt: Date.now(),
     });
   }
+
+  deleteByPrefix(prefix: string) {
+    for (const key of this.cache.keys()) {
+      if (key.startsWith(prefix)) {
+        this.cache.delete(key);
+      }
+    }
+  }
 }
