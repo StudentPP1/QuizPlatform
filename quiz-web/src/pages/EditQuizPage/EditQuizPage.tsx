@@ -10,19 +10,26 @@ import { QuizNavigateEdit } from "../../models/QuizNavigateEdit"
 
 const EditQuizPage: FC = () => {
     const location = useLocation();
+    let counter = 0;
     const { quiz } = location.state as QuizNavigate;
 
     function mapToAnswerType(text: string, isCorrect: boolean): AnswerType {
+        counter += 1;
         return {
-            id: Date.now(), text: text, isCorrect: isCorrect
+            id: Date.now() + counter, text: text, isCorrect: isCorrect
         }
     }
 
     function mapToQuestionType(task: QuizTask): QuestionType {
+        counter += 1;
         const correctAnswers = task.correctAnswers.map(text => mapToAnswerType(text, true));
-        const answers = task.options ? task.options.map(text => mapToAnswerType(text, false)) : [];
+        const answers = task.options
+            ? task.options
+                .filter((option) => !task.correctAnswers.includes(option))
+                .map(text => mapToAnswerType(text, false))
+            : [];
         return {
-            id: task.id,
+            id: Date.now() + counter,
             text: task.question,
             answers: correctAnswers.concat(answers),
             image: task.image,
@@ -41,7 +48,7 @@ const EditQuizPage: FC = () => {
     }
 
     return (
-        <Navigate to={"/create-quiz"} replace={true} state={{ quiz: mapToQuizEdit(quiz) } as QuizNavigateEdit } />
+        <Navigate to={"/create-quiz"} replace={true} state={{ quiz: mapToQuizEdit(quiz) } as QuizNavigateEdit} />
     )
 }
 

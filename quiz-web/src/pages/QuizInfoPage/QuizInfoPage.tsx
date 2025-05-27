@@ -37,7 +37,8 @@ const QuizInfoPage: FC = () => {
                 ])
                 setQuiz(quizResult as Quiz);
                 setReviews(reviewsResult as Review[]);
-                setFrom(to + 1)
+                setFrom((prev) => prev + DEFAULT_PAGINATION_SIZE);
+                setTo((prev) => prev + DEFAULT_PAGINATION_SIZE);
             } catch (error) {
                 console.error("Failed to fetch data:", error);
             }
@@ -109,28 +110,28 @@ const QuizInfoPage: FC = () => {
                 <div className={styles.quizReviews}>
                     <h2>Reviews</h2>
                 </div>
-            </div>
-            <div className={styles.content_container}>
-                {isLoading ? <Loading /> :
-                    <div className={styles.reviewList}>
-                        {reviews.map((review) => (
-                            <div className={styles.review}>
-                                <div className={styles.userProfile} onClick={() => {
-                                    navigate(`/authorInfo/${review.creator.userId}`)
-                                }}>
-                                    <Avatar avatarUrl={review.creator.avatarUrl} />
-                                    <p className={styles.username}>{review.creator.username}</p>
+                <div className={styles.content_container}>
+                    {isLoading ? <Loading /> :
+                        <div className={styles.reviewList}>
+                            {reviews.map((review) => (
+                                <div className={styles.review}>
+                                    <div className={styles.userProfile} onClick={() => {
+                                        navigate(`/authorInfo/${review.creator.userId}`)
+                                    }}>
+                                        <Avatar avatarUrl={review.creator.avatarUrl} />
+                                        <p className={styles.username}>{review.creator.username}</p>
+                                    </div>
+                                    <p>{"⭐".repeat(review.rating)}</p>
+                                    {review.text !== null
+                                        ? <p className={styles.reviewText}>{review.text}</p>
+                                        : <></>
+                                    }
                                 </div>
-                                <p>{"⭐".repeat(review.rating)}</p>
-                                {review.text !== null
-                                    ? <p className={styles.reviewText}>{review.text}</p>
-                                    : <></>
-                                }
-                            </div>
-                        ))}
-                    </div>}
+                            ))}
+                        </div>}
+                </div>
+                <div ref={lastElement} className="last" />
             </div>
-            <div ref={lastElement} className="last" />
         </Wrapper>
     );
 };
