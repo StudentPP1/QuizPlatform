@@ -7,30 +7,36 @@ import {
   Param,
   Req,
   Query,
+  Inject,
 } from '@nestjs/common';
-import { Request } from 'express';
 
+import { REVIEW_SERVICE } from '@common/constants/review.constants';
+import { IReviewService } from '@common/contracts/services/review.service.contract';
 import { CreateReviewDto } from '@common/dto/create-review.dto';
+import { ReviewPaginationDto } from '@common/dto/pagination.dto';
+import { ReviewDto } from '@common/dto/review.dto';
 import { JwtGuard } from '@common/guards/jwt.guard';
-import { ReviewService } from '@review/review.service';
-import { User } from '@users/entities/user.entity';
+import { RequestWithUser } from '@common/interfaces/request-with-user.interface';
+import { Review } from '@review/entities/review.entity';
 
 @UseGuards(JwtGuard)
 @Controller('review')
 export class ReviewController {
-  constructor(private readonly reviewService: ReviewService) {}
+  constructor(
+    @Inject(REVIEW_SERVICE) private readonly reviewService: IReviewService,
+  ) {}
 
   @Post(':quizId')
-  async addReview(
+  addReview(
     @Param('quizId') quizId: string,
     @Body() createReviewDto: CreateReviewDto,
-    @Req() req: Request & { user?: User },
-  ) {
-    return this.reviewService.addReview(quizId, req.user, createReviewDto);
+    @Req() request: RequestWithUser,
+  ): Promise<Review> {
+    return this.reviewService.addReview(quizId, request.user, createReviewDto);
   }
 
   @Get()
-  async getReviewsForQuiz(@Query('quizId') quizId: string) {
-    return this.reviewService.getReviewsForQuiz(quizId);
+  getReviewsForQuiz(@Query() dto: ReviewPaginationDto): Promise<ReviewDto[]> {
+    return this.reviewService.getReviewsForQuiz(dto);
   }
 }

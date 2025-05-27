@@ -3,30 +3,37 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
-import { LRUStrategy } from '@common/cache/strategies/lru.strategy';
+import { LFUStrategy } from '@common/cache/strategies/lfu.strategy';
+import { ITokenService } from '@common/contracts/services/token.service.contract';
 import { Payload } from '@common/interfaces/payload.interface';
+import { Tokens } from '@common/interfaces/tokens.payload';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
-export class TokenService {
-  private cache = new MemoizationCache(new LRUStrategy(2));
+export class TokenService implements ITokenService {
+  private cache = new MemoizationCache(new LFUStrategy(15));
 
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
 
-  private createPayload(user: Partial<User>): Payload {
-    const payload = {
-      id: user.id,
-      username: user.username,
-      email: user.email,
+  async generateTokens(user: User): Promise<Tokens> {
+    const generator = this.getTokenGenerator(user);
+    return {
+      accessToken: (await generator.next()).value as string,
+      refreshToken: (await generator.next()).value as string,
     };
-
-    return payload;
   }
 
-  async *createTokenGenerator(
+  private getTokenGenerator(
+    user: Partial<User>,
+  ): AsyncGenerator<string, void, unknown> {
+    const key = user.id;
+    return this.cache.getOrCompute(key, () => this.createTokenGenerator(user));
+  }
+
+  private async *createTokenGenerator(
     user: Partial<User>,
   ): AsyncGenerator<string, void, unknown> {
     const payload = this.createPayload(user);
@@ -46,14 +53,17 @@ export class TokenService {
     }
   }
 
-  getTokenGenerator(
-    user: Partial<User>,
-  ): AsyncGenerator<string, void, unknown> {
-    const key = user.id;
-    return this.cache.getOrCompute(key, () => this.createTokenGenerator(user));
+  private createPayload(user: Partial<User>): Payload {
+    const payload = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+    };
+
+    return payload;
   }
 
-  removeTokenGenerator(userId: string) {
+  removeTokenGenerator(userId: string): void {
     this.cache.remove(userId);
   }
 }

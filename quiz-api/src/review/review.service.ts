@@ -1,12 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
-import { TimeStrategy } from '@common/cache/strategies/ttl.strategy';
+import { LRUStrategy } from '@common/cache/strategies/lru.strategy';
 import { QUIZ_REPOSITORY } from '@common/constants/quiz.constants';
 import { REVIEW_REPOSITORY } from '@common/constants/review.constants';
 import { IQuizRepository } from '@common/contracts/repositories/quiz.repository.contract';
 import { IReviewRepository } from '@common/contracts/repositories/review.repository.contract';
+import { IReviewService } from '@common/contracts/services/review.service.contract';
 import { CreateReviewDto } from '@common/dto/create-review.dto';
+import { ReviewPaginationDto } from '@common/dto/pagination.dto';
 import { ReviewDto } from '@common/dto/review.dto';
 import { EventEmitterService } from '@events/event-emitter.service';
 import { Quiz } from '@quiz/entities/quiz.entity';
@@ -14,8 +16,8 @@ import { Review } from '@review/entities/review.entity';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
-export class ReviewService {
-  private cache = new MemoizationCache(new TimeStrategy(120));
+export class ReviewService implements IReviewService {
+  private cache = new MemoizationCache(new LRUStrategy(15));
 
   constructor(
     @Inject(REVIEW_REPOSITORY)
@@ -29,7 +31,7 @@ export class ReviewService {
     quizId: string,
     user: User,
     createReviewDto: CreateReviewDto,
-  ) {
+  ): Promise<Review> {
     const quiz = await this.quizRepository.findOneByIdWithRelations(quizId, [
       'creator',
     ]);
@@ -40,10 +42,7 @@ export class ReviewService {
       quiz.creator.id,
     );
 
-    const updatedReviews = await this.reviewRepository.findByQuizId(quizId);
-
-    if (this.cache.has(`reviews:${quizId}`))
-      this.cache.set(`reviews:${quizId}`, updatedReviews);
+    this.cache.deleteByPrefix(`reviews:${quizId}`);
 
     await Promise.all([
       this.reviewRepository.save(review),
@@ -82,10 +81,12 @@ export class ReviewService {
     await this.quizRepository.save(quiz);
   }
 
-  async getReviewsForQuiz(quizId: string): Promise<ReviewDto[]> {
+  async getReviewsForQuiz(dto: ReviewPaginationDto): Promise<ReviewDto[]> {
+    const { quizId, from, to } = dto;
+
     const reviews = await this.cache.getOrComputeAsync(
-      `reviews:${quizId}`,
-      () => this.reviewRepository.findByQuizId(quizId),
+      `reviews:${quizId}:${from}:${to}`,
+      () => this.reviewRepository.findByQuizId(quizId, from, to),
     );
 
     return reviews.map((review: Review) => new ReviewDto(review));

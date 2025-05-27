@@ -1,5 +1,6 @@
 import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
 import { CreateUserDto } from '@common/dto/create-user.dto';
+import { BasePaginationDto } from '@common/dto/pagination.dto';
 import { ProfileDto } from '@common/dto/profile.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { AuthProvider } from '@common/enums/auth-provider.enum';
@@ -17,13 +18,11 @@ export interface IUsersService {
   getUserInfo(userId: string): Promise<ProfileDto>;
   getCreatedQuizzes(
     userId: string,
-    from: number,
-    to: number,
+    paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]>;
   getParticipatedQuizzes(
     userId: string,
-    from: number,
-    to: number,
+    paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]>;
   addQuizParticipation(user: User, quiz: Quiz): Promise<void>;
   getTopCreators(limit: number): Promise<ProfileDto[]>;

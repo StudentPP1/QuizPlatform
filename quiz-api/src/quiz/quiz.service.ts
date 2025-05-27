@@ -7,35 +7,39 @@ import {
 } from '@nestjs/common';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
-import { LFUStrategy } from '@common/cache/strategies/lfu.strategy';
+import { TimeStrategy } from '@common/cache/strategies/ttl.strategy';
 import {
   QUIZ_REPOSITORY,
   QUIZ_RESULT_REPOSITORY,
 } from '@common/constants/quiz.constants';
+import { TASK_SERVICE } from '@common/constants/task.constants';
 import { USERS_SERVICE } from '@common/constants/users.constants';
 import { IQuizResultRepository } from '@common/contracts/repositories/quiz-result.repository.contract';
 import { IQuizRepository } from '@common/contracts/repositories/quiz.repository.contract';
 import { IQuizService } from '@common/contracts/services/quiz.service.contract';
+import { ITaskService } from '@common/contracts/services/task.service.contract';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
 import { CreateQuizDto } from '@common/dto/create-quiz.dto';
 import { FullQuizDto } from '@common/dto/full-quiz.dto';
+import {
+  BasePaginationDto,
+  QuizPaginationDto,
+} from '@common/dto/pagination.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
-import { SaveQuizResultDto } from '@common/dto/save-quiz-result.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
 import { Quiz } from '@quiz/entities/quiz.entity';
-import { TaskService } from '@task/task.service';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
 export class QuizService implements IQuizService {
-  private cache = new MemoizationCache(new LFUStrategy(3));
+  private cache = new MemoizationCache(new TimeStrategy(15 * 60 * 1000));
 
   constructor(
     @Inject(QUIZ_REPOSITORY)
     private readonly quizRepository: IQuizRepository,
     @Inject(QUIZ_RESULT_REPOSITORY)
     private readonly quizResultRepository: IQuizResultRepository,
-    private readonly taskService: TaskService,
+    @Inject(TASK_SERVICE) private readonly taskService: ITaskService,
     @Inject(forwardRef(() => USERS_SERVICE))
     private readonly usersService: IUsersService,
   ) {}
@@ -44,7 +48,7 @@ export class QuizService implements IQuizService {
     createQuizDto: CreateQuizDto,
     user: User,
     files: Express.Multer.File[],
-  ) {
+  ): Promise<object> {
     createQuizDto.tasks = this.attachImagesToTasks(createQuizDto.tasks, files);
     const quiz = this.quizRepository.create(createQuizDto, user);
     await this.quizRepository.save(quiz);
@@ -62,7 +66,7 @@ export class QuizService implements IQuizService {
     dto: UpdateQuizDto,
     user: User,
     files: Express.Multer.File[],
-  ) {
+  ): Promise<object> {
     dto.tasks = this.attachImagesToTasks(dto.tasks, files);
     const quiz = await this.quizRepository.findOneByIdWithRelations(quizId, [
       'creator',
@@ -107,7 +111,7 @@ export class QuizService implements IQuizService {
     return tasks;
   }
 
-  async deleteQuiz(id: string, user: User) {
+  async deleteQuiz(id: string, user: User): Promise<object> {
     const quiz = await this.quizRepository.findOneByIdWithRelations(id, [
       'creator',
       'tasks',
@@ -130,11 +134,7 @@ export class QuizService implements IQuizService {
     return { message: 'Quiz deleted successfully' };
   }
 
-  async saveResult(
-    quizId: string,
-    userId: string,
-    saveQuizResultDto: SaveQuizResultDto,
-  ): Promise<object> {
+  async saveResult(quizId: string, userId: string): Promise<object> {
     const user = await this.usersService.getUserById(userId);
     const quiz = await this.quizRepository.findOneByIdWithRelations(quizId, [
       'participants',
@@ -144,25 +144,13 @@ export class QuizService implements IQuizService {
       throw new NotFoundException('Quiz not found');
     }
 
-    const exestingResult = await this.quizResultRepository.findByQuizAndUserId(
+    const existingResult = await this.quizResultRepository.findByQuizAndUserId(
       quizId,
       userId,
     );
 
-    if (exestingResult) {
-      const newResult = this.quizResultRepository.updateResult(
-        exestingResult,
-        saveQuizResultDto,
-      );
-
-      await this.quizResultRepository.save(newResult);
-    } else {
-      const quizResult = this.quizResultRepository.create(
-        saveQuizResultDto,
-        user,
-        quiz,
-      );
-
+    if (!existingResult) {
+      const quizResult = this.quizResultRepository.create(user, quiz);
       quiz.participants.push(user);
 
       await Promise.all([
@@ -177,7 +165,7 @@ export class QuizService implements IQuizService {
     };
   }
 
-  async getQuiz(id: string) {
+  async getQuiz(id: string): Promise<FullQuizDto> {
     const quiz = await this.cache.getOrComputeAsync(`quiz:${id}`, () =>
       this.quizRepository.findOneByIdWithRelations(id, [
         'creator',
@@ -191,12 +179,14 @@ export class QuizService implements IQuizService {
     return new FullQuizDto(quiz);
   }
 
-  async searchQuizzesByName(name: string) {
-    const quizzes = await this.quizRepository.findByName(name);
+  async searchQuizzesByName(dto: QuizPaginationDto): Promise<QuizPreviewDto[]> {
+    const { name, from, to } = dto;
+
+    const quizzes = await this.quizRepository.findByName(name, from, to);
     return quizzes.map((quiz) => new QuizPreviewDto(quiz));
   }
 
-  async getTopQuizzes(limit: number) {
+  async getTopQuizzes(limit: number): Promise<QuizPreviewDto[]> {
     const key = `top-quizzes:${limit}`;
     const quizzes = await this.cache.getOrComputeAsync(key, () =>
       this.quizRepository.findTopQuizzes(limit),
@@ -205,7 +195,12 @@ export class QuizService implements IQuizService {
     return quizzes.map((quiz: Quiz) => new QuizPreviewDto(quiz));
   }
 
-  async getCreatedQuizzes(userId: string, from: number, to: number) {
+  async getCreatedQuizzes(
+    userId: string,
+    paginationDto: BasePaginationDto,
+  ): Promise<QuizPreviewDto[]> {
+    const { from, to } = paginationDto;
+
     const quizzes = await this.quizRepository.findCreatedByUserId(
       userId,
       from,
@@ -215,7 +210,12 @@ export class QuizService implements IQuizService {
     return quizzes.map((quiz) => new QuizPreviewDto(quiz));
   }
 
-  async getParticipatedQuizzes(userId: string, from: number, to: number) {
+  async getParticipatedQuizzes(
+    userId: string,
+    paginationDto: BasePaginationDto,
+  ): Promise<QuizPreviewDto[]> {
+    const { from, to } = paginationDto;
+
     const quizzes = await this.quizRepository.findParticipatedByUserId(
       userId,
       from,

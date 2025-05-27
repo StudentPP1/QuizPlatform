@@ -8,14 +8,14 @@ export class MemoizationCache {
 
   constructor(private strategy: EvictionStrategy) {}
 
-  getOrCompute(key: string, computeFn: () => any): any {
+  getOrCompute<T>(key: string, computeFn: () => T): T {
     const entry = this.cache.get(key);
 
     if (entry) {
       if (this.strategy.isStale?.(entry)) {
         this.remove(key);
       } else {
-        entry.frequency += 1;
+        entry.usageCount += 1;
         entry.lastAccessed = Date.now();
         return entry.value;
       }
@@ -34,7 +34,7 @@ export class MemoizationCache {
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: error.message,
+          error: (error as Error).message,
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
         {
@@ -44,17 +44,17 @@ export class MemoizationCache {
     }
   }
 
-  async getOrComputeAsync(
+  async getOrComputeAsync<T>(
     key: string,
-    computeFn: () => Promise<any>,
-  ): Promise<any> {
+    computeFn: () => Promise<T>,
+  ): Promise<T> {
     const entry = this.cache.get(key);
 
     if (entry) {
       if (this.strategy.isStale?.(entry)) {
         this.remove(key);
       } else {
-        entry.frequency += 1;
+        entry.usageCount += 1;
         entry.lastAccessed = Date.now();
         return entry.value;
       }
@@ -73,7 +73,7 @@ export class MemoizationCache {
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: error.message,
+          error: (error as Error).message,
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
         {
@@ -96,9 +96,17 @@ export class MemoizationCache {
 
     this.cache.set(key, {
       value,
-      frequency: 1,
+      usageCount: 1,
       lastAccessed: Date.now(),
       createdAt: Date.now(),
     });
+  }
+
+  deleteByPrefix(prefix: string): void {
+    for (const key of this.cache.keys()) {
+      if (key.startsWith(prefix)) {
+        this.cache.delete(key);
+      }
+    }
   }
 }

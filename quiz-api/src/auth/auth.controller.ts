@@ -8,21 +8,23 @@ import {
   UseGuards,
   Req,
   UnauthorizedException,
+  Inject,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 
-import { AuthService } from '@auth/auth.service';
+import { AUTH_SERVICE } from '@common/constants/auth.constants';
+import { IAuthService } from '@common/contracts/services/auth.service.contract';
 import { CreateUserDto } from '@common/dto/create-user.dto';
 import { GoogleOAuthGuard } from '@common/guards/google-oauth.guard';
 import { JwtGuard } from '@common/guards/jwt.guard';
 import { LocalAuthGuard } from '@common/guards/local-auth.guard';
-import { User } from '@users/entities/user.entity';
+import { RequestWithUser } from '@common/interfaces/request-with-user.interface';
 
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly authService: AuthService,
+    @Inject(AUTH_SERVICE) private readonly authService: IAuthService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -43,7 +45,7 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   async login(
-    @Req() request: Request & { user?: User },
+    @Req() request: RequestWithUser,
     @Res() response: Response,
   ): Promise<void> {
     const { accessToken, refreshToken } = await this.authService.login(
@@ -57,20 +59,20 @@ export class AuthController {
 
   @Get('google')
   @UseGuards(GoogleOAuthGuard)
-  async googleAuth() {
+  googleAuth(): void {
     return;
   }
 
   @Get('google/redirect')
   @UseGuards(GoogleOAuthGuard)
   async googleAuthRedirect(
-    @Req() request: Request & { user?: User },
+    @Req() request: RequestWithUser,
     @Res() response: Response,
-  ) {
+  ): Promise<void> {
     if (!request.user) {
       throw new UnauthorizedException('Google authentication failed');
     }
-    const refreshToken = await this.authService.googleLogin(request.user);
+    const { refreshToken } = await this.authService.googleLogin(request.user);
 
     this.setRefreshTokenCookie(response, refreshToken);
 
@@ -80,11 +82,8 @@ export class AuthController {
   @Get('logout')
   @UseGuards(JwtGuard)
   @HttpCode(200)
-  async logout(
-    @Req() request: Request & { user?: User },
-    @Res() response: Response,
-  ) {
-    await this.authService.logout(request.user.id);
+  logout(@Req() request: RequestWithUser, @Res() response: Response): void {
+    this.authService.logout(request.user.id);
 
     response.clearCookie('refresh_token', {
       httpOnly: true,

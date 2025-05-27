@@ -5,6 +5,7 @@ import { TimeStrategy } from '@common/cache/strategies/ttl.strategy';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
 import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
 import { CreateUserDto } from '@common/dto/create-user.dto';
+import { BasePaginationDto } from '@common/dto/pagination.dto';
 import { ProfileDto } from '@common/dto/profile.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { AuthProvider } from '@common/enums/auth-provider.enum';
@@ -17,73 +18,73 @@ import { RealUsersService } from '@users/users.service';
 @Injectable()
 export class ProxyUsersService implements IUsersService {
   private queue = new Queue(10, 100);
-  private cache = new MemoizationCache(new TimeStrategy(3600));
+  private cache = new MemoizationCache(new TimeStrategy(15 * 60 * 1000));
 
   constructor(private readonly usersService: RealUsersService) {}
 
-  async getUserById(id: string): Promise<User | null> {
-    return await this.cache.getOrComputeAsync(`userId:${id}`, () =>
+  getUserById(id: string): Promise<User | null> {
+    return this.cache.getOrComputeAsync(`userId:${id}`, () =>
       this.queue.enqueue(() => this.usersService.getUserById(id)),
     );
   }
 
-  async getUserByEmail(email: string): Promise<User | null> {
-    return await this.cache.getOrComputeAsync(`email:${email}`, () =>
-      this.queue.enqueue(() => this.usersService.getUserByEmail(email)),
-    );
-  }
-
-  async createUser(
+  createUser(
     userDto: CreateUserDto | CreateGoogleUserDto,
     authProvider: AuthProvider,
   ): Promise<User> {
-    return await this.queue.enqueue(() =>
+    return this.queue.enqueue(() =>
       this.usersService.createUser(userDto, authProvider),
     );
   }
 
-  async getUserInfo(userId: string): Promise<ProfileDto> {
+  getUserByEmail(email: string): Promise<User | null> {
+    return this.cache.getOrComputeAsync(`email:${email}`, () =>
+      this.queue.enqueue(() => this.usersService.getUserByEmail(email)),
+    );
+  }
+
+  getUserInfo(userId: string): Promise<ProfileDto> {
     const key = `userId-info:${userId}`;
 
-    return await this.cache.getOrComputeAsync(key, () =>
+    return this.cache.getOrComputeAsync(key, () =>
       this.queue.enqueue(() => this.usersService.getUserInfo(userId)),
     );
   }
 
-  async getCreatedQuizzes(
+  getCreatedQuizzes(
     userId: string,
-    from: number,
-    to: number,
+    paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]> {
-    return await this.queue.enqueue(() =>
-      this.usersService.getCreatedQuizzes(userId, from, to),
+    return this.queue.enqueue(() =>
+      this.usersService.getCreatedQuizzes(userId, paginationDto),
     );
   }
 
   async getParticipatedQuizzes(
     userId: string,
-    from: number,
-    to: number,
+    paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]> {
-    return await this.queue.enqueue(() =>
-      this.usersService.getParticipatedQuizzes(userId, from, to),
+    return this.queue.enqueue(() =>
+      this.usersService.getParticipatedQuizzes(userId, paginationDto),
     );
   }
 
   async addQuizParticipation(user: User, quiz: Quiz): Promise<void> {
-    return await this.queue.enqueue(() =>
+    await this.queue.enqueue(() =>
       this.usersService.addQuizParticipation(user, quiz),
     );
   }
 
-  async getTopCreators(limit: number) {
+  async getTopCreators(limit: number): Promise<ProfileDto[]> {
     const key = `top-creators:${limit}`;
-    return await this.cache.getOrComputeAsync(key, () =>
+    return this.cache.getOrComputeAsync(key, () =>
       this.queue.enqueue(() => this.usersService.getTopCreators(limit)),
     );
   }
 
   async updateAuthorRating(options: UpdateAuthorRatingOptions): Promise<void> {
-    this.queue.enqueue(() => this.usersService.updateAuthorRating(options));
+    await this.queue.enqueue(() =>
+      this.usersService.updateAuthorRating(options),
+    );
   }
 }

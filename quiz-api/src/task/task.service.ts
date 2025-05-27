@@ -5,26 +5,33 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { TASK_REPOSITORY } from '@common/constants/task.constants';
 import { ITaskRepository } from '@common/contracts/repositories/task.repository.contract';
+import { ITaskService } from '@common/contracts/services/task.service.contract';
 import { CreateTaskDto } from '@common/dto/create-task.dto';
 import { UpdateTaskDto } from '@common/dto/update-task.dto';
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { Task } from '@task/entities/task.entity';
 
 @Injectable()
-export class TaskService {
+export class TaskService implements ITaskService {
   constructor(
     @Inject(TASK_REPOSITORY)
     private readonly taskRepository: ITaskRepository,
   ) {}
 
-  async createTasks(createTaskDtos: CreateTaskDto[], quiz: Quiz) {
+  async createTasks(
+    createTaskDtos: CreateTaskDto[],
+    quiz: Quiz,
+  ): Promise<void> {
     for (const taskDto of createTaskDtos) {
       const task = this.taskRepository.create(taskDto, quiz);
       await this.taskRepository.save(task);
     }
   }
 
-  async updateTasks(quiz: Quiz, updateTaskDtos: UpdateTaskDto[]) {
+  async updateTasks(
+    quiz: Quiz,
+    updateTaskDtos: UpdateTaskDto[],
+  ): Promise<void> {
     const existingTasks = await this.taskRepository.findByQuizId(quiz.id);
 
     for (let i = 0; i < updateTaskDtos.length; i++) {
@@ -45,7 +52,7 @@ export class TaskService {
     }
   }
 
-  async deleteTasks(tasks: Task[]) {
+  async deleteTasks(tasks: Task[]): Promise<void> {
     const tasksToDelete = tasks
       .filter((task) => task.image)
       .map(async (task) => {
@@ -53,8 +60,11 @@ export class TaskService {
         try {
           await fs.unlink(imagePath);
           console.log(`Deleted: ${imagePath}`);
-        } catch (err) {
-          console.error(`Failed to delete image: ${imagePath}`, err.message);
+        } catch (error) {
+          console.error(
+            `Failed to delete image: ${imagePath}`,
+            (error as Error).message,
+          );
         }
       });
 

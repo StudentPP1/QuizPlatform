@@ -2,8 +2,11 @@ import { Controller, Get, Inject, Query, Req, UseGuards } from '@nestjs/common';
 
 import { USERS_SERVICE } from '@common/constants/users.constants';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
+import { BasePaginationDto } from '@common/dto/pagination.dto';
+import { ProfileDto } from '@common/dto/profile.dto';
+import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { JwtGuard } from '@common/guards/jwt.guard';
-import { User } from '@users/entities/user.entity';
+import { RequestWithUser } from '@common/interfaces/request-with-user.interface';
 
 @UseGuards(JwtGuard)
 @Controller('users')
@@ -13,33 +16,34 @@ export class UsersController {
   ) {}
 
   @Get('/profile')
-  async getUserInfo(
+  getUserInfo(
     @Query('id') userId: string | undefined,
-    @Req() req: Request & { user?: User },
-  ) {
-    return this.usersService.getUserInfo(userId || req.user.id);
+    @Req() request: RequestWithUser,
+  ): Promise<ProfileDto> {
+    return this.usersService.getUserInfo(userId || request.user.id);
   }
 
   @Get('created')
-  async getCreatedQuizzes(
-    @Query('userId') userId: string,
-    @Query('from') from: number,
-    @Query('to') to: number,
-  ) {
-    return this.usersService.getCreatedQuizzes(userId, from, to);
+  getCreatedQuizzes(
+    @Req() request: RequestWithUser,
+    @Query() paginationDto: BasePaginationDto,
+  ): Promise<QuizPreviewDto[]> {
+    return this.usersService.getCreatedQuizzes(request.user.id, paginationDto);
   }
 
   @Get('participated')
-  async getParticipatedQuizzes(
-    @Query('from') from: number,
-    @Query('to') to: number,
-    @Req() req: Request & { user?: User },
-  ) {
-    return this.usersService.getParticipatedQuizzes(req.user.id, from, to);
+  getParticipatedQuizzes(
+    @Req() request: RequestWithUser,
+    @Query() paginationDto: BasePaginationDto,
+  ): Promise<QuizPreviewDto[]> {
+    return this.usersService.getParticipatedQuizzes(
+      request.user.id,
+      paginationDto,
+    );
   }
 
   @Get('top-creators')
-  async getTopCreators(@Query('limit') limit: number = 3) {
+  getTopCreators(@Query('limit') limit: number = 3): Promise<ProfileDto[]> {
     return this.usersService.getTopCreators(limit);
   }
 }

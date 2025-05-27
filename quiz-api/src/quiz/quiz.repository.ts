@@ -33,10 +33,12 @@ export class QuizRepository implements IQuizRepository {
     await this.repository.remove(quiz);
   }
 
-  findByName(name: string): Promise<Quiz[]> {
+  findByName(name: string, from: number, to: number): Promise<Quiz[]> {
     return this.repository.find({
       where: { title: ILike(`%${name}%`) },
       relations: ['tasks', 'creator', 'creator.createdQuizzes'],
+      skip: from - 1,
+      take: to - from,
     });
   }
 

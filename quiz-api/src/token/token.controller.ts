@@ -1,28 +1,27 @@
-import { Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Inject, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 
+import { TOKEN_SERVICE } from '@common/constants/token.constants';
+import { ITokenService } from '@common/contracts/services/token.service.contract';
 import { RefreshTokenGuard } from '@common/guards/refresh-token.guard';
-import { TokenService } from '@token/token.service';
-import { User } from '@users/entities/user.entity';
+import { RequestWithUser } from '@common/interfaces/request-with-user.interface';
 
 @Controller('token')
 export class TokenController {
   constructor(
-    private readonly tokenService: TokenService,
+    @Inject(TOKEN_SERVICE) private readonly tokenService: ITokenService,
     private readonly configService: ConfigService,
   ) {}
 
   @Post('update')
   @UseGuards(RefreshTokenGuard)
   async updateTokens(
-    @Req() request: Request & { decoded?: User },
+    @Req() request: RequestWithUser,
     @Res() response: Response,
-  ) {
-    const generator = this.tokenService.getTokenGenerator(request.user);
-
-    const accessToken = (await generator.next()).value;
-    const refreshToken = (await generator.next()).value;
+  ): Promise<void> {
+    const { accessToken, refreshToken } =
+      await this.tokenService.generateTokens(request.user);
 
     response.cookie('refresh_token', refreshToken, {
       httpOnly: true,

@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
 import { IQuizResultRepository } from '@common/contracts/repositories/quiz-result.repository.contract';
-import { SaveQuizResultDto } from '@common/dto/save-quiz-result.dto';
 import { QuizResult } from '@quiz/entities/quiz-result.entity';
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { User } from '@users/entities/user.entity';
@@ -15,11 +14,10 @@ export class QuizResultRepository implements IQuizResultRepository {
     this.repository = this.dataSource.getRepository(QuizResult);
   }
 
-  create(dto: SaveQuizResultDto, user: User, quiz: Quiz): QuizResult {
+  create(user: User, quiz: Quiz): QuizResult {
     const quizResult = this.repository.create({
       user,
       quiz,
-      ...dto,
     });
 
     return quizResult;
@@ -36,9 +34,5 @@ export class QuizResultRepository implements IQuizResultRepository {
     return this.repository.findOne({
       where: { quiz: { id: quizId }, user: { id: userId } },
     });
-  }
-
-  updateResult(quizResult: QuizResult, dto: SaveQuizResultDto): QuizResult {
-    return this.repository.merge(quizResult, dto);
   }
 }
