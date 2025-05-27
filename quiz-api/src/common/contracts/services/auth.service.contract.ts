@@ -5,9 +5,9 @@ import { User } from '@users/entities/user.entity';
 
 export interface IAuthService {
   signUp(createUserDto: CreateUserDto): Promise<Tokens>;
-  validateUser(email: string, password: string): Promise<User>;
   login(user: User): Promise<Tokens>;
   googleLogin(user: User): Promise<Tokens>;
+  validateUser(email: string, password: string): Promise<User>;
   validateGoogleUser(data: CreateGoogleUserDto): Promise<User>;
   logout(userId: string): void;
 }

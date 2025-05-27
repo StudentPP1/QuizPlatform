@@ -22,13 +22,6 @@ export class AuthService implements IAuthService {
     @Inject(TOKEN_SERVICE) private readonly tokenService: ITokenService,
   ) {}
 
-  private async hashPassword(password: string): Promise<string> {
-    const saltRound = 10;
-    const hashedPassword = await hash(password, saltRound);
-
-    return hashedPassword;
-  }
-
   async signUp(createUserDto: CreateUserDto): Promise<Tokens> {
     const { username, email, password } = createUserDto;
     const hashedPassword = await this.hashPassword(password);
@@ -49,6 +42,21 @@ export class AuthService implements IAuthService {
     return this.tokenService.generateTokens(user);
   }
 
+  private async hashPassword(password: string): Promise<string> {
+    const saltRound = 10;
+    const hashedPassword = await hash(password, saltRound);
+
+    return hashedPassword;
+  }
+
+  login(user: User): Promise<Tokens> {
+    return this.tokenService.generateTokens(user);
+  }
+
+  googleLogin(user: User): Promise<Tokens> {
+    return this.login(user);
+  }
+
   async validateUser(email: string, password: string): Promise<User> {
     const user = await this.usersService.getUserByEmail(email);
 
@@ -58,14 +66,6 @@ export class AuthService implements IAuthService {
 
     const { password: _, ...result } = user;
     return result;
-  }
-
-  login(user: User): Promise<Tokens> {
-    return this.tokenService.generateTokens(user);
-  }
-
-  googleLogin(user: User): Promise<Tokens> {
-    return this.login(user);
   }
 
   async validateGoogleUser(data: CreateGoogleUserDto): Promise<User> {
