@@ -3,8 +3,10 @@ import { forwardRef, Module } from '@nestjs/common';
 import {
   USERS_SERVICE,
   USERS_REPOSITORY,
+  BASE_USERS_SERVICE,
 } from '@common/constants/users.constants';
 import { QuizModule } from '@quiz/quiz.module';
+import { LoggingUsersDecorator } from '@users/logging-users.decorator';
 import { ProxyUsersService } from '@users/users-proxy.service';
 import { UsersRepository } from '@users/users-repository';
 import { UsersController } from '@users/users.controller';
@@ -14,10 +16,17 @@ import { RealUsersService } from '@users/users.service';
   imports: [forwardRef(() => QuizModule)],
   controllers: [UsersController],
   providers: [
-    RealUsersService,
+    {
+      provide: BASE_USERS_SERVICE,
+      useClass: RealUsersService,
+    },
     {
       provide: USERS_SERVICE,
-      useClass: ProxyUsersService,
+      useFactory: (realService: RealUsersService) => {
+        const proxy = new ProxyUsersService(realService);
+        return new LoggingUsersDecorator(proxy);
+      },
+      inject: [BASE_USERS_SERVICE],
     },
     {
       provide: USERS_REPOSITORY,
