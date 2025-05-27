@@ -13,7 +13,9 @@ import { IQuizService } from '@common/contracts/services/quiz.service.contract';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
 import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
 import { CreateUserDto } from '@common/dto/create-user.dto';
+import { BasePaginationDto } from '@common/dto/pagination.dto';
 import { ProfileDto } from '@common/dto/profile.dto';
+import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { AuthProvider } from '@common/enums/auth-provider.enum';
 import { UpdateAuthorRatingOptions } from '@common/interfaces/update-author-rating-options.interface';
 import { Quiz } from '@quiz/entities/quiz.entity';
@@ -28,12 +30,8 @@ export class RealUsersService implements IUsersService {
     private readonly quizService: IQuizService,
   ) {}
 
-  async getUserById(id: string): Promise<User | null> {
+  getUserById(id: string): Promise<User | null> {
     return this.usersRepository.findOneById(id);
-  }
-
-  async getUserByEmail(email: string): Promise<User | null> {
-    return this.usersRepository.findOneByEmail(email);
   }
 
   async createUser(
@@ -51,18 +49,28 @@ export class RealUsersService implements IUsersService {
     return user;
   }
 
+  getUserByEmail(email: string): Promise<User | null> {
+    return this.usersRepository.findOneByEmail(email);
+  }
+
   async getUserInfo(userId: string): Promise<ProfileDto> {
     const user = await this.usersRepository.findOneById(userId);
     if (!user) throw new NotFoundException('User not found');
     return new ProfileDto(user);
   }
 
-  async getCreatedQuizzes(userId: string, from: number, to: number) {
-    return this.quizService.getCreatedQuizzes(userId, from, to);
+  getCreatedQuizzes(
+    userId: string,
+    paginationDto: BasePaginationDto,
+  ): Promise<QuizPreviewDto[]> {
+    return this.quizService.getCreatedQuizzes(userId, paginationDto);
   }
 
-  async getParticipatedQuizzes(userId: string, from: number, to: number) {
-    return this.quizService.getParticipatedQuizzes(userId, from, to);
+  getParticipatedQuizzes(
+    userId: string,
+    paginationDto: BasePaginationDto,
+  ): Promise<QuizPreviewDto[]> {
+    return this.quizService.getParticipatedQuizzes(userId, paginationDto);
   }
 
   async addQuizParticipation(user: User, quiz: Quiz): Promise<void> {
@@ -70,12 +78,12 @@ export class RealUsersService implements IUsersService {
     await this.usersRepository.save(user);
   }
 
-  async getTopCreators(limit: number) {
+  async getTopCreators(limit: number): Promise<ProfileDto[]> {
     const users = await this.usersRepository.findTopCreators(limit);
     return users.map((user) => new ProfileDto(user));
   }
 
-  async updateAuthorRating(options: UpdateAuthorRatingOptions) {
+  async updateAuthorRating(options: UpdateAuthorRatingOptions): Promise<void> {
     const user = await this.usersRepository.findOneById(options.userId);
     user.rating = Math.round(options.newRating);
     await this.usersRepository.save(user);

@@ -5,6 +5,7 @@ import { TimeStrategy } from '@common/cache/strategies/ttl.strategy';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
 import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
 import { CreateUserDto } from '@common/dto/create-user.dto';
+import { BasePaginationDto } from '@common/dto/pagination.dto';
 import { ProfileDto } from '@common/dto/profile.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { AuthProvider } from '@common/enums/auth-provider.enum';
@@ -27,18 +28,18 @@ export class ProxyUsersService implements IUsersService {
     );
   }
 
-  getUserByEmail(email: string): Promise<User | null> {
-    return this.cache.getOrComputeAsync(`email:${email}`, () =>
-      this.queue.enqueue(() => this.usersService.getUserByEmail(email)),
-    );
-  }
-
   createUser(
     userDto: CreateUserDto | CreateGoogleUserDto,
     authProvider: AuthProvider,
   ): Promise<User> {
     return this.queue.enqueue(() =>
       this.usersService.createUser(userDto, authProvider),
+    );
+  }
+
+  getUserByEmail(email: string): Promise<User | null> {
+    return this.cache.getOrComputeAsync(`email:${email}`, () =>
+      this.queue.enqueue(() => this.usersService.getUserByEmail(email)),
     );
   }
 
@@ -52,21 +53,19 @@ export class ProxyUsersService implements IUsersService {
 
   getCreatedQuizzes(
     userId: string,
-    from: number,
-    to: number,
+    paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]> {
     return this.queue.enqueue(() =>
-      this.usersService.getCreatedQuizzes(userId, from, to),
+      this.usersService.getCreatedQuizzes(userId, paginationDto),
     );
   }
 
   async getParticipatedQuizzes(
     userId: string,
-    from: number,
-    to: number,
+    paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]> {
     return this.queue.enqueue(() =>
-      this.usersService.getParticipatedQuizzes(userId, from, to),
+      this.usersService.getParticipatedQuizzes(userId, paginationDto),
     );
   }
 
