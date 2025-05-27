@@ -6,7 +6,7 @@ import { Quiz } from '@quiz/entities/quiz.entity';
 import { Task } from '@task/entities/task.entity';
 
 export class LoggingTaskDecorator implements ITaskService {
-  private readonly logger = baseLogger.child({ service: 'Auth Service' });
+  private readonly logger = baseLogger.child({ service: 'Task Service' });
 
   constructor(private readonly wrapped: ITaskService) {}
 
