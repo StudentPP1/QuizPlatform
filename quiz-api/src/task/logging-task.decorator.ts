@@ -1,0 +1,54 @@
+import { ITaskService } from '@common/contracts/services/task.service.contract';
+import { baseLogger } from '@common/logging/logger';
+import { CreateTaskDto } from '@src/common/dto/create-task.dto';
+import { UpdateTaskDto } from '@src/common/dto/update-task.dto';
+import { Quiz } from '@src/quiz/entities/quiz.entity';
+
+import { Task } from './entities/task.entity';
+
+export class LoggingTaskDecorator implements ITaskService {
+  private readonly logger = baseLogger.child({ service: 'Auth Service' });
+
+  constructor(private readonly wrapped: ITaskService) {}
+
+  private async logMethod<T>(
+    methodName: string,
+    args: unknown[],
+    fn: () => Promise<T>,
+  ): Promise<T> {
+    this.logger.info(
+      `Called ${methodName}(${args.map((arg) => JSON.stringify(arg)).join(', ')})`,
+    );
+    const start = Date.now();
+
+    try {
+      const result = await fn();
+      const duration = Date.now() - start;
+      this.logger.info(`Method ${methodName} completed in ${duration}ms`);
+      return result;
+    } catch (error) {
+      this.logger.error(
+        `Method ${methodName} failed: ${error instanceof Error ? error.message : error}`,
+      );
+      throw error;
+    }
+  }
+
+  createTasks(createTaskDtos: CreateTaskDto[], quiz: Quiz): Promise<void> {
+    return this.logMethod('createTasks', [createTaskDtos, quiz], () =>
+      this.wrapped.createTasks(createTaskDtos, quiz),
+    );
+  }
+
+  updateTasks(quiz: Quiz, updateTaskDtos: UpdateTaskDto[]): Promise<void> {
+    return this.logMethod('updateTasks', [quiz, updateTaskDtos], () =>
+      this.wrapped.updateTasks(quiz, updateTaskDtos),
+    );
+  }
+
+  deleteTasks(tasks: Task[]): Promise<void> {
+    return this.logMethod('deleteTasks', [tasks], () =>
+      this.wrapped.deleteTasks(tasks),
+    );
+  }
+}
