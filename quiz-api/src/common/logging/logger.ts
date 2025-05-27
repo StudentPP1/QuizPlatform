@@ -4,7 +4,7 @@ const infoOnlyFilter = winston.format((info) => {
   return info.level === 'info' ? info : false;
 });
 
-const logger = winston.createLogger({
+export const baseLogger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
     winston.format.json(),
@@ -24,5 +24,3 @@ const logger = winston.createLogger({
     }),
   ],
 });
-
-export const quizServiceLogger = logger.child({ service: 'Quiz service' });
