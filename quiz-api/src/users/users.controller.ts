@@ -15,7 +15,7 @@ export class UsersController {
     @Inject(USERS_SERVICE) private readonly usersService: IUsersService,
   ) {}
 
-  @Get('/profile')
+  @Get('profile')
   getUserInfo(
     @Query('id') userId: string | undefined,
     @Req() request: RequestWithUser,
@@ -26,9 +26,13 @@ export class UsersController {
   @Get('created')
   getCreatedQuizzes(
     @Req() request: RequestWithUser,
+    @Query('userId') userId: string | undefined,
     @Query() paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]> {
-    return this.usersService.getCreatedQuizzes(request.user.id, paginationDto);
+    return this.usersService.getCreatedQuizzes(
+      userId || request.user.id,
+      paginationDto,
+    );
   }
 
   @Get('participated')
