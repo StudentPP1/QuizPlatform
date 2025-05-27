@@ -6,6 +6,7 @@ import { QUIZ_REPOSITORY } from '@common/constants/quiz.constants';
 import { REVIEW_REPOSITORY } from '@common/constants/review.constants';
 import { IQuizRepository } from '@common/contracts/repositories/quiz.repository.contract';
 import { IReviewRepository } from '@common/contracts/repositories/review.repository.contract';
+import { IReviewService } from '@common/contracts/services/review.service.contract';
 import { CreateReviewDto } from '@common/dto/create-review.dto';
 import { ReviewPaginationDto } from '@common/dto/pagination.dto';
 import { ReviewDto } from '@common/dto/review.dto';
@@ -15,7 +16,7 @@ import { Review } from '@review/entities/review.entity';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
-export class ReviewService {
+export class ReviewService implements IReviewService {
   private cache = new MemoizationCache(new LRUStrategy(15));
 
   constructor(

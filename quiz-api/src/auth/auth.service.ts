@@ -1,7 +1,10 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 
+import { TOKEN_SERVICE } from '@common/constants/token.constants';
 import { USERS_SERVICE } from '@common/constants/users.constants';
+import { IAuthService } from '@common/contracts/services/auth.service.contract';
+import { ITokenService } from '@common/contracts/services/token.service.contract';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
 import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
 import { CreateUserDto } from '@common/dto/create-user.dto';
@@ -9,15 +12,14 @@ import { AuthProvider } from '@common/enums/auth-provider.enum';
 import { SendMailOptions } from '@common/interfaces/send-mail-options.interface';
 import { Tokens } from '@common/interfaces/tokens.payload';
 import { EventEmitterService } from '@events/event-emitter.service';
-import { TokenService } from '@token/token.service';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements IAuthService {
   constructor(
     private readonly emitter: EventEmitterService,
     @Inject(USERS_SERVICE) private readonly usersService: IUsersService,
-    private readonly tokenService: TokenService,
+    @Inject(TOKEN_SERVICE) private readonly tokenService: ITokenService,
   ) {}
 
   private async hashPassword(password: string): Promise<string> {

@@ -1,15 +1,16 @@
-import { Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Inject, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 
+import { TOKEN_SERVICE } from '@common/constants/token.constants';
+import { ITokenService } from '@common/contracts/services/token.service.contract';
 import { RefreshTokenGuard } from '@common/guards/refresh-token.guard';
 import { RequestWithUser } from '@common/interfaces/request-with-user.interface';
-import { TokenService } from '@token/token.service';
 
 @Controller('token')
 export class TokenController {
   constructor(
-    private readonly tokenService: TokenService,
+    @Inject(TOKEN_SERVICE) private readonly tokenService: ITokenService,
     private readonly configService: ConfigService,
   ) {}
 

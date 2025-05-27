@@ -12,10 +12,12 @@ import {
   QUIZ_REPOSITORY,
   QUIZ_RESULT_REPOSITORY,
 } from '@common/constants/quiz.constants';
+import { TASK_SERVICE } from '@common/constants/task.constants';
 import { USERS_SERVICE } from '@common/constants/users.constants';
 import { IQuizResultRepository } from '@common/contracts/repositories/quiz-result.repository.contract';
 import { IQuizRepository } from '@common/contracts/repositories/quiz.repository.contract';
 import { IQuizService } from '@common/contracts/services/quiz.service.contract';
+import { ITaskService } from '@common/contracts/services/task.service.contract';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
 import { CreateQuizDto } from '@common/dto/create-quiz.dto';
 import { FullQuizDto } from '@common/dto/full-quiz.dto';
@@ -26,7 +28,6 @@ import {
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
 import { Quiz } from '@quiz/entities/quiz.entity';
-import { TaskService } from '@task/task.service';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
@@ -38,7 +39,7 @@ export class QuizService implements IQuizService {
     private readonly quizRepository: IQuizRepository,
     @Inject(QUIZ_RESULT_REPOSITORY)
     private readonly quizResultRepository: IQuizResultRepository,
-    private readonly taskService: TaskService,
+    @Inject(TASK_SERVICE) private readonly taskService: ITaskService,
     @Inject(forwardRef(() => USERS_SERVICE))
     private readonly usersService: IUsersService,
   ) {}

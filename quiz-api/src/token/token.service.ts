@@ -4,12 +4,13 @@ import { JwtService } from '@nestjs/jwt';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
 import { LFUStrategy } from '@common/cache/strategies/lfu.strategy';
+import { ITokenService } from '@common/contracts/services/token.service.contract';
 import { Payload } from '@common/interfaces/payload.interface';
 import { Tokens } from '@common/interfaces/tokens.payload';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
-export class TokenService {
+export class TokenService implements ITokenService {
   private cache = new MemoizationCache(new LFUStrategy(15));
 
   constructor(

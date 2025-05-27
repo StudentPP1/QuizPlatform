@@ -5,13 +5,14 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { TASK_REPOSITORY } from '@common/constants/task.constants';
 import { ITaskRepository } from '@common/contracts/repositories/task.repository.contract';
+import { ITaskService } from '@common/contracts/services/task.service.contract';
 import { CreateTaskDto } from '@common/dto/create-task.dto';
 import { UpdateTaskDto } from '@common/dto/update-task.dto';
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { Task } from '@task/entities/task.entity';
 
 @Injectable()
-export class TaskService {
+export class TaskService implements ITaskService {
   constructor(
     @Inject(TASK_REPOSITORY)
     private readonly taskRepository: ITaskRepository,

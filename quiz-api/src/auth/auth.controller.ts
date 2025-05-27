@@ -8,11 +8,13 @@ import {
   UseGuards,
   Req,
   UnauthorizedException,
+  Inject,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 
-import { AuthService } from '@auth/auth.service';
+import { AUTH_SERVICE } from '@common/constants/auth.constants';
+import { IAuthService } from '@common/contracts/services/auth.service.contract';
 import { CreateUserDto } from '@common/dto/create-user.dto';
 import { GoogleOAuthGuard } from '@common/guards/google-oauth.guard';
 import { JwtGuard } from '@common/guards/jwt.guard';
@@ -22,7 +24,7 @@ import { RequestWithUser } from '@common/interfaces/request-with-user.interface'
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly authService: AuthService,
+    @Inject(AUTH_SERVICE) private readonly authService: IAuthService,
     private readonly configService: ConfigService,
   ) {}
 
