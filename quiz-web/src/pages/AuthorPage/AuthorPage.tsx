@@ -22,7 +22,7 @@ const AuthorPage: React.FC = () => {
         if (id != null) {
             UserService.getAuthor(id).then((result) => { setAuthor(result) })
         }
-    }, [])
+    }, [id])
 
     const { items: quizzes, isLoading } = usePaginatedData<QuizDTO>({
         fetchFunction: strategy.fetchQuizzes,
@@ -45,24 +45,24 @@ const AuthorPage: React.FC = () => {
                     </div>
                 </div>
                 <h3 className={styles.sectionTitle}>Quests</h3>
+                <div className={styles.content_container}>
+                    {isLoading
+                        ? <Loading />
+                        : <div className={styles.quests}>
+                            {quizzes.map((quiz) => (
+                                <div
+                                    onClick={() => navigate(`/quizInfo/${quiz.id}`)}
+                                    key={quiz.id} className={styles.quest}>
+                                    <h4 className={styles.questTitle}>{quiz.title}</h4>
+                                    <p className={styles.questInfo}>{quiz.numberOfTasks} questions</p>
+                                    <p className={styles.questInfo}>{"⭐".repeat(quiz.rating)}</p>
+                                </div>
+                            ))}
+                        </div>
+                    }
+                </div>
             </div>
-            <div className={styles.content_container}>
-                {isLoading
-                    ? <Loading />
-                    : <div className={styles.quests}>
-                        {quizzes.map((quiz) => (
-                            <div
-                                onClick={() => navigate(`/quizInfo/${quiz.id}`)}
-                                key={quiz.id} className={styles.quest}>
-                                <h4 className={styles.questTitle}>{quiz.title}</h4>
-                                <p className={styles.questInfo}>{quiz.numberOfTasks} questions</p>
-                                <p className={styles.questInfo}>{"⭐".repeat(quiz.rating)}</p>
-                            </div>
-                        ))}
-                    </div>
-                }
-            </div>
-            <div className={styles.content_container}></div>
+            <div ref={lastElement} className="last" />
         </Wrapper>
     );
 };

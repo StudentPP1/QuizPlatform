@@ -24,7 +24,8 @@ const SearchPage: FC = () => {
       if (text) {
         const data = await QuizService.search(from, to, text);
         setQuizzes(data);
-        setFrom(to + 1);
+        setFrom((prev) => prev + DEFAULT_PAGINATION_SIZE);
+        setTo((prev) => prev + DEFAULT_PAGINATION_SIZE);
       }
     };
 
