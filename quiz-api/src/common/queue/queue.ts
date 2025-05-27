@@ -28,7 +28,7 @@ export class Queue {
     });
   }
 
-  private async processQueue() {
+  private async processQueue(): Promise<void> {
     if (
       this.activeTasks >= this.maxConcurrentTasks ||
       this.queue.length === 0
@@ -54,7 +54,7 @@ export class Queue {
     }
   }
 
-  private delay(ms: number) {
+  private delay(ms: number): Promise<unknown> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
