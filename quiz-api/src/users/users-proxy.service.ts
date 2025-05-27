@@ -1,5 +1,3 @@
-import { Injectable } from '@nestjs/common';
-
 import { MemoizationCache } from '@common/cache/memoization-cache';
 import { TimeStrategy } from '@common/cache/strategies/ttl.strategy';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
@@ -15,7 +13,6 @@ import { Quiz } from '@quiz/entities/quiz.entity';
 import { User } from '@users/entities/user.entity';
 import { RealUsersService } from '@users/users.service';
 
-@Injectable()
 export class ProxyUsersService implements IUsersService {
   private queue = new Queue(10, 100);
   private cache = new MemoizationCache(new TimeStrategy(15 * 60 * 1000));
