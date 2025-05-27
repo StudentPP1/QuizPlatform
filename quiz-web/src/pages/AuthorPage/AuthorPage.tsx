@@ -29,18 +29,19 @@ const AuthorPage: React.FC = () => {
 
     useObserver(lastElement, isLoading, () => {
         setLoading(true);
-        // TODO: userId should be passed to the strategy
-        strategy.fetchQuizzes(from, to).then((data) => {
-            setQuizzes(prev => {
-                if (prev) {
-                    return [...prev, ...data];
-                } else {
-                    return data;
-                }
-            });
-            setFrom(prev => prev + SIZE);
-            setTo(prev => prev + SIZE);
-        }).finally(() => setLoading(false));
+        if (id != null) {
+            strategy.fetchQuizzes(from, to, id).then((data) => {
+                setQuizzes(prev => {
+                    if (prev) {
+                        return [...prev, ...data];
+                    } else {
+                        return data;
+                    }
+                });
+                setFrom(prev => prev + SIZE);
+                setTo(prev => prev + SIZE);
+            }).finally(() => setLoading(false));
+        }
     });
 
     return (

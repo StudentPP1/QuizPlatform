@@ -44,9 +44,10 @@ export class QuizService {
   }
 
   @log
-  static async getCreatedQuizzes(from: number, to: number): Promise<QuizDTO[]> {
+  static async getCreatedQuizzes(from: number, to: number, userId?: string): Promise<QuizDTO[]> {
+    const userIdQuery = userId ? `/${userId}` : ""
     return apiFetch<QuizDTO[]>(
-      `/api/users/created?from=${from}&to=${to}`,
+      `/api/users/created${userIdQuery}?from=${from}&to=${to}`,
       this.withAuth()
     );
   }
