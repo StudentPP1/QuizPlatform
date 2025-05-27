@@ -1,6 +1,10 @@
 import { IQuizService } from '@common/contracts/services/quiz.service.contract';
 import { CreateQuizDto } from '@common/dto/create-quiz.dto';
 import { FullQuizDto } from '@common/dto/full-quiz.dto';
+import {
+  BasePaginationDto,
+  QuizPaginationDto,
+} from '@common/dto/pagination.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { SaveQuizResultDto } from '@common/dto/save-quiz-result.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
@@ -76,13 +80,9 @@ export class LoggingQuizDecorator implements IQuizService {
     return this.logMethod('getQuiz', [id], () => this.wrapped.getQuiz(id));
   }
 
-  searchQuizzesByName(
-    name: string,
-    from: number,
-    to: number,
-  ): Promise<QuizPreviewDto[]> {
-    return this.logMethod('searchQuizzesByName', [name], () =>
-      this.wrapped.searchQuizzesByName(name, from, to),
+  searchQuizzesByName(dto: QuizPaginationDto): Promise<QuizPreviewDto[]> {
+    return this.logMethod('searchQuizzesByName', [dto], () =>
+      this.wrapped.searchQuizzesByName(dto),
     );
   }
 
@@ -94,21 +94,21 @@ export class LoggingQuizDecorator implements IQuizService {
 
   getCreatedQuizzes(
     userId: string,
-    from: number,
-    to: number,
+    paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]> {
-    return this.logMethod('getCreatedQuizzes', [userId, from, to], () =>
-      this.wrapped.getCreatedQuizzes(userId, from, to),
+    return this.logMethod('getCreatedQuizzes', [userId, paginationDto], () =>
+      this.wrapped.getCreatedQuizzes(userId, paginationDto),
     );
   }
 
   getParticipatedQuizzes(
     userId: string,
-    from: number,
-    to: number,
+    paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]> {
-    return this.logMethod('getParticipatedQuizzes', [userId, from, to], () =>
-      this.wrapped.getParticipatedQuizzes(userId, from, to),
+    return this.logMethod(
+      'getParticipatedQuizzes',
+      [userId, paginationDto],
+      () => this.wrapped.getParticipatedQuizzes(userId, paginationDto),
     );
   }
 }

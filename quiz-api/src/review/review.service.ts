@@ -7,6 +7,7 @@ import { REVIEW_REPOSITORY } from '@common/constants/review.constants';
 import { IQuizRepository } from '@common/contracts/repositories/quiz.repository.contract';
 import { IReviewRepository } from '@common/contracts/repositories/review.repository.contract';
 import { CreateReviewDto } from '@common/dto/create-review.dto';
+import { ReviewPaginationDto } from '@common/dto/pagination.dto';
 import { ReviewDto } from '@common/dto/review.dto';
 import { EventEmitterService } from '@events/event-emitter.service';
 import { Quiz } from '@quiz/entities/quiz.entity';
@@ -79,11 +80,9 @@ export class ReviewService {
     await this.quizRepository.save(quiz);
   }
 
-  async getReviewsForQuiz(
-    quizId: string,
-    from: number,
-    to: number,
-  ): Promise<ReviewDto[]> {
+  async getReviewsForQuiz(dto: ReviewPaginationDto): Promise<ReviewDto[]> {
+    const { quizId, from, to } = dto;
+
     const reviews = await this.cache.getOrComputeAsync(
       `reviews:${quizId}:${from}:${to}`,
       () => this.reviewRepository.findByQuizId(quizId, from, to),

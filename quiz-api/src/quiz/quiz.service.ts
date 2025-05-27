@@ -19,6 +19,10 @@ import { IQuizService } from '@common/contracts/services/quiz.service.contract';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
 import { CreateQuizDto } from '@common/dto/create-quiz.dto';
 import { FullQuizDto } from '@common/dto/full-quiz.dto';
+import {
+  BasePaginationDto,
+  QuizPaginationDto,
+} from '@common/dto/pagination.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { SaveQuizResultDto } from '@common/dto/save-quiz-result.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
@@ -191,11 +195,9 @@ export class QuizService implements IQuizService {
     return new FullQuizDto(quiz);
   }
 
-  async searchQuizzesByName(
-    name: string,
-    from: number,
-    to: number,
-  ): Promise<QuizPreviewDto[]> {
+  async searchQuizzesByName(dto: QuizPaginationDto): Promise<QuizPreviewDto[]> {
+    const { name, from, to } = dto;
+
     const quizzes = await this.quizRepository.findByName(name, from, to);
     return quizzes.map((quiz) => new QuizPreviewDto(quiz));
   }
@@ -211,9 +213,10 @@ export class QuizService implements IQuizService {
 
   async getCreatedQuizzes(
     userId: string,
-    from: number,
-    to: number,
+    paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]> {
+    const { from, to } = paginationDto;
+
     const quizzes = await this.quizRepository.findCreatedByUserId(
       userId,
       from,
@@ -225,9 +228,10 @@ export class QuizService implements IQuizService {
 
   async getParticipatedQuizzes(
     userId: string,
-    from: number,
-    to: number,
+    paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]> {
+    const { from, to } = paginationDto;
+
     const quizzes = await this.quizRepository.findParticipatedByUserId(
       userId,
       from,

@@ -1,15 +1,8 @@
-import {
-  Controller,
-  Get,
-  Inject,
-  ParseIntPipe,
-  Query,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Inject, Query, Req, UseGuards } from '@nestjs/common';
 
 import { USERS_SERVICE } from '@common/constants/users.constants';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
+import { BasePaginationDto } from '@common/dto/pagination.dto';
 import { ProfileDto } from '@common/dto/profile.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { JwtGuard } from '@common/guards/jwt.guard';
@@ -32,20 +25,21 @@ export class UsersController {
 
   @Get('created')
   getCreatedQuizzes(
-    @Query('userId') userId: string,
-    @Query('from', ParseIntPipe) from: number,
-    @Query('to', ParseIntPipe) to: number,
+    @Req() request: RequestWithUser,
+    @Query() paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]> {
-    return this.usersService.getCreatedQuizzes(userId, from, to);
+    return this.usersService.getCreatedQuizzes(request.user.id, paginationDto);
   }
 
   @Get('participated')
   getParticipatedQuizzes(
-    @Query('from', ParseIntPipe) from: number,
-    @Query('to', ParseIntPipe) to: number,
     @Req() request: RequestWithUser,
+    @Query() paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]> {
-    return this.usersService.getParticipatedQuizzes(request.user.id, from, to);
+    return this.usersService.getParticipatedQuizzes(
+      request.user.id,
+      paginationDto,
+    );
   }
 
   @Get('top-creators')

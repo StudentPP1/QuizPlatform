@@ -12,7 +12,6 @@ import {
   Inject,
   Put,
   Delete,
-  ParseIntPipe,
   BadRequestException,
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
@@ -23,6 +22,7 @@ import { QUIZ_SERVICE } from '@common/constants/quiz.constants';
 import { IQuizService } from '@common/contracts/services/quiz.service.contract';
 import { CreateQuizDto } from '@common/dto/create-quiz.dto';
 import { FullQuizDto } from '@common/dto/full-quiz.dto';
+import { QuizPaginationDto } from '@common/dto/pagination.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { SaveQuizResultDto } from '@common/dto/save-quiz-result.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
@@ -103,12 +103,8 @@ export class QuizController {
   }
 
   @Get('search')
-  searchQuizzes(
-    @Query('name') name: string,
-    @Query('from', ParseIntPipe) from: number,
-    @Query('to', ParseIntPipe) to: number,
-  ): Promise<QuizPreviewDto[]> {
-    return this.quizService.searchQuizzesByName(name, from, to);
+  searchQuizzes(@Query() dto: QuizPaginationDto): Promise<QuizPreviewDto[]> {
+    return this.quizService.searchQuizzesByName(dto);
   }
 
   @Get('top-rated')
