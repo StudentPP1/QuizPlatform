@@ -26,9 +26,16 @@ export class EventEmitterService
     super();
   }
 
-  private handleError(error: ErrorOptions): void {
-    console.error(`[${error.context}] ${error.message}`);
-    console.error(error.originalError);
+  onModuleInit() {
+    this.on(
+      'user.registered',
+      this.handleUserRegistered.bind(this) as (...args: any[]) => void,
+    );
+    this.on(
+      'user.rating_updated',
+      this.handleUserRatingUpdated.bind(this) as (...args: any[]) => void,
+    );
+    this.on('error', this.handleError.bind(this) as (...args: any[]) => void);
   }
 
   private async handleUserRegistered(options: SendMailOptions): Promise<void> {
@@ -57,16 +64,9 @@ export class EventEmitterService
     }
   }
 
-  onModuleInit() {
-    this.on(
-      'user.registered',
-      this.handleUserRegistered.bind(this) as (...args: any[]) => void,
-    );
-    this.on(
-      'user.rating_updated',
-      this.handleUserRatingUpdated.bind(this) as (...args: any[]) => void,
-    );
-    this.on('error', this.handleError.bind(this) as (...args: any[]) => void);
+  private handleError(error: ErrorOptions): void {
+    console.error(`[${error.context}] ${error.message}`);
+    console.error(error.originalError);
   }
 
   onModuleDestroy() {

@@ -17,14 +17,19 @@ export class TokenService {
     private readonly configService: ConfigService,
   ) {}
 
-  private createPayload(user: Partial<User>): Payload {
-    const payload = {
-      id: user.id,
-      username: user.username,
-      email: user.email,
+  async generateTokens(user: User): Promise<Tokens> {
+    const generator = this.getTokenGenerator(user);
+    return {
+      accessToken: (await generator.next()).value as string,
+      refreshToken: (await generator.next()).value as string,
     };
+  }
 
-    return payload;
+  private getTokenGenerator(
+    user: Partial<User>,
+  ): AsyncGenerator<string, void, unknown> {
+    const key = user.id;
+    return this.cache.getOrCompute(key, () => this.createTokenGenerator(user));
   }
 
   private async *createTokenGenerator(
@@ -47,19 +52,14 @@ export class TokenService {
     }
   }
 
-  async generateTokens(user: User): Promise<Tokens> {
-    const generator = this.getTokenGenerator(user);
-    return {
-      accessToken: (await generator.next()).value as string,
-      refreshToken: (await generator.next()).value as string,
+  private createPayload(user: Partial<User>): Payload {
+    const payload = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
     };
-  }
 
-  private getTokenGenerator(
-    user: Partial<User>,
-  ): AsyncGenerator<string, void, unknown> {
-    const key = user.id;
-    return this.cache.getOrCompute(key, () => this.createTokenGenerator(user));
+    return payload;
   }
 
   removeTokenGenerator(userId: string): void {
