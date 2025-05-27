@@ -7,11 +7,11 @@ import {
 } from '@common/dto/pagination.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
-import { quizServiceLogger } from '@common/logging/logger';
+import { baseLogger } from '@common/logging/logger';
 import { User } from '@users/entities/user.entity';
 
 export class LoggingQuizDecorator implements IQuizService {
-  private readonly logger = quizServiceLogger;
+  private readonly logger = baseLogger.child({ service: 'Quiz Service' });
 
   constructor(private readonly wrapped: IQuizService) {}
 
