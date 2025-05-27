@@ -1,10 +1,9 @@
 import { ITaskService } from '@common/contracts/services/task.service.contract';
+import { CreateTaskDto } from '@common/dto/create-task.dto';
+import { UpdateTaskDto } from '@common/dto/update-task.dto';
 import { baseLogger } from '@common/logging/logger';
-import { CreateTaskDto } from '@src/common/dto/create-task.dto';
-import { UpdateTaskDto } from '@src/common/dto/update-task.dto';
-import { Quiz } from '@src/quiz/entities/quiz.entity';
-
-import { Task } from './entities/task.entity';
+import { Quiz } from '@quiz/entities/quiz.entity';
+import { Task } from '@task/entities/task.entity';
 
 export class LoggingTaskDecorator implements ITaskService {
   private readonly logger = baseLogger.child({ service: 'Auth Service' });
