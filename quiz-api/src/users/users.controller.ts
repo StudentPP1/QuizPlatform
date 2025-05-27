@@ -2,7 +2,10 @@ import { Controller, Get, Inject, Query, Req, UseGuards } from '@nestjs/common';
 
 import { USERS_SERVICE } from '@common/constants/users.constants';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
-import { BasePaginationDto } from '@common/dto/pagination.dto';
+import {
+  BasePaginationDto,
+  UsersPaginationDto,
+} from '@common/dto/pagination.dto';
 import { ProfileDto } from '@common/dto/profile.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { JwtGuard } from '@common/guards/jwt.guard';
@@ -26,11 +29,10 @@ export class UsersController {
   @Get('created')
   getCreatedQuizzes(
     @Req() request: RequestWithUser,
-    @Query('userId') userId: string | undefined,
-    @Query() paginationDto: BasePaginationDto,
+    @Query() paginationDto: UsersPaginationDto,
   ): Promise<QuizPreviewDto[]> {
     return this.usersService.getCreatedQuizzes(
-      userId || request.user.id,
+      paginationDto.userId || request.user.id,
       paginationDto,
     );
   }
