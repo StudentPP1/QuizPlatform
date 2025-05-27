@@ -24,9 +24,6 @@ export class QuizResult {
   @JoinColumn({ name: 'quizId' })
   quiz: Quiz;
 
-  @Column({ type: 'int' })
-  score: number;
-
   @CreateDateColumn()
   createdAt: Date;
 
