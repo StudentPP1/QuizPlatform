@@ -1,5 +1,8 @@
 import bcrypt from 'bcryptjs'
 
+export const DEFAULT_PAGINATION_SIZE = 10;
+export const DEFAULT_PAGINATION_FROM = 1;
+
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const ACCESS_TOKEN_NAME = "access_token";
 export const HASH = bcrypt.genSaltSync(10) 

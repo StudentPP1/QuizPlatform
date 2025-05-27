@@ -7,51 +7,20 @@ import { useObserver } from "../../hooks/useObserver";
 import { CreatedQuizzesStrategy, ParticipatedQuizzesStrategy, QuizFetchStrategy } from "../../api/services/QuizFetchStrategy";
 import { QuizDTO } from "../../models/QuizDTO";
 import Loading from "../../components/loading/Loader";
+import { usePaginatedData } from "../../hooks/usePaginatedFetch";
 
 const LibraryPage: FC = () => {
-  const SIZE = 10;
   const lastElement = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
-  const [isLoading, setLoading] = useState(false);
-  const [quizzes, setQuizzes] = useState<QuizDTO[]>([]);
   const [strategy, setStrategy] = useState<QuizFetchStrategy>(new CreatedQuizzesStrategy())
   const [tab, setTab] = useState(1);
-  const [from, setFrom] = useState(1);
-  const [to, setTo] = useState(SIZE);
 
   // TODO: + Task 6 => load more quizzes when the user scrolls down
-  const fetchQuizzes = () => {
-    setLoading(true);
-    console.log("current: ", tab, strategy.constructor.name)
-    strategy.fetchQuizzes(from, to).then((data) => {
-      setQuizzes(prev => {
-        console.log("prev: ", prev)
-        console.dir("data: ", data)
-        if (prev != data && data.length > 0) {
-          return [...prev, ...data];
-        } else {
-          return prev;
-        }
-      });
-      setFrom(prev => prev + SIZE);
-      setTo(prev => prev + SIZE);
-    }).finally(() => setLoading(false));
-  }
-
-  function resetPagination() {
-    setQuizzes([])
-    setFrom(1);
-    setTo(SIZE);
-    fetchQuizzes()
-  }
-
-  useEffect(() => {
-    resetPagination()
-  }, [tab])
-
-  useObserver(lastElement, isLoading, () => {
-    console.log("loading new quizzes...")
-    fetchQuizzes();
+  const { items: quizzes, isLoading } = usePaginatedData<QuizDTO>({
+    fetchFunction: strategy.fetchQuizzes,
+    observerTarget: lastElement.current,
+    dependencies: [strategy], 
+    useObserverHook: useObserver,
   });
 
   // TODO: use strategy pattern
@@ -65,14 +34,12 @@ const LibraryPage: FC = () => {
               <li className={tab === 1 ? styles.active : ''} onClick={() => {
                 setStrategy(new CreatedQuizzesStrategy())
                 setTab(1);
-                resetPagination();
               }}>
                 Created
               </li>
               <li className={tab === 2 ? styles.active : ''} onClick={() => {
                 setStrategy(new ParticipatedQuizzesStrategy())
                 setTab(2);
-                resetPagination();
               }}>
                 History
               </li>

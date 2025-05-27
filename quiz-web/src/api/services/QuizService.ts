@@ -27,9 +27,13 @@ export class QuizService {
   }
 
   @log
-  static async search(text: string): Promise<QuizDTO[]> {
+  static async search(
+    from: number,
+    to: number,
+    text: string
+  ): Promise<QuizDTO[]> {
     return apiFetch<QuizDTO[]>(
-      `/api/quiz/search?name=${text}`,
+      `/api/quiz/search?name=${text}&from=${from}&to=${to}`,
       this.withAuth()
     );
   }
@@ -44,10 +48,14 @@ export class QuizService {
   }
 
   @log
-  static async getCreatedQuizzes(from: number, to: number, userId?: string): Promise<QuizDTO[]> {
-    const userIdQuery = userId ? `/${userId}` : ""
+  static async getCreatedQuizzes(
+    from: number,
+    to: number,
+    userId?: string
+  ): Promise<QuizDTO[]> {
+    const userIdQuery = userId ? `?userId=${userId}&` : "?";
     return apiFetch<QuizDTO[]>(
-      `/api/users/created${userIdQuery}?from=${from}&to=${to}`,
+      `/api/users/created${userIdQuery}from=${from}&to=${to}`,
       this.withAuth()
     );
   }
@@ -79,8 +87,15 @@ export class QuizService {
   }
 
   @log
-  static async getReviews(id: string): Promise<Review[]> {
-    return apiFetch<Review[]>(`/api/review?quizId=${id}`, this.withAuth());
+  static async getReviews(
+    from: number,
+    to: number,
+    id: string
+  ): Promise<Review[]> {
+    return apiFetch<Review[]>(
+      `/api/review?quizId=${id}&from=${from}&to=${to}`,
+      this.withAuth()
+    );
   }
 
   @log

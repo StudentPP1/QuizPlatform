@@ -1,6 +1,6 @@
 import { FaEdit, FaPlay } from "react-icons/fa";
 import styles from "./QuizInfoPage.module.scss";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
 import { Quiz } from "../../models/Quiz";
@@ -9,6 +9,10 @@ import Avatar from "../../components/avatar/Avatar";
 import { QuizService } from "../../api/services/QuizService";
 import { QuizNavigate } from "../../models/QuizNavigate";
 import { AuthContext } from "../../context/context";
+import { DEFAULT_PAGINATION_FROM, DEFAULT_PAGINATION_SIZE } from "../../constants/constants";
+import { useObserver } from "../../hooks/useObserver";
+import { usePaginatedData } from "../../hooks/usePaginatedFetch";
+import Loading from "../../components/loading/Loader";
 
 // TODO: + Task 5 => implement async/await or Promise.all()
 const QuizInfoPage: FC = () => {
@@ -17,6 +21,7 @@ const QuizInfoPage: FC = () => {
     const navigate = useNavigate();
     const [quiz, setQuiz] = useState<Quiz | null>(null)
     const [reviews, setReviews] = useState<Review[]>([])
+    const lastElement = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         localStorage.setItem("index", "0");
@@ -26,8 +31,7 @@ const QuizInfoPage: FC = () => {
             try {
                 const [quizResult, reviewsResult] = await Promise.all([
                     QuizService.getQuiz(id),
-                    // TODO: pagination for reviews
-                    QuizService.getReviews(id)
+                    QuizService.getReviews(DEFAULT_PAGINATION_FROM, DEFAULT_PAGINATION_SIZE, id)
                 ])
                 setQuiz(quizResult as Quiz);
                 setReviews(reviewsResult as Review[]);
@@ -38,6 +42,17 @@ const QuizInfoPage: FC = () => {
 
         fetchData();
     }, []);
+
+    const { items: newReviews, isLoading } = usePaginatedData<Review>({
+        fetchFunction: QuizService.getReviews,
+        observerTarget: lastElement.current,
+        id,
+        dependencies: [id],
+        useObserverHook: useObserver,
+        initFrom: DEFAULT_PAGINATION_SIZE + 1,
+    });
+
+    setReviews(newReviews)
 
     return (
         <Wrapper>
@@ -88,23 +103,25 @@ const QuizInfoPage: FC = () => {
 
                 <div className={styles.quizReviews}>
                     <h2>Reviews</h2>
-                    <div className={styles.reviewList}>
-                        {reviews.map((review) => (
-                            <div className={styles.review}>
-                                <div className={styles.userProfile} onClick={() => {
-                                    navigate(`/authorInfo/${review.creator.userId}`)
-                                }}>
-                                    <Avatar avatarUrl={review.creator.avatarUrl} />
-                                    <p className={styles.username}>{review.creator.username}</p>
+                    {isLoading ? <Loading /> :
+                        <div className={styles.reviewList}>
+                            {reviews.map((review) => (
+                                <div className={styles.review}>
+                                    <div className={styles.userProfile} onClick={() => {
+                                        navigate(`/authorInfo/${review.creator.userId}`)
+                                    }}>
+                                        <Avatar avatarUrl={review.creator.avatarUrl} />
+                                        <p className={styles.username}>{review.creator.username}</p>
+                                    </div>
+                                    <p>{"⭐".repeat(review.rating)}</p>
+                                    {review.text !== null
+                                        ? <p className={styles.reviewText}>{review.text}</p>
+                                        : <></>
+                                    }
                                 </div>
-                                <p>{"⭐".repeat(review.rating)}</p>
-                                {review.text !== null
-                                    ? <p className={styles.reviewText}>{review.text}</p>
-                                    : <></>
-                                }
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>}
+                    <div ref={lastElement} className="last" />
                 </div>
             </div>
         </Wrapper>

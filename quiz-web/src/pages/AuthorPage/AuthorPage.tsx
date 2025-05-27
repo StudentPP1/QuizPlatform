@@ -8,16 +8,13 @@ import { UserService } from "../../api/services/UserService";
 import { CreatedQuizzesStrategy } from "../../api/services/QuizFetchStrategy";
 import { useObserver } from "../../hooks/useObserver";
 import { QuizDTO } from "../../models/QuizDTO";
+import { usePaginatedData } from "../../hooks/usePaginatedFetch";
+import Loading from "../../components/loading/Loader";
 
 const AuthorPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [author, setAuthor] = useState<Creator>();
-    const [quizzes, setQuizzes] = useState<QuizDTO[]>([]);
     const navigate = useNavigate();
-    const SIZE = 10;
-    const [isLoading, setLoading] = useState(false);
-    const [from, setFrom] = useState(1);
-    const [to, setTo] = useState(SIZE);
     const strategy = new CreatedQuizzesStrategy();
     const lastElement = useRef<HTMLDivElement | null>(null);
 
@@ -27,21 +24,12 @@ const AuthorPage: React.FC = () => {
         }
     }, [])
 
-    useObserver(lastElement, isLoading, () => {
-        setLoading(true);
-        if (id != null) {
-            strategy.fetchQuizzes(from, to, id).then((data) => {
-                setQuizzes(prev => {
-                    if (prev) {
-                        return [...prev, ...data];
-                    } else {
-                        return data;
-                    }
-                });
-                setFrom(prev => prev + SIZE);
-                setTo(prev => prev + SIZE);
-            }).finally(() => setLoading(false));
-        }
+    const { items: quizzes, isLoading } = usePaginatedData<QuizDTO>({
+        fetchFunction: strategy.fetchQuizzes,
+        observerTarget: lastElement.current,
+        id,
+        dependencies: [id],
+        useObserverHook: useObserver,
     });
 
     return (
@@ -57,18 +45,21 @@ const AuthorPage: React.FC = () => {
                     </div>
                 </div>
                 <h3 className={styles.sectionTitle}>Quests</h3>
-                <div className={styles.quests}>
-                    {quizzes.map((quiz) => (
-                        <div
-                            onClick={() => navigate(`/quizInfo/${quiz.id}`)}
-                            key={quiz.id} className={styles.quest}>
-                            <h4 className={styles.questTitle}>{quiz.title}</h4>
-                            <p className={styles.questInfo}>{quiz.numberOfTasks} questions</p>
-                            <p className={styles.questInfo}>{"⭐".repeat(quiz.rating)}</p>
-                        </div>
-                    ))}
-                    <div ref={lastElement} className="last" />
-                </div>
+                {isLoading
+                    ? <Loading />
+                    : <div className={styles.quests}>
+                        {quizzes.map((quiz) => (
+                            <div
+                                onClick={() => navigate(`/quizInfo/${quiz.id}`)}
+                                key={quiz.id} className={styles.quest}>
+                                <h4 className={styles.questTitle}>{quiz.title}</h4>
+                                <p className={styles.questInfo}>{quiz.numberOfTasks} questions</p>
+                                <p className={styles.questInfo}>{"⭐".repeat(quiz.rating)}</p>
+                            </div>
+                        ))}
+                        <div ref={lastElement} className="last" />
+                    </div>
+                }
             </div>
         </Wrapper>
     );
