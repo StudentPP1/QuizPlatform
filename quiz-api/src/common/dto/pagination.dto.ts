@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsString, IsUUID, Min } from 'class-validator';
+import { IsInt, IsOptional, IsString, IsUUID, Min } from 'class-validator';
 
 export class BasePaginationDto {
   @Type(() => Number)
@@ -21,4 +21,10 @@ export class QuizPaginationDto extends BasePaginationDto {
 export class ReviewPaginationDto extends BasePaginationDto {
   @IsUUID()
   quizId: string;
+}
+
+export class UsersPaginationDto extends BasePaginationDto {
+  @IsOptional()
+  @IsString()
+  userId: string;
 }
