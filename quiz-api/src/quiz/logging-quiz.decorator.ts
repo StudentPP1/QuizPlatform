@@ -6,7 +6,6 @@ import {
   QuizPaginationDto,
 } from '@common/dto/pagination.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
-import { SaveQuizResultDto } from '@common/dto/save-quiz-result.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
 import { quizServiceLogger } from '@common/logging/logger';
 import { User } from '@users/entities/user.entity';
@@ -66,13 +65,9 @@ export class LoggingQuizDecorator implements IQuizService {
     );
   }
 
-  saveResult(
-    quizId: string,
-    userId: string,
-    dto: SaveQuizResultDto,
-  ): Promise<object> {
-    return this.logMethod('saveResult', [quizId, userId, dto], () =>
-      this.wrapped.saveResult(quizId, userId, dto),
+  saveResult(quizId: string, userId: string): Promise<object> {
+    return this.logMethod('saveResult', [quizId, userId], () =>
+      this.wrapped.saveResult(quizId, userId),
     );
   }
 

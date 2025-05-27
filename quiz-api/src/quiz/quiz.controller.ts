@@ -24,7 +24,6 @@ import { CreateQuizDto } from '@common/dto/create-quiz.dto';
 import { FullQuizDto } from '@common/dto/full-quiz.dto';
 import { QuizPaginationDto } from '@common/dto/pagination.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
-import { SaveQuizResultDto } from '@common/dto/save-quiz-result.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
 import { JwtGuard } from '@common/guards/jwt.guard';
 import { RequestWithUser } from '@common/interfaces/request-with-user.interface';
@@ -87,14 +86,9 @@ export class QuizController {
   @Post(':quizId/results')
   saveResult(
     @Param('quizId') quizId: string,
-    @Body() saveQuizResultDto: SaveQuizResultDto,
     @Req() request: RequestWithUser,
   ): Promise<object> {
-    return this.quizService.saveResult(
-      quizId,
-      request.user.id,
-      saveQuizResultDto,
-    );
+    return this.quizService.saveResult(quizId, request.user.id);
   }
 
   @Get(':quizId/info')

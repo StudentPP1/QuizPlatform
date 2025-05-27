@@ -24,7 +24,6 @@ import {
   QuizPaginationDto,
 } from '@common/dto/pagination.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
-import { SaveQuizResultDto } from '@common/dto/save-quiz-result.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { TaskService } from '@task/task.service';
@@ -134,11 +133,7 @@ export class QuizService implements IQuizService {
     return { message: 'Quiz deleted successfully' };
   }
 
-  async saveResult(
-    quizId: string,
-    userId: string,
-    saveQuizResultDto: SaveQuizResultDto,
-  ): Promise<object> {
+  async saveResult(quizId: string, userId: string): Promise<object> {
     const user = await this.usersService.getUserById(userId);
     const quiz = await this.quizRepository.findOneByIdWithRelations(quizId, [
       'participants',
@@ -148,25 +143,13 @@ export class QuizService implements IQuizService {
       throw new NotFoundException('Quiz not found');
     }
 
-    const exestingResult = await this.quizResultRepository.findByQuizAndUserId(
+    const existingResult = await this.quizResultRepository.findByQuizAndUserId(
       quizId,
       userId,
     );
 
-    if (exestingResult) {
-      const newResult = this.quizResultRepository.updateResult(
-        exestingResult,
-        saveQuizResultDto,
-      );
-
-      await this.quizResultRepository.save(newResult);
-    } else {
-      const quizResult = this.quizResultRepository.create(
-        saveQuizResultDto,
-        user,
-        quiz,
-      );
-
+    if (!existingResult) {
+      const quizResult = this.quizResultRepository.create(user, quiz);
       quiz.participants.push(user);
 
       await Promise.all([
