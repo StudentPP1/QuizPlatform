@@ -10,11 +10,9 @@ import { QuizService } from "../../api/services/QuizService";
 import { QuizNavigate } from "../../models/QuizNavigate";
 import { AuthContext } from "../../context/context";
 import { DEFAULT_PAGINATION_FROM, DEFAULT_PAGINATION_SIZE } from "../../constants/constants";
-import { useObserver } from "../../hooks/useObserver";
-import { usePaginatedData } from "../../hooks/usePaginatedFetch";
 import Loading from "../../components/loading/Loader";
+import { useObserver } from "../../hooks/useObserver";
 
-// TODO: + Task 5 => implement async/await or Promise.all()
 const QuizInfoPage: FC = () => {
     const { user } = useContext(AuthContext);
     const { id } = useParams<{ id: string }>();
@@ -22,6 +20,9 @@ const QuizInfoPage: FC = () => {
     const [quiz, setQuiz] = useState<Quiz | null>(null)
     const [reviews, setReviews] = useState<Review[]>([])
     const lastElement = useRef<HTMLDivElement | null>(null);
+    const [isLoading, setLoading] = useState(false);
+    const [from, setFrom] = useState(DEFAULT_PAGINATION_FROM);
+    const [to, setTo] = useState(DEFAULT_PAGINATION_SIZE);
 
     useEffect(() => {
         localStorage.setItem("index", "0");
@@ -29,12 +30,14 @@ const QuizInfoPage: FC = () => {
         const fetchData = async () => {
             if (id == null) return
             try {
+                // TODO: + Task 5 => implement async/await or Promise.all()
                 const [quizResult, reviewsResult] = await Promise.all([
                     QuizService.getQuiz(id),
-                    QuizService.getReviews(DEFAULT_PAGINATION_FROM, DEFAULT_PAGINATION_SIZE, id)
+                    QuizService.getReviews(from, to, id)
                 ])
                 setQuiz(quizResult as Quiz);
                 setReviews(reviewsResult as Review[]);
+                setFrom(to + 1)
             } catch (error) {
                 console.error("Failed to fetch data:", error);
             }
@@ -43,16 +46,18 @@ const QuizInfoPage: FC = () => {
         fetchData();
     }, []);
 
-    const { items: newReviews, isLoading } = usePaginatedData<Review>({
-        fetchFunction: QuizService.getReviews,
-        observerTarget: lastElement.current,
-        id,
-        dependencies: [id],
-        useObserverHook: useObserver,
-        initFrom: DEFAULT_PAGINATION_SIZE + 1,
-    });
-
-    setReviews(newReviews)
+    useObserver(lastElement, isLoading, async () => {
+        if (isLoading) return;
+        setLoading(true);
+        if (id == null) return;
+        await QuizService.getReviews(from, to, id)
+            .then((data) => {
+                setReviews((prev) => [...prev, ...data]);
+                setFrom((prev) => prev + DEFAULT_PAGINATION_SIZE);
+                setTo((prev) => prev + DEFAULT_PAGINATION_SIZE);
+            })
+            .finally(() => setLoading(false));
+    })
 
     return (
         <Wrapper>
@@ -103,27 +108,29 @@ const QuizInfoPage: FC = () => {
 
                 <div className={styles.quizReviews}>
                     <h2>Reviews</h2>
-                    {isLoading ? <Loading /> :
-                        <div className={styles.reviewList}>
-                            {reviews.map((review) => (
-                                <div className={styles.review}>
-                                    <div className={styles.userProfile} onClick={() => {
-                                        navigate(`/authorInfo/${review.creator.userId}`)
-                                    }}>
-                                        <Avatar avatarUrl={review.creator.avatarUrl} />
-                                        <p className={styles.username}>{review.creator.username}</p>
-                                    </div>
-                                    <p>{"⭐".repeat(review.rating)}</p>
-                                    {review.text !== null
-                                        ? <p className={styles.reviewText}>{review.text}</p>
-                                        : <></>
-                                    }
-                                </div>
-                            ))}
-                        </div>}
-                    <div ref={lastElement} className="last" />
                 </div>
             </div>
+            <div className={styles.content_container}>
+                {isLoading ? <Loading /> :
+                    <div className={styles.reviewList}>
+                        {reviews.map((review) => (
+                            <div className={styles.review}>
+                                <div className={styles.userProfile} onClick={() => {
+                                    navigate(`/authorInfo/${review.creator.userId}`)
+                                }}>
+                                    <Avatar avatarUrl={review.creator.avatarUrl} />
+                                    <p className={styles.username}>{review.creator.username}</p>
+                                </div>
+                                <p>{"⭐".repeat(review.rating)}</p>
+                                {review.text !== null
+                                    ? <p className={styles.reviewText}>{review.text}</p>
+                                    : <></>
+                                }
+                            </div>
+                        ))}
+                    </div>}
+            </div>
+            <div ref={lastElement} className="last" />
         </Wrapper>
     );
 };

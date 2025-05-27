@@ -16,7 +16,7 @@ const SearchPage: FC = () => {
 
   const { items: quizzes, isLoading } = usePaginatedData<QuizDTO>({
     fetchFunction: QuizService.search,
-    observerTarget: lastElement.current,
+    observerTarget: lastElement,
     id: text,
     dependencies: [text],
     useObserverHook: useObserver
@@ -33,30 +33,32 @@ const SearchPage: FC = () => {
             </ul>
           </nav>
         </div>
-        {isLoading
-          ? <Loading />
-          : <div className={styles.modules}>
-            {quizzes.map((quiz) => (
-              <button
-                className={styles.module_card}
-                onClick={() => {
-                  localStorage.setItem("index", "0")
-                  navigate(`/quizInfo/${quiz.id}`)
-                }}
-              >
-                <div className={styles.card_content}>
-                  <h3 className={styles.name_quest}>{quiz.title}</h3>
-                  <div className={styles.top_info}>
-                    <span className={styles.term_count}>{quiz.numberOfTasks} questions</span>
+        <div className={styles.content_container}>
+          {isLoading
+            ? <Loading />
+            : <div className={styles.modules}>
+              {quizzes.map((quiz) => (
+                <button
+                  className={styles.module_card}
+                  onClick={() => {
+                    localStorage.setItem("index", "0")
+                    navigate(`/quizInfo/${quiz.id}`)
+                  }}
+                >
+                  <div className={styles.card_content}>
+                    <h3 className={styles.name_quest}>{quiz.title}</h3>
+                    <div className={styles.top_info}>
+                      <span className={styles.term_count}>{quiz.numberOfTasks} questions</span>
+                    </div>
+                    <div className={styles.author}>
+                      <Avatar avatarUrl={quiz.creator.avatarUrl} />
+                      <span className={styles.name}>{quiz.creator.username}</span>
+                    </div>
                   </div>
-                  <div className={styles.author}>
-                    <Avatar avatarUrl={quiz.creator.avatarUrl} />
-                    <span className={styles.name}>{quiz.creator.username}</span>
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>}
+                </button>
+              ))}
+            </div>}
+        </div>
         <div ref={lastElement} className="last" />
       </div>
     </Wrapper>

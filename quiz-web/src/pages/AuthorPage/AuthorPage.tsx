@@ -26,7 +26,7 @@ const AuthorPage: React.FC = () => {
 
     const { items: quizzes, isLoading } = usePaginatedData<QuizDTO>({
         fetchFunction: strategy.fetchQuizzes,
-        observerTarget: lastElement.current,
+        observerTarget: lastElement,
         id,
         dependencies: [id],
         useObserverHook: useObserver,
@@ -45,6 +45,8 @@ const AuthorPage: React.FC = () => {
                     </div>
                 </div>
                 <h3 className={styles.sectionTitle}>Quests</h3>
+            </div>
+            <div className={styles.content_container}>
                 {isLoading
                     ? <Loading />
                     : <div className={styles.quests}>
@@ -57,10 +59,10 @@ const AuthorPage: React.FC = () => {
                                 <p className={styles.questInfo}>{"⭐".repeat(quiz.rating)}</p>
                             </div>
                         ))}
-                        <div ref={lastElement} className="last" />
                     </div>
                 }
             </div>
+            <div className={styles.content_container}></div>
         </Wrapper>
     );
 };

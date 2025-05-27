@@ -1,11 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
-import { DEFAULT_PAGINATION_FROM, DEFAULT_PAGINATION_SIZE } from "../constants/constants";
+import {
+  DEFAULT_PAGINATION_FROM,
+  DEFAULT_PAGINATION_SIZE,
+} from "../constants/constants";
 
 type FetchFunction<T> = (from: number, to: number, id?: any) => Promise<T[]>;
 
 type UsePaginatedDataProps<T> = {
   fetchFunction: FetchFunction<T>;
-  observerTarget: Element | null;
+  observerTarget: any;
   id?: any;
   dependencies?: any[]; // [tab], [searchText], [userId]
   useObserverHook: (
@@ -54,8 +57,10 @@ export function usePaginatedData<T>({
   }, [...dependencies]);
 
   useEffect(() => {
-    fetchItems();
-  }, [...dependencies]);
+    if (items.length === 0) {
+      fetchItems();
+    }
+  }, [items.length, fetchItems]);
 
   useObserverHook(observerTarget, isLoading, fetchItems);
 

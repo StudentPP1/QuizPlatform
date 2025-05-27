@@ -1,5 +1,7 @@
 @use "../../scss/variables" as v;
-
+.content_container {
+  min-height: 100vw;
+}
 .quizPage {
     background-color: v.$background;
     color: v.$white;

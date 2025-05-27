@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 import styles from "./LibraryPage.module.scss";
 import { useNavigate } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
@@ -16,10 +16,10 @@ const LibraryPage: FC = () => {
   const [tab, setTab] = useState(1);
 
   // TODO: + Task 6 => load more quizzes when the user scrolls down
-  const { items: quizzes, isLoading } = usePaginatedData<QuizDTO>({
+  const { items: quizzes, isLoading, resetPagination } = usePaginatedData<QuizDTO>({
     fetchFunction: strategy.fetchQuizzes,
-    observerTarget: lastElement.current,
-    dependencies: [strategy], 
+    observerTarget: lastElement,
+    dependencies: [strategy],
     useObserverHook: useObserver,
   });
 
@@ -34,12 +34,14 @@ const LibraryPage: FC = () => {
               <li className={tab === 1 ? styles.active : ''} onClick={() => {
                 setStrategy(new CreatedQuizzesStrategy())
                 setTab(1);
+                resetPagination()
               }}>
                 Created
               </li>
               <li className={tab === 2 ? styles.active : ''} onClick={() => {
                 setStrategy(new ParticipatedQuizzesStrategy())
                 setTab(2);
+                resetPagination()
               }}>
                 History
               </li>
@@ -72,7 +74,6 @@ const LibraryPage: FC = () => {
         </div>
 
         <div ref={lastElement} className="last" />
-
       </div>
     </Wrapper>
   );
