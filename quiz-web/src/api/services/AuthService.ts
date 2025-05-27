@@ -1,10 +1,11 @@
-import { API_BASE_URL } from "../../constants/constants";
+import { API_BASE_URL, HASH } from "../../constants/constants";
 import { log } from "../../utils/Logger";
 import { apiFetch } from "../utils/ApiUtils";
 import { HttpMethod } from "../utils/HttpMethod";
 import { RequestAttributes } from "../utils/RequestAttributes";
+import bcrypt from "bcryptjs";
 
-// TODO: + Task 9 => implement logging using custom decorator 
+// TODO: + Task 9 => implement logging using custom decorator
 export class AuthService {
   @log
   static async register(username: string, email: string, password: string) {
@@ -15,8 +16,7 @@ export class AuthService {
         .setBody({
           username: username,
           email: email,
-          // TODO: hash password before sending it to the server
-          password: password,
+          password: bcrypt.hashSync(password, HASH),
         })
         .build()
     );
@@ -30,7 +30,7 @@ export class AuthService {
         .setMethod(HttpMethod.POST)
         .setBody({
           email: email,
-          password: password,
+          password: bcrypt.hashSync(password, HASH)
         })
         .build()
     );
