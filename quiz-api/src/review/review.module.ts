@@ -11,7 +11,6 @@ import { LoggingReviewDecorator } from '@review/logging-review.decorator';
 import { ReviewController } from '@review/review.controller';
 import { ReviewRepository } from '@review/review.repository';
 import { ReviewService } from '@review/review.service';
-import { IReviewService } from '@common/contracts/services/review.service.contract';
 import { UsersModule } from '@users/users.module';
 
 @Module({
