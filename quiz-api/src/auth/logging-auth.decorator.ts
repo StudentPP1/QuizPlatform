@@ -34,37 +34,37 @@ export class LoggingAuthDecorator implements IAuthService {
   }
 
   signUp(createUserDto: CreateUserDto): Promise<Tokens> {
-    return this.logMethod(
-      'signUp',
-      [createUserDto.username, createUserDto.email],
-      () => this.wrapped.signUp(createUserDto),
+    return this.logMethod(this.signUp.name, [createUserDto], () =>
+      this.wrapped.signUp(createUserDto),
     );
   }
 
   login(user: User): Promise<Tokens> {
-    return this.logMethod('login', [user], () => this.wrapped.login(user));
+    return this.logMethod(this.login.name, [user], () =>
+      this.wrapped.login(user),
+    );
   }
 
   googleLogin(user: User): Promise<Tokens> {
-    return this.logMethod('googleLogin', [user], () =>
+    return this.logMethod(this.googleLogin.name, [user], () =>
       this.wrapped.googleLogin(user),
     );
   }
 
   validateUser(email: string, password: string): Promise<User> {
-    return this.logMethod('validateUser', [email], () =>
+    return this.logMethod(this.validateUser.name, [email, password], () =>
       this.wrapped.validateUser(email, password),
     );
   }
 
   validateGoogleUser(data: CreateGoogleUserDto): Promise<User> {
-    return this.logMethod('validateGoogleUser', [data], () =>
+    return this.logMethod(this.validateGoogleUser.name, [data], () =>
       this.wrapped.validateGoogleUser(data),
     );
   }
 
   logout(userId: string): void {
-    this.logMethod('logout', [userId], () => {
+    this.logMethod(this.logout.name, [userId], () => {
       this.wrapped.logout(userId);
       return Promise.resolve();
     });

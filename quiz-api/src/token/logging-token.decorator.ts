@@ -4,7 +4,7 @@ import { baseLogger } from '@common/logging/logger';
 import { User } from '@users/entities/user.entity';
 
 export class LoggingTokenDecorator implements ITokenService {
-  private readonly logger = baseLogger.child({ service: 'Task Service' });
+  private readonly logger = baseLogger.child({ service: 'Token Service' });
 
   constructor(private readonly wrapped: ITokenService) {}
 
@@ -32,13 +32,13 @@ export class LoggingTokenDecorator implements ITokenService {
   }
 
   generateTokens(user: User): Promise<Tokens> {
-    return this.logMethod('generateTokens', [user], () =>
+    return this.logMethod(this.generateTokens.name, [user], () =>
       this.wrapped.generateTokens(user),
     );
   }
 
   removeTokenGenerator(userId: string): void {
-    this.logMethod('removeTokenGenerator', [userId], () => {
+    this.logMethod(this.removeTokenGenerator.name, [userId], () => {
       this.wrapped.removeTokenGenerator(userId);
       return Promise.resolve();
     });

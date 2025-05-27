@@ -43,7 +43,7 @@ export class LoggingQuizDecorator implements IQuizService {
     user: User,
     files: Express.Multer.File[],
   ): Promise<object> {
-    return this.logMethod('createQuiz', [dto, user], () =>
+    return this.logMethod(this.createQuiz.name, [dto, user, files], () =>
       this.wrapped.createQuiz(dto, user, files),
     );
   }
@@ -54,35 +54,39 @@ export class LoggingQuizDecorator implements IQuizService {
     user: User,
     files: Express.Multer.File[],
   ): Promise<object> {
-    return this.logMethod('updateQuiz', [quizId, updateQuizDto, user], () =>
-      this.wrapped.updateQuiz(quizId, updateQuizDto, user, files),
+    return this.logMethod(
+      this.updateQuiz.name,
+      [quizId, updateQuizDto, user, files],
+      () => this.wrapped.updateQuiz(quizId, updateQuizDto, user, files),
     );
   }
 
   deleteQuiz(quizId: string, user: User): Promise<object> {
-    return this.logMethod('deleteQuiz', [quizId, user], () =>
+    return this.logMethod(this.deleteQuiz.name, [quizId, user], () =>
       this.wrapped.deleteQuiz(quizId, user),
     );
   }
 
   saveResult(quizId: string, userId: string): Promise<object> {
-    return this.logMethod('saveResult', [quizId, userId], () =>
+    return this.logMethod(this.saveResult.name, [quizId, userId], () =>
       this.wrapped.saveResult(quizId, userId),
     );
   }
 
   getQuiz(id: string): Promise<FullQuizDto> {
-    return this.logMethod('getQuiz', [id], () => this.wrapped.getQuiz(id));
+    return this.logMethod(this.getQuiz.name, [id], () =>
+      this.wrapped.getQuiz(id),
+    );
   }
 
   searchQuizzesByName(dto: QuizPaginationDto): Promise<QuizPreviewDto[]> {
-    return this.logMethod('searchQuizzesByName', [dto], () =>
+    return this.logMethod(this.searchQuizzesByName.name, [dto], () =>
       this.wrapped.searchQuizzesByName(dto),
     );
   }
 
   getTopQuizzes(limit: number): Promise<QuizPreviewDto[]> {
-    return this.logMethod('getTopQuizzes', [limit], () =>
+    return this.logMethod(this.getTopQuizzes.name, [limit], () =>
       this.wrapped.getTopQuizzes(limit),
     );
   }
@@ -91,8 +95,10 @@ export class LoggingQuizDecorator implements IQuizService {
     userId: string,
     paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]> {
-    return this.logMethod('getCreatedQuizzes', [userId, paginationDto], () =>
-      this.wrapped.getCreatedQuizzes(userId, paginationDto),
+    return this.logMethod(
+      this.getCreatedQuizzes.name,
+      [userId, paginationDto],
+      () => this.wrapped.getCreatedQuizzes(userId, paginationDto),
     );
   }
 
@@ -101,7 +107,7 @@ export class LoggingQuizDecorator implements IQuizService {
     paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]> {
     return this.logMethod(
-      'getParticipatedQuizzes',
+      this.getParticipatedQuizzes.name,
       [userId, paginationDto],
       () => this.wrapped.getParticipatedQuizzes(userId, paginationDto),
     );

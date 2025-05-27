@@ -35,13 +35,13 @@ export class LoggingReviewDecorator implements IReviewService {
   }
 
   addReview(quizId: string, user: User, dto: CreateReviewDto): Promise<Review> {
-    return this.logMethod('addReview', [quizId, user, dto], () =>
+    return this.logMethod(this.addReview.name, [quizId, user, dto], () =>
       this.wrapped.addReview(quizId, user, dto),
     );
   }
 
   getReviewsForQuiz(dto: ReviewPaginationDto): Promise<ReviewDto[]> {
-    return this.logMethod('getReviewsForQuiz', [dto], () =>
+    return this.logMethod(this.getReviewsForQuiz.name, [dto], () =>
       this.wrapped.getReviewsForQuiz(dto),
     );
   }
