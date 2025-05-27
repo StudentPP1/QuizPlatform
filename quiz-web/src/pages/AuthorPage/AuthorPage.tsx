@@ -29,6 +29,7 @@ const AuthorPage: React.FC = () => {
 
     useObserver(lastElement, isLoading, () => {
         setLoading(true);
+        // TODO: userId should be passed to the strategy
         strategy.fetchQuizzes(from, to).then((data) => {
             setQuizzes(prev => {
                 if (prev) {

@@ -15,6 +15,7 @@ export class AuthService {
         .setBody({
           username: username,
           email: email,
+          // TODO: hash password before sending it to the server
           password: password,
         })
         .build()

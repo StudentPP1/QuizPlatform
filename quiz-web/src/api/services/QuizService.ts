@@ -113,14 +113,11 @@ export class QuizService {
   }
 
   @log
-  static async doneQuiz(quizId: string, score: number): Promise<DoneApiResult> {
+  static async doneQuiz(quizId: string): Promise<DoneApiResult> {
     return apiFetch<DoneApiResult>(
       `/api/quiz/${quizId}/results`,
       RequestAttributes.builder()
         .setMethod(HttpMethod.POST)
-        .setBody({
-          score: score,
-        })
         .addAuthHeader()
         .build()
     );

@@ -29,7 +29,7 @@ const ResultsPage: React.FC = () => {
 
   const handleExit = async () => {
     try {
-      await QuizService.doneQuiz(quiz.id, quizScore()).then((result) => {
+      await QuizService.doneQuiz(quiz.id).then((result) => {
         toast.success(result.message, { position: "top-right" });
         navigate("/home");
       })

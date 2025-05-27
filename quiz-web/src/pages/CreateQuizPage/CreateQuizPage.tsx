@@ -96,6 +96,7 @@ const CreateQuizPage: FC = () => {
             ...(quiz?.id && { id: quiz.id }),
             title,
             description,
+            // TODO: delete numberOfTasks
             numberOfTasks: tasks.length,
             timeLimit: parseInt(timeLimit, 10),
             tasks

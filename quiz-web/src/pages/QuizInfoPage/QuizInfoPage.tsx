@@ -26,6 +26,7 @@ const QuizInfoPage: FC = () => {
             try {
                 const [quizResult, reviewsResult] = await Promise.all([
                     QuizService.getQuiz(id),
+                    // TODO: pagination for reviews
                     QuizService.getReviews(id)
                 ])
                 setQuiz(quizResult as Quiz);

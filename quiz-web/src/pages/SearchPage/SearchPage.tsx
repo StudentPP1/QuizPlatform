@@ -10,7 +10,7 @@ const SearchPage: FC = () => {
   const navigate = useNavigate();
   const [quizzes, setQuizzes] = useState<QuizDTO[]>([]);
   const { text } = useParams<{ text: string }>();
-
+  // TODO: pagination
   useEffect(() => {
     if (text != null) {
       QuizService.search(text).then((result) => { setQuizzes(result) })
