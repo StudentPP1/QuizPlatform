@@ -27,6 +27,10 @@ import {
 } from '@common/dto/pagination.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
+import {
+  MessageResponse,
+  QuizIdResponse,
+} from '@common/interfaces/response.interface';
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { User } from '@users/entities/user.entity';
 
@@ -48,7 +52,7 @@ export class QuizService implements IQuizService {
     createQuizDto: CreateQuizDto,
     user: User,
     files: Express.Multer.File[],
-  ): Promise<object> {
+  ): Promise<QuizIdResponse> {
     createQuizDto.tasks = this.attachImagesToTasks(createQuizDto.tasks, files);
     const quiz = this.quizRepository.create(createQuizDto, user);
     await this.quizRepository.save(quiz);
@@ -66,7 +70,7 @@ export class QuizService implements IQuizService {
     dto: UpdateQuizDto,
     user: User,
     files: Express.Multer.File[],
-  ): Promise<object> {
+  ): Promise<QuizIdResponse> {
     dto.tasks = this.attachImagesToTasks(dto.tasks, files);
     const quiz = await this.quizRepository.findOneByIdWithRelations(quizId, [
       'creator',
@@ -111,7 +115,7 @@ export class QuizService implements IQuizService {
     return tasks;
   }
 
-  async deleteQuiz(id: string, user: User): Promise<object> {
+  async deleteQuiz(id: string, user: User): Promise<MessageResponse> {
     const quiz = await this.quizRepository.findOneByIdWithRelations(id, [
       'creator',
       'tasks',
@@ -134,7 +138,7 @@ export class QuizService implements IQuizService {
     return { message: 'Quiz deleted successfully' };
   }
 
-  async saveResult(quizId: string, userId: string): Promise<object> {
+  async saveResult(quizId: string, userId: string): Promise<MessageResponse> {
     const user = await this.usersService.getUserById(userId);
     const quiz = await this.quizRepository.findOneByIdWithRelations(quizId, [
       'participants',
