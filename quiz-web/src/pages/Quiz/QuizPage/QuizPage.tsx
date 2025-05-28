@@ -110,7 +110,6 @@ const QuizPage: React.FC = () => {
     ['text', (question) => TextStrategy(question)],
   ]);
 
-  // TODO: use strategy pattern
   const QuestionStrategy = (question: QuizTask) => {
     return strategies.get(question.type)?.(question);
   };

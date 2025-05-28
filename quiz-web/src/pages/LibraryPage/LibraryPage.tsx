@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import styles from "./LibraryPage.module.scss";
 import { useNavigate } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
@@ -14,17 +14,21 @@ const LibraryPage: FC = () => {
   const navigate = useNavigate();
   const [strategy, setStrategy] = useState<QuizFetchStrategy>(new CreatedQuizzesStrategy())
   const [tab, setTab] = useState(1);
+  const [quizzes, setQuizzes] = useState<QuizDTO[]>([])
+  const [isLoading, setLoading] = useState(false);
 
   // TODO: + Task 6 => load more quizzes when the user scrolls down
-  const { items: quizzes, isLoading, resetPagination } = usePaginatedData<QuizDTO>({
+  const { resetPagination } = usePaginatedData<QuizDTO>({
     fetchFunction: strategy.fetchQuizzes,
     observerTarget: lastElement,
+    data: null,
     dependencies: [strategy],
     useObserverHook: useObserver,
+    setItems: setQuizzes,
+    isLoading: isLoading,
+    setLoading: setLoading,
   });
-  // TODO: fix pagination infinite loop
 
-  // TODO: use strategy pattern
   return (
     <Wrapper>
       <div className={styles.library_container}>
@@ -33,7 +37,7 @@ const LibraryPage: FC = () => {
           <nav className={styles.nav_bar}>
             <ul>
               <li className={tab === 1 ? styles.active : ''} onClick={() => {
-                setStrategy(new CreatedQuizzesStrategy())
+                setStrategy(new CreatedQuizzesStrategy())  
                 setTab(1);
                 resetPagination()
               }}>

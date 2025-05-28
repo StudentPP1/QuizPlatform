@@ -12,6 +12,7 @@ import { AuthContext } from "../../context/context";
 import { DEFAULT_PAGINATION_FROM, DEFAULT_PAGINATION_SIZE } from "../../constants/constants";
 import Loading from "../../components/loading/Loader";
 import { useObserver } from "../../hooks/useObserver";
+import { usePaginatedData } from "../../hooks/usePaginatedFetch";
 
 const QuizInfoPage: FC = () => {
     const { user } = useContext(AuthContext);
@@ -22,44 +23,34 @@ const QuizInfoPage: FC = () => {
     const lastElement = useRef<HTMLDivElement | null>(null);
     const [isLoading, setLoading] = useState(false);
     const [from, setFrom] = useState(DEFAULT_PAGINATION_FROM);
-    const [to, setTo] = useState(DEFAULT_PAGINATION_SIZE);
 
     useEffect(() => {
         localStorage.setItem("index", "0");
-
         const fetchData = async () => {
             if (id == null) return
-            try {
-                // TODO: + Task 5 => implement async/await or Promise.all()
-                const [quizResult, reviewsResult] = await Promise.all([
-                    QuizService.getQuiz(id),
-                    QuizService.getReviews(from, to, id)
-                ])
-                setQuiz(quizResult as Quiz);
-                setReviews(reviewsResult as Review[]);
-                setFrom((prev) => prev + DEFAULT_PAGINATION_SIZE);
-                setTo((prev) => prev + DEFAULT_PAGINATION_SIZE);
-            } catch (error) {
-                console.error("Failed to fetch data:", error);
-            }
+            // TODO: + Task 5 => implemented by using Promise.all()
+            const [quizResult, reviewsResult] = await Promise.all([
+                QuizService.getQuiz(id),
+                QuizService.getReviews(from, from + DEFAULT_PAGINATION_SIZE, id)
+            ])
+            setQuiz(quizResult as Quiz);
+            setReviews(reviewsResult as Review[]);
+            setFrom(from + DEFAULT_PAGINATION_SIZE);
         };
-
         fetchData();
     }, []);
 
-    // TODO: use observer pattern 
-    useObserver(lastElement, isLoading, async () => {
-        if (isLoading) return;
-        setLoading(true);
-        if (id == null) return;
-        await QuizService.getReviews(from, to, id)
-            .then((data) => {
-                setReviews((prev) => [...prev, ...data]);
-                setFrom((prev) => prev + DEFAULT_PAGINATION_SIZE);
-                setTo((prev) => prev + DEFAULT_PAGINATION_SIZE);
-            })
-            .finally(() => setLoading(false));
-    })
+    usePaginatedData<Review>({
+        fetchFunction: QuizService.getReviews,
+        observerTarget: lastElement,
+        data: id,
+        dependencies: [id],
+        useObserverHook: useObserver,
+        setItems: setReviews,
+        initFrom: from,
+        isLoading: isLoading,
+        setLoading: setLoading,
+    });
 
     return (
         <Wrapper>
@@ -114,8 +105,8 @@ const QuizInfoPage: FC = () => {
                 <div className={styles.content_container}>
                     {isLoading ? <Loading /> :
                         <div className={styles.reviewList}>
-                            {reviews.map((review) => (
-                                <div className={styles.review}>
+                            {reviews.map((review, index) => (
+                                <div className={styles.review} key={index}>
                                     <div className={styles.userProfile} onClick={() => {
                                         navigate(`/authorInfo/${review.creator.userId}`)
                                     }}>

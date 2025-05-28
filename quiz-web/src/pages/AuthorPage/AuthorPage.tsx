@@ -17,19 +17,27 @@ const AuthorPage: React.FC = () => {
     const navigate = useNavigate();
     const strategy = new CreatedQuizzesStrategy();
     const lastElement = useRef<HTMLDivElement | null>(null);
+    const [quizzes, setQuizzes] = useState<QuizDTO[]>([])
+    const [isLoading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (id != null) {
-            UserService.getAuthor(id).then((result) => { setAuthor(result) })
+        const fetchAuthor = async () => {
+            if (id != null) {
+                await UserService.getAuthor(id).then((result) => { setAuthor(result) })
+            }
         }
+        fetchAuthor();
     }, [id])
 
-    const { items: quizzes, isLoading } = usePaginatedData<QuizDTO>({
+    usePaginatedData<QuizDTO>({
         fetchFunction: strategy.fetchQuizzes,
         observerTarget: lastElement,
-        id,
+        data: id,
         dependencies: [id],
         useObserverHook: useObserver,
+        setItems: setQuizzes,
+        isLoading: isLoading,
+        setLoading: setLoading,
     });
 
     return (

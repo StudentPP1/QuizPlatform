@@ -14,7 +14,7 @@ export class QuizService {
   static async getTopQuizzes(limit: number = 3): Promise<QuizDTO[]> {
     return apiFetch<QuizDTO[]>(
       `/api/quiz/top-rated?limit=${limit}`,
-      this.withAuth()
+      QuizService.withAuth()
     );
   }
 
@@ -22,7 +22,7 @@ export class QuizService {
   static async getTopAuthors(limit: number = 3): Promise<Creator[]> {
     return apiFetch<Creator[]>(
       `/api/users/top-creators?limit=${limit}`,
-      this.withAuth()
+      QuizService.withAuth()
     );
   }
 
@@ -34,7 +34,7 @@ export class QuizService {
   ): Promise<QuizDTO[]> {
     return apiFetch<QuizDTO[]>(
       `/api/quiz/search?name=${text}&from=${from}&to=${to}`,
-      this.withAuth()
+      QuizService.withAuth()
     );
   }
 
@@ -42,8 +42,8 @@ export class QuizService {
   static async getQuiz(quizId: string): Promise<Quiz> {
     return apiFetch<Quiz>(
       `/api/quiz/${quizId}/info`,
-      this.withAuth(),
-      this.handleNotFound
+      QuizService.withAuth(),
+      QuizService.handleNotFound
     );
   }
 
@@ -56,7 +56,7 @@ export class QuizService {
     const userIdQuery = userId ? `?userId=${userId}&` : "?";
     return apiFetch<QuizDTO[]>(
       `/api/users/created${userIdQuery}from=${from}&to=${to}`,
-      this.withAuth()
+      QuizService.withAuth()
     );
   }
 
@@ -67,7 +67,7 @@ export class QuizService {
   ): Promise<QuizDTO[]> {
     return apiFetch<QuizDTO[]>(
       `/api/users/participated?from=${from}&to=${to}`,
-      this.withAuth()
+      QuizService.withAuth()
     );
   }
 
@@ -94,7 +94,7 @@ export class QuizService {
   ): Promise<Review[]> {
     return apiFetch<Review[]>(
       `/api/review?quizId=${id}&from=${from}&to=${to}`,
-      this.withAuth()
+      QuizService.withAuth()
     );
   }
 
@@ -112,7 +112,7 @@ export class QuizService {
         .setBody(quiz, false)
         .addAuthHeader()
         .build(),
-      this.handleNotFound
+      QuizService.handleNotFound
     );
   }
 
@@ -124,7 +124,7 @@ export class QuizService {
         .setMethod(HttpMethod.DELETE)
         .addAuthHeader()
         .build(),
-      this.handleNotFound
+      QuizService.handleNotFound
     );
   }
 

@@ -9,7 +9,7 @@ type FetchFunction<T> = (from: number, to: number, id?: any) => Promise<T[]>;
 type UsePaginatedDataProps<T> = {
   fetchFunction: FetchFunction<T>;
   observerTarget: any;
-  id?: any;
+  data?: any;
   dependencies?: any[]; // [tab], [searchText], [userId]
   useObserverHook: (
     target: Element | null,
@@ -17,57 +17,54 @@ type UsePaginatedDataProps<T> = {
     onIntersect: () => void
   ) => void;
   initFrom?: number;
-  initSize?: number;
+  size?: number;
+  setItems: React.Dispatch<React.SetStateAction<T[]>>;
+  isLoading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function usePaginatedData<T>({
   fetchFunction,
   observerTarget,
-  id = null,
+  data = null,
   dependencies = [],
   useObserverHook,
   initFrom = DEFAULT_PAGINATION_FROM,
-  initSize = DEFAULT_PAGINATION_SIZE,
+  size = DEFAULT_PAGINATION_SIZE,
+  setItems,
+  isLoading,
+  setLoading,
 }: UsePaginatedDataProps<T>) {
-  const [items, setItems] = useState<T[]>([]);
   const [from, setFrom] = useState(initFrom);
-  const [to, setTo] = useState(initSize);
-  const [isLoading, setLoading] = useState(false);
+
+  const fetchData = async (from: number, to: number, addMode: boolean) => {
+    setLoading(true);
+    await fetchFunction(from, to, data)
+      .then((data) => {
+        setItems(addMode ? (prev) => [...prev, ...data] : data);
+        setFrom(to + 1);
+      })
+      .finally(() => setLoading(false));
+  };
 
   const fetchItems = useCallback(() => {
     if (isLoading) return;
-    setLoading(true);
-    fetchFunction(from, to, id)
-      .then((data) => {
-        setItems((prev) => [...prev, ...data]);
-        setFrom((prev) => prev + initSize);
-        setTo((prev) => prev + initSize);
-      })
-      .finally(() => setLoading(false));
-  }, [from, to, id, fetchFunction, isLoading, initSize]);
+    fetchData(from, from + size, true);
+  }, [from, data, fetchFunction, isLoading, size]);
 
   const resetPagination = useCallback(() => {
     setItems([]);
-    setFrom(1);
-    setTo(initSize);
-  }, [initSize]);
+    setFrom(initFrom);
+  }, [size]);
 
-  // Reset pagination when dependencies change
+  // Reset data when dependencies change
   useEffect(() => {
-    resetPagination();
+    fetchData(initFrom, initFrom + size, false);
   }, [...dependencies]);
-
-  useEffect(() => {
-    if (items.length === 0) {
-      fetchItems();
-    }
-  }, [items.length, fetchItems]);
 
   useObserverHook(observerTarget, isLoading, fetchItems);
 
   return {
-    items,
-    isLoading,
     resetPagination,
   };
 }
