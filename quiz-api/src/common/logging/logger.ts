@@ -1,24 +1,24 @@
-import winston from 'winston';
+import { createLogger, format, transports } from 'winston';
 
-const infoOnlyFilter = winston.format((info) => {
+const infoOnlyFilter = format((info) => {
   return info.level === 'info' ? info : false;
 });
 
-export const baseLogger = winston.createLogger({
+export const baseLogger = createLogger({
   level: 'info',
-  format: winston.format.combine(
-    winston.format.json(),
-    winston.format.timestamp(),
-    winston.format.prettyPrint(),
+  format: format.combine(
+    format.json(),
+    format.timestamp(),
+    format.prettyPrint(),
   ),
   transports: [
-    new winston.transports.Console({ level: 'info' }),
-    new winston.transports.File({
+    new transports.Console({ level: 'info' }),
+    new transports.File({
       format: infoOnlyFilter(),
       filename: 'logs/info.log',
       level: 'info',
     }),
-    new winston.transports.File({
+    new transports.File({
       filename: 'logs/errors.log',
       level: 'error',
     }),
