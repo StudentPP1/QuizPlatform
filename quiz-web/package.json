@@ -12,7 +12,6 @@
   "dependencies": {
     "@types/react-icons": "^3.0.0",
     "@types/react-router-dom": "^5.3.3",
-    "bcryptjs": "^3.0.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
