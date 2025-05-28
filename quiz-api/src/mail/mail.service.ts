@@ -5,10 +5,11 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createTransport, Transporter } from 'nodemailer';
 
+import { IMailService } from '@common/contracts/services/mail.service.contract';
 import { SendMailOptions } from '@common/interfaces/send-mail-options.interface';
 
 @Injectable()
-export class MailService {
+export class MailService implements IMailService {
   private readonly transport: Transporter;
 
   constructor(private readonly configService: ConfigService) {
