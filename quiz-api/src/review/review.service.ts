@@ -10,7 +10,8 @@ import { IReviewService } from '@common/contracts/services/review.service.contra
 import { CreateReviewDto } from '@common/dto/create-review.dto';
 import { ReviewPaginationDto } from '@common/dto/pagination.dto';
 import { ReviewDto } from '@common/dto/review.dto';
-import { EventEmitterService } from '@events/event-emitter.service';
+import { eventEmitter } from '@common/events/event-emitter';
+import { UpdateAuthorRatingOptions } from '@common/interfaces/update-author-rating-options.interface';
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { Review } from '@review/entities/review.entity';
 import { User } from '@users/entities/user.entity';
@@ -24,7 +25,6 @@ export class ReviewService implements IReviewService {
     private readonly reviewRepository: IReviewRepository,
     @Inject(QUIZ_REPOSITORY)
     private quizRepository: IQuizRepository,
-    private readonly eventEmitterService: EventEmitterService,
   ) {}
 
   async addReview(
@@ -47,11 +47,12 @@ export class ReviewService implements IReviewService {
     await Promise.all([
       this.reviewRepository.save(review),
       this.updateQuizRating(quiz),
-      this.eventEmitterService.emit('user.rating_updated', {
-        userId: quiz.creator.id,
-        newRating: newAuthorRating,
-      }),
     ]);
+
+    eventEmitter.emit<UpdateAuthorRatingOptions>('user.rating_updated', {
+      userId: quiz.creator.id,
+      newRating: newAuthorRating,
+    });
 
     return review;
   }

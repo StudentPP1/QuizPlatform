@@ -9,15 +9,14 @@ import { IUsersService } from '@common/contracts/services/users.service.contract
 import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
 import { CreateUserDto } from '@common/dto/create-user.dto';
 import { AuthProvider } from '@common/enums/auth-provider.enum';
+import { eventEmitter } from '@common/events/event-emitter';
 import { SendMailOptions } from '@common/interfaces/send-mail-options.interface';
 import { Tokens } from '@common/interfaces/tokens.payload';
-import { EventEmitterService } from '@events/event-emitter.service';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
 export class AuthService implements IAuthService {
   constructor(
-    private readonly emitter: EventEmitterService,
     @Inject(USERS_SERVICE) private readonly usersService: IUsersService,
     @Inject(TOKEN_SERVICE) private readonly tokenService: ITokenService,
   ) {}
@@ -34,7 +33,7 @@ export class AuthService implements IAuthService {
       AuthProvider.LOCAL,
     );
 
-    this.emitter.emit<SendMailOptions>('user.registered', {
+    eventEmitter.emit<SendMailOptions>('user.registered', {
       to: email,
       username,
     });
@@ -75,7 +74,7 @@ export class AuthService implements IAuthService {
       return user;
     }
 
-    this.emitter.emit<SendMailOptions>('user.registered', {
+    eventEmitter.emit<SendMailOptions>('user.registered', {
       to: data.email,
       username: data.username,
     });
