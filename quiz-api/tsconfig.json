@@ -25,7 +25,6 @@
       "@src/*": ["src/*"],
       "@auth/*": ["src/auth/*"],
       "@common/*": ["src/common/*"],
-      "@events/*": ["src/events/*"],
       "@mail/*": ["src/mail/*"],
       "@review/*": ["src/review/*"],
       "@task/*": ["src/task/*"],

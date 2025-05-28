@@ -77,7 +77,6 @@
     "@src": "dist",
     "@auth": "dist/auth",
     "@common": "dist/common",
-    "@events": "dist/events",
     "@mail": "dist/mail",
     "@review": "dist/review",
     "@task": "dist/task",
