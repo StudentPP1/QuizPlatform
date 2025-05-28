@@ -44,8 +44,8 @@ const AuthorPage: React.FC = () => {
                         </p>
                     </div>
                 </div>
-                <h3 className={styles.sectionTitle}>Quests</h3>
                 <div className={styles.content_container}>
+                    <h3 className={styles.sectionTitle}>Quests</h3>
                     {isLoading
                         ? <Loading />
                         : <div className={styles.quests}>
@@ -61,8 +61,8 @@ const AuthorPage: React.FC = () => {
                         </div>
                     }
                 </div>
+                <div ref={lastElement} className="last" />
             </div>
-            <div ref={lastElement} className="last" />
         </Wrapper>
     );
 };

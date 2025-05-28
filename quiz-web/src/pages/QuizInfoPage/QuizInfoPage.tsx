@@ -47,6 +47,7 @@ const QuizInfoPage: FC = () => {
         fetchData();
     }, []);
 
+    // TODO: use observer pattern 
     useObserver(lastElement, isLoading, async () => {
         if (isLoading) return;
         setLoading(true);

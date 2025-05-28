@@ -33,13 +33,13 @@ const QuizPage: React.FC = () => {
   const handleAnswerSelection = (question: QuizTask, value: string, checked?: boolean) => {
     setAnswers((prev) => {
       if (question.type === "multiple-choice") {
-        const selected = (prev[question.id] as string[]) || [];
+        const selected = (prev[currentQuestionIndex.toString()] as string[]) || [];
         return {
           ...prev,
-          [question.id]: checked ? [...selected, value] : selected.filter((item) => item !== value),
+          [currentQuestionIndex.toString()]: checked ? [...selected, value] : selected.filter((item) => item !== value),
         };
       }
-      return { ...prev, [question.id]: [value] };
+      return { ...prev, [currentQuestionIndex.toString()]: [value] };
     });
   };
 
@@ -47,54 +47,62 @@ const QuizPage: React.FC = () => {
     handleAnswerSelection(question, event.target.value, event.target.checked);
   };
 
-  const SingleChoiceStrategy = (question: QuizTask) => (
-    <>
-      {question.options?.map((option) => (
-        <label key={option} className={styles.option}>
-          <input
-            className={styles.radioButton}
-            type="radio"
-            name={question.id}
-            value={option}
-            onChange={handleAnswerChange}
-          />
-          {option}
-        </label>
-      ))}
-    </>
-  );
+  const SingleChoiceStrategy = (question: QuizTask) => {
+    return (
+      <>
+        {question.options?.map((option) => (
+          <label key={option} className={styles.option}>
+            <input
+              className={styles.radioButton}
+              type="radio"
+              value={option}
+              name={currentQuestionIndex.toString()}
+              onChange={handleAnswerChange}
+              checked={answers[currentQuestionIndex.toString()]?.[0] === option}
+            />
+            {option}
+          </label>
+        ))}
+      </>
+    )
+  }
 
-  const MultipleChoiceStrategy = (question: QuizTask) => (
-    <>
-      {question.options?.map((option) => (
-        <label key={option} className={styles.option}>
-          <input
-            className={styles.checkBox}
-            type="checkbox"
-            value={option}
-            onChange={handleAnswerChange}
-          />
-          {option}
-        </label>
-      ))}
-    </>
-  );
+  const MultipleChoiceStrategy = (question: QuizTask) => {
+    return (
+      <>
+        {question.options?.map((option) => (
+          <label key={option} className={styles.option}>
+            <input
+              className={styles.checkBox}
+              type="checkbox"
+              value={option}
+              onChange={handleAnswerChange}
+            />
+            {option}
+          </label>
+        ))}
+      </>
+    )
+  }
 
-  const TextStrategy = (question: QuizTask) => (
-    <>
-      {question.options?.map((option) => (
-        <label key={option} className={styles.option_text}>
-          <input
-            autoFocus={true}
-            type="text"
-            className={styles.textInput}
-            onChange={handleAnswerChange}
-            value={(answers[question.id] && answers[question.id][0]) || ""}
-          />
-        </label>
-      ))}
-    </>
-  );
+  const TextStrategy = (question: QuizTask) => {
+    const index = currentQuestionIndex.toString();
+    return (
+      <>
+        {question.options?.map((option) => (
+          <label key={option} className={styles.option_text}>
+            <input
+              autoFocus={true}
+              type="text"
+              className={styles.textInput}
+              onChange={handleAnswerChange}
+              value={(answers[index] && answers[index][0]) || ""}
+            />
+          </label>
+        ))}
+      </>
+    )
+  }
 
   const strategies = new Map<string, (question: QuizTask) => any>([
     ['single', (question) => SingleChoiceStrategy(question)],

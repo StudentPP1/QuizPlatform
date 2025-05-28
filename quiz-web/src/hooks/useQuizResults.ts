@@ -8,7 +8,7 @@ const useQuizResults = (quizTasks: QuizTask[], userAnswers: UserAnswers) => {
     
     // TODO: + Task 1 => implement for ... of loop to iterate over quizTasks 
     for (const question of quizTasks) {
-      const userAnswer = userAnswers[question.id];
+      const userAnswer = userAnswers[quizTasks.indexOf(question).toString()];
       console.log("_______")
       console.log(userAnswer)
       const correctAnswer = question.correctAnswers;
