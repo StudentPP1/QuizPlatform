@@ -12,8 +12,8 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
 import { REFRESH_TOKEN_REPOSITORY } from '@common/constants/token.constants';
+import { IRefreshTokenRepository } from '@common/contracts/repositories/refresh-token.repository.contract';
 import { Payload } from '@common/interfaces/payload.interface';
-import { IRefreshTokenRepository } from '@src/common/contracts/repositories/refresh-token.repository.contract';
 
 @Injectable()
 export class RefreshTokenGuard implements CanActivate {

@@ -8,10 +8,10 @@ import ms, { StringValue } from 'ms';
 import { MemoizationCache } from '@common/cache/memoization-cache';
 import { LFUStrategy } from '@common/cache/strategies/lfu.strategy';
 import { REFRESH_TOKEN_REPOSITORY } from '@common/constants/token.constants';
+import { IRefreshTokenRepository } from '@common/contracts/repositories/refresh-token.repository.contract';
 import { ITokenService } from '@common/contracts/services/token.service.contract';
 import { Payload } from '@common/interfaces/payload.interface';
 import { Tokens } from '@common/interfaces/tokens.payload';
-import { IRefreshTokenRepository } from '@src/common/contracts/repositories/refresh-token.repository.contract';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
