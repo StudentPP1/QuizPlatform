@@ -22,7 +22,7 @@ const SearchPage: FC = () => {
     localStorage.setItem("index", "0");
     const fetchData = async () => {
       if (text) {
-        const data = await QuizService.search(from, to, text);
+        const data = await QuizService.search(DEFAULT_PAGINATION_FROM, DEFAULT_PAGINATION_SIZE, text);
         setQuizzes(data);
         setFrom((prev) => prev + DEFAULT_PAGINATION_SIZE);
         setTo((prev) => prev + DEFAULT_PAGINATION_SIZE);

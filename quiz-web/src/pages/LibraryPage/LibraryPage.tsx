@@ -22,6 +22,7 @@ const LibraryPage: FC = () => {
     dependencies: [strategy],
     useObserverHook: useObserver,
   });
+  // TODO: fix pagination infinite loop
 
   // TODO: use strategy pattern
   return (
