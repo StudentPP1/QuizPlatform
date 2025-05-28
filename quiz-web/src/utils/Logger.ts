@@ -12,7 +12,7 @@ export function log(
 ): TypedPropertyDescriptor<any> | void {
   const originalMethod = descriptor.value; // Save a reference to the original method
 
-  // Change the method to log its execution time and arguments
+  // Change the function to log its execution time and arguments and return new function
   descriptor.value = function (...args: any[]) {
     const start = performance.now();
     const time = () => `${(performance.now() - start).toFixed(2)}ms`;

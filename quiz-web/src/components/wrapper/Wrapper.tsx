@@ -1,23 +1,17 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { Creator } from "../../models/Creator";
 import styles from "./Wrapper.module.scss";
 import Header from "../header/Header";
 import Avatar from "../avatar/Avatar";
-import Menu from "../menu/Menu";
+import Menu from "../userMenu/Menu";
 import Sidebar from "../sidebar/Sidebar";
-import { UserService } from "../../api/services/UserService";
+import { AuthContext } from "../../context/context";
 
 const Wrapper: FC<{
     children: any
 }> = ({ children }) => {
     const [open, setOpen] = useState<boolean>(false);
-    const [user, setUser] = useState<Creator | null>(null);
-
-    useEffect(() => {
-        UserService.getUser()
-            .then((result: any) => { setUser(result) })
-            .catch(() => { setUser(null) })
-    }, [])
+    const { user } = useContext(AuthContext)
 
     return (
         <>

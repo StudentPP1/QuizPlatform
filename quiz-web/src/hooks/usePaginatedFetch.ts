@@ -52,6 +52,7 @@ export function usePaginatedData<T>({
     setTo(initSize);
   }, [initSize]);
 
+  // Reset pagination when dependencies change
   useEffect(() => {
     resetPagination();
   }, [...dependencies]);

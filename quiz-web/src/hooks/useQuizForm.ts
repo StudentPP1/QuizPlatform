@@ -31,7 +31,8 @@ export const useQuizForm = (
     questions: initialQuiz?.questions || [],
   });
 
-  // generic function to update any field in the form state: (title, string value)
+  // generic function to update any field in the form state: 
+  // example: updateField("title" (key of QuizFormState), "new title" (string value))
   const updateField = useCallback(
     <K extends keyof QuizFormState>(field: K, value: QuizFormState[K]) => {
       setFormState((prev) => ({ ...prev, [field]: value }));
@@ -40,6 +41,7 @@ export const useQuizForm = (
   );
 
   // useCallback is used to avoid recreating functions on every render
+  // if dependencies change, the function will be recreated
   const addQuestion = useCallback(
     (isOpenEnded: boolean) => {
       const newQuestion: QuestionType = {
@@ -136,6 +138,7 @@ export const useQuizForm = (
     return formData;
   }, [formState, initialQuiz]);
 
+  // Return actual state and actions 
   return [
     formState,
     {
