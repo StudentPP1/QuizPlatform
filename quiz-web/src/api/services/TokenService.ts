@@ -1,4 +1,9 @@
-import { ACCESS_TOKEN_NAME, API_BASE_URL } from "../../constants/constants";
+import {
+  ACCESS_TOKEN_EXPIRATION,
+  ACCESS_TOKEN_NAME,
+  API_BASE_URL,
+} from "../../constants/constants";
+import { globalCache } from "../../hooks/useCachedFetch";
 import { fetchErrorEvent } from "../utils/ErrorHandler";
 import { HttpMethod } from "../utils/HttpMethod";
 import { RequestAttributes } from "../utils/RequestAttributes";
@@ -17,7 +22,11 @@ export async function refreshToken() {
         })
       );
     } else {
-      sessionStorage.setItem(ACCESS_TOKEN_NAME, token.accessToken);
+      globalCache.set(ACCESS_TOKEN_NAME, {
+        data: token.accessToken,
+        timestamp: Number(ACCESS_TOKEN_EXPIRATION),
+      });
+      console.log("globalCache: ", globalCache);
     }
   });
 }

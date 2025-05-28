@@ -3,9 +3,9 @@ import {
   DEFAULT_CREDENTIALS,
   DEFAULT_HEADERS,
 } from "../../constants/constants";
+import { globalCache } from "../../hooks/useCachedFetch";
 import { HttpMethod } from "./HttpMethod";
 
-// TODO: use builder pattern
 export class RequestAttributes {
   private method: string = HttpMethod.GET;
   private headers: Record<string, string> = DEFAULT_HEADERS;
@@ -35,10 +35,10 @@ export class RequestAttributes {
   }
 
   addAuthHeader(): this {
-    this.headers["Authorization"] = `Bearer ${sessionStorage.getItem(
-      ACCESS_TOKEN_NAME
-    )}`;
-    console.log("Authorization header: ", this.headers["Authorization"])
+    this.headers["Authorization"] = `Bearer ${
+      globalCache.get(ACCESS_TOKEN_NAME)?.data
+    }`;
+    console.log("Authorization header: ", this.headers["Authorization"]);
     return this;
   }
 

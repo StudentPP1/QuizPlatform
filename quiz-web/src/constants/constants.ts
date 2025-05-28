@@ -5,6 +5,7 @@ export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const FRONT_URL = `${import.meta.env.VITE_FRONT_URL}`;
 
 export const ACCESS_TOKEN_NAME = "access_token";
+export const ACCESS_TOKEN_EXPIRATION = `${import.meta.env.VITE_ACCESS_TOKEN_EXPIRATION}`;
 
 export const DEFAULT_CREDENTIALS: RequestCredentials = "include";
 export const DEFAULT_HEADERS: Record<string, string> = {

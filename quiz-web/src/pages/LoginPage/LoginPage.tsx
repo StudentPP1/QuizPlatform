@@ -4,7 +4,7 @@ import styles from "./LoginPage.module.scss";
 import { useNavigate } from "react-router-dom";
 import { AuthContext, AuthState } from "../../context/context";
 import { UserService } from "../../api/services/UserService";
-import { ACCESS_TOKEN_NAME } from "../../constants/constants";
+import { ACCESS_TOKEN_EXPIRATION, ACCESS_TOKEN_NAME } from "../../constants/constants";
 import { AsyncFunctionQueue } from "../../utils/Queue";
 import { globalCache } from "../../hooks/useCachedFetch";
 
@@ -21,7 +21,10 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const queue = new AsyncFunctionQueue();
 
   const authenticate = (result: any) => {
-    sessionStorage.setItem(ACCESS_TOKEN_NAME, result.accessToken);
+    globalCache.set(ACCESS_TOKEN_NAME, {
+      data: result.accessToken,
+      timestamp: Number(ACCESS_TOKEN_EXPIRATION)
+    });
     setIsOpen(false);
 
     queue.enqueue(() => UserService.getUser(), (error: any) => {

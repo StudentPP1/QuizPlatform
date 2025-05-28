@@ -25,6 +25,7 @@ const Sidebar: FC = () => {
             <ul>
                 {Object.keys(pages).map((i) => 
                     <li
+                    key={i}
                     onClick={() => {
                         localStorage.setItem("index", i.toString());
                         setIndex(Number.parseInt(i));

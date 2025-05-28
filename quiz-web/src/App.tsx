@@ -7,6 +7,7 @@ import { ACCESS_TOKEN_NAME } from "./constants/constants";
 import { Creator } from "./models/Creator";
 import { refreshToken } from "./api/services/TokenService";
 import { UserService } from "./api/services/UserService";
+import { globalCache } from "./hooks/useCachedFetch";
 
 export const App: FC = () => {
   const [user, setUser] = useState<Creator | null>(null);
@@ -14,7 +15,7 @@ export const App: FC = () => {
   useEffect(() => {
     localStorage.setItem("index", "2")
     refreshToken().then(() => {
-      if (sessionStorage.getItem(ACCESS_TOKEN_NAME) != null) {
+      if (globalCache.has(ACCESS_TOKEN_NAME)) {
         UserService.getUser()
           .then((result: any) => { setUser(result) })
           .catch(() => { setUser(null) })
