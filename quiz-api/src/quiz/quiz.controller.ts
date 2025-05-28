@@ -27,6 +27,10 @@ import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
 import { JwtGuard } from '@common/guards/jwt.guard';
 import { RequestWithUser } from '@common/interfaces/request-with-user.interface';
+import {
+  MessageResponse,
+  QuizIdResponse,
+} from '@common/interfaces/response.interface';
 
 @UseGuards(JwtGuard)
 @Controller('quiz')
@@ -41,7 +45,7 @@ export class QuizController {
     @Req() request: RequestWithUser,
     @Body('quiz') quizRaw: string,
     @UploadedFiles() files: Express.Multer.File[],
-  ): Promise<object> {
+  ): Promise<QuizIdResponse> {
     try {
       const createQuizDto = plainToInstance(CreateQuizDto, JSON.parse(quizRaw));
       await validateOrReject(createQuizDto);
@@ -59,7 +63,7 @@ export class QuizController {
     @Req() request: RequestWithUser,
     @Body('quiz') quizRaw: string,
     @UploadedFiles() files: Express.Multer.File[],
-  ): Promise<object> {
+  ): Promise<QuizIdResponse> {
     try {
       const updateQuizDto = plainToInstance(UpdateQuizDto, JSON.parse(quizRaw));
       await validateOrReject(updateQuizDto);
@@ -79,7 +83,7 @@ export class QuizController {
   deleteQuiz(
     @Param('id') id: string,
     @Req() request: RequestWithUser,
-  ): Promise<object> {
+  ): Promise<MessageResponse> {
     return this.quizService.deleteQuiz(id, request.user);
   }
 
@@ -87,7 +91,7 @@ export class QuizController {
   saveResult(
     @Param('quizId') quizId: string,
     @Req() request: RequestWithUser,
-  ): Promise<object> {
+  ): Promise<MessageResponse> {
     return this.quizService.saveResult(quizId, request.user.id);
   }
 

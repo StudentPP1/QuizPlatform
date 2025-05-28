@@ -7,6 +7,10 @@ import {
 } from '@common/dto/pagination.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
+import {
+  MessageResponse,
+  QuizIdResponse,
+} from '@common/interfaces/response.interface';
 import { baseLogger } from '@common/logging/logger';
 import { User } from '@users/entities/user.entity';
 
@@ -42,7 +46,7 @@ export class LoggingQuizDecorator implements IQuizService {
     dto: CreateQuizDto,
     user: User,
     files: Express.Multer.File[],
-  ): Promise<object> {
+  ): Promise<QuizIdResponse> {
     return this.logMethod(this.createQuiz.name, [dto, user, files], () =>
       this.wrapped.createQuiz(dto, user, files),
     );
@@ -53,7 +57,7 @@ export class LoggingQuizDecorator implements IQuizService {
     updateQuizDto: UpdateQuizDto,
     user: User,
     files: Express.Multer.File[],
-  ): Promise<object> {
+  ): Promise<QuizIdResponse> {
     return this.logMethod(
       this.updateQuiz.name,
       [quizId, updateQuizDto, user, files],
@@ -61,13 +65,13 @@ export class LoggingQuizDecorator implements IQuizService {
     );
   }
 
-  deleteQuiz(quizId: string, user: User): Promise<object> {
+  deleteQuiz(quizId: string, user: User): Promise<MessageResponse> {
     return this.logMethod(this.deleteQuiz.name, [quizId, user], () =>
       this.wrapped.deleteQuiz(quizId, user),
     );
   }
 
-  saveResult(quizId: string, userId: string): Promise<object> {
+  saveResult(quizId: string, userId: string): Promise<MessageResponse> {
     return this.logMethod(this.saveResult.name, [quizId, userId], () =>
       this.wrapped.saveResult(quizId, userId),
     );

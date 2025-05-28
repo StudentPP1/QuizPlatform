@@ -6,6 +6,10 @@ import {
 } from '@common/dto/pagination.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { UpdateQuizDto } from '@common/dto/update-quiz.dto';
+import {
+  MessageResponse,
+  QuizIdResponse,
+} from '@common/interfaces/response.interface';
 import { User } from '@users/entities/user.entity';
 
 export interface IQuizService {
@@ -13,15 +17,15 @@ export interface IQuizService {
     dto: CreateQuizDto,
     user: User,
     files: Express.Multer.File[],
-  ): Promise<object>;
+  ): Promise<QuizIdResponse>;
   updateQuiz(
     quizId: string,
     updateQuizDto: UpdateQuizDto,
     user: User,
     files: Express.Multer.File[],
-  ): Promise<object>;
-  deleteQuiz(quizId: string, user: User): Promise<object>;
-  saveResult(quizId: string, userId: string): Promise<object>;
+  ): Promise<QuizIdResponse>;
+  deleteQuiz(quizId: string, user: User): Promise<MessageResponse>;
+  saveResult(quizId: string, userId: string): Promise<MessageResponse>;
   getQuiz(id: string): Promise<FullQuizDto>;
   searchQuizzesByName(dto: QuizPaginationDto): Promise<QuizPreviewDto[]>;
   getTopQuizzes(limit: number): Promise<QuizPreviewDto[]>;
