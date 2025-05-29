@@ -13,7 +13,7 @@ import { QuizResult } from '@quiz/entities/quiz-result.entity';
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { Review } from '@review/entities/review.entity';
 
-@Entity()
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
