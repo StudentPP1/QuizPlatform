@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DataSource, MoreThan, Repository } from 'typeorm';
+import { DataSource, FindOptionsWhere, MoreThan, Repository } from 'typeorm';
 
 import { IRefreshTokenRepository } from '@common/contracts/repositories/refresh-token.repository.contract';
 import { RefreshToken } from '@token/entities/refresh-token.entity';
@@ -13,17 +13,22 @@ export class RefreshTokenRepository implements IRefreshTokenRepository {
     this.repository = this.dataSource.getRepository(RefreshToken);
   }
 
-  findByOneByUserIdAndHash(
-    hash: string,
+  findRefreshToken(
     userId: string,
+    hash?: string,
   ): Promise<RefreshToken | null> {
+    const where: FindOptionsWhere<RefreshToken> = {
+      user: { id: userId },
+      isUsed: false,
+      expiresAt: MoreThan(new Date()),
+    };
+
+    if (hash !== undefined) {
+      where.tokenHash = hash;
+    }
+
     return this.repository.findOne({
-      where: {
-        user: { id: userId },
-        tokenHash: hash,
-        isUsed: false,
-        expiresAt: MoreThan(new Date()),
-      },
+      where,
       relations: ['user'],
     });
   }
