@@ -11,8 +11,8 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
-import { REFRESH_TOKEN_REPOSITORY } from '@common/constants/token.constants';
-import { IRefreshTokenRepository } from '@common/contracts/repositories/refresh-token.repository.contract';
+import { TOKEN_SERVICE } from '@common/constants/token.constants';
+import { ITokenService } from '@common/contracts/services/token.service.contract';
 import { Payload } from '@common/interfaces/payload.interface';
 
 @Injectable()
@@ -20,8 +20,8 @@ export class RefreshTokenGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-    @Inject(REFRESH_TOKEN_REPOSITORY)
-    private readonly refreshTokenRepository: IRefreshTokenRepository,
+    @Inject(TOKEN_SERVICE)
+    private readonly tokenService: ITokenService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -31,7 +31,12 @@ export class RefreshTokenGuard implements CanActivate {
     const payload = await this.verifyToken(refreshToken);
     const tokenHash = this.hashToken(refreshToken);
 
-    await this.validateTokenInDb(tokenHash, payload.id);
+    const dbToken = await this.tokenService.validateRefreshTokenInDb(
+      tokenHash,
+      payload.id,
+    );
+
+    await this.tokenService.markTokenAsUsed(dbToken);
 
     request.user = payload;
     return true;
@@ -59,22 +64,5 @@ export class RefreshTokenGuard implements CanActivate {
 
   private hashToken(token: string): string {
     return createHash('sha256').update(token).digest('hex');
-  }
-
-  private async validateTokenInDb(
-    tokenHash: string,
-    userId: string,
-  ): Promise<void> {
-    const dbToken = await this.refreshTokenRepository.findByOneByUserIdAndHash(
-      tokenHash,
-      userId,
-    );
-
-    if (!dbToken) {
-      throw new UnauthorizedException('Refresh token expired or reused');
-    }
-
-    dbToken.isUsed = true;
-    await this.refreshTokenRepository.save(dbToken);
   }
 }

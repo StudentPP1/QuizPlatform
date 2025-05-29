@@ -7,7 +7,6 @@ import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { AuthProvider } from '@common/enums/auth-provider.enum';
 import { UpdateAuthorRatingOptions } from '@common/interfaces/update-author-rating-options.interface';
 import { baseLogger } from '@common/logging/logger';
-import { Quiz } from '@quiz/entities/quiz.entity';
 import { User } from '@users/entities/user.entity';
 
 export class LoggingUsersDecorator implements IUsersService {
@@ -84,12 +83,6 @@ export class LoggingUsersDecorator implements IUsersService {
       this.getParticipatedQuizzes.name,
       [userId, paginationDto],
       () => this.wrapped.getParticipatedQuizzes(userId, paginationDto),
-    );
-  }
-
-  addQuizParticipation(user: User, quiz: Quiz): Promise<void> {
-    return this.logMethod(this.addQuizParticipation.name, [user, quiz], () =>
-      this.wrapped.addQuizParticipation(user, quiz),
     );
   }
 

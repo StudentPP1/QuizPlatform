@@ -51,7 +51,7 @@ export class QuizController {
       await validateOrReject(createQuizDto);
 
       return this.quizService.createQuiz(createQuizDto, request.user, files);
-    } catch (error) {
+    } catch {
       throw new BadRequestException('Invalid quiz data');
     }
   }
@@ -74,7 +74,7 @@ export class QuizController {
         request.user,
         files,
       );
-    } catch (error) {
+    } catch {
       throw new BadRequestException('Invalid quiz data');
     }
   }

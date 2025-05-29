@@ -82,7 +82,8 @@ export class AuthService implements IAuthService {
     return this.usersService.createUser(data, AuthProvider.GOOGLE);
   }
 
-  logout(userId: string): void {
+  async logout(userId: string): Promise<void> {
     this.tokenService.removeTokenGenerator(userId);
+    await this.tokenService.invalidateUserRefreshToken(userId);
   }
 }

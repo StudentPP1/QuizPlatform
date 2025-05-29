@@ -159,7 +159,6 @@ export class QuizService implements IQuizService {
 
       await Promise.all([
         this.quizRepository.save(quiz),
-        this.usersService.addQuizParticipation(user, quiz),
         this.quizResultRepository.save(quizResult),
       ]);
     }

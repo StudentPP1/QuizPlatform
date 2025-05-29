@@ -1,99 +1,145 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Quiz API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Quiz API is a backend service for managing quizzes, users, tasks, reviews, and authentication. It is part of a monorepo called `QuizPlatform`, which also contains the frontend project (`quiz-web`).
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This API is built with **NestJS**, uses **TypeORM** for database interaction, and is connected to a **PostgreSQL** database.
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📁 Project Structure
 
-## Project setup
-
-```bash
-$ yarn install
+```
+QuizPlatform/
+├── quiz-api/       # This backend service (you are here)
+├── quiz-web/       # Frontend app
 ```
 
-## Compile and run the project
+Inside `quiz-api/src`:
 
-```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+```
+src/
+├── auth/             # Authentication (local + Google OAuth)
+├── common/           # Shared interfaces, utilities, DTOs etc.
+├── mail/             # Email service for send welcome mail
+├── quiz/             # Quiz interaction and participation
+├── review/           # Quiz reviews and ratings
+├── task/             # Individual tasks/questions inside quizzes
+├── token/            # JWT access/refresh tokens logic
+├── users/            # User profiles and management
+├── app.module.ts     # Root module
+├── config.schema.ts  # Environment config validation
+├── main.ts           # Entry point
 ```
 
-## Run tests
+---
+
+## 🚀 Features
+
+* User registration and login (email + Google OAuth)
+* JWT authentication (access/refresh tokens)
+* Quiz creation and solving
+* Rating and review system
+* Mailing a welcome letter (via Nodemailer)
+
+---
+
+## 🛠️ Tech Stack
+
+* **Node.js** + **NestJS**
+* **TypeScript**
+* **PostgreSQL** + **TypeORM**
+* **JWT** (Access & Refresh tokens)
+* **Google OAuth 2.0**
+* **Nodemailer**
+* **Yarn** as package manager
+
+---
+
+## 📦 Installation
+
+1. **Clone the monorepo and navigate to quiz-api**
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+git clone https://github.com/StudentPP1/QuizPlatform.git
+cd QuizPlatform/quiz-api
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+2. **Install dependencies**
 
 ```bash
-$ yarn install -g mau
-$ mau deploy
+yarn install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+3. **Create environment variables**
 
-## Resources
+Copy the `.env.example` file to create the appropriate environment file:
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+cp .env.example .env.development.local    # For development
+cp .env.example .env.production.local     # For production
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Edit the corresponding files and fill in the required variables:
 
-## Support
+* `env.development.local` for development
+* `env.production.local` for production
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+4. **Run the development server**
 
-## Stay in touch
+```bash
+yarn start:dev
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+5. **Run the production server**
 
-## License
+Build the project and run it:
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```bash
+yarn build
+yarn start:prod
+```
+
+---
+
+## 📋 API Endpoints
+
+> 🧭 All API routes are prefixed with `/api` (e.g., `/api/auth/login`).
+
+| Method | Route                                      | Description                                                            | Auth  |
+|--------|--------------------------------------------|------------------------------------------------------------------------|-------|
+| POST   | /auth/signup                               | Register a new user                                                    | ❌    |
+| POST   | /auth/login                                | Log in with email and password                                         | ❌    |
+| GET    | /auth/google                               | Start Google OAuth flow                                                | ❌    |
+| GET    | /auth/google/redirect                      | Handle Google OAuth redirect                                           | ❌    |
+| GET    | /auth/logout                               | Log out                                                                | ✅    |
+| POST   | /quiz/create                               | Create a new quiz                                                      | ✅    |
+| PUT    | /quiz/update/:id                           | Update a quiz by its ID                                                | ✅    |
+| DELETE | /quiz/delete/:id                           | Delete a quiz by its ID                                                | ✅    |
+| POST   | /quiz/:quizId/results                      | Submit results for a quiz by its ID                                    | ✅    |
+| GET    | /quiz/:quizId/info                         | Retrieve quiz information by its ID                                    | ✅    |
+| GET    | /quiz/search?name=name&from=1&to=11        | Search quizzes by name with pagination                                 | ✅    |
+| GET    | /quiz/top-rated?limit=3                    | Retrieve top-rated quizzes                                             | ✅    |
+| POST   | /review/:quizId                            | Submit a review for a quiz                                             | ✅    |
+| GET    | /review?quizId=uuid&from=1&to=11           | Get reviews for a quiz by its ID with pagination                       | ✅    |
+| POST   | /token/update                              | Refresh access and refresh tokens                                      | ✅    |
+| GET    | /users/profile?userId=uuid                 | Get user profile (optionally by userId)                                | ✅    |
+| GET    | /users/created?userId=uuid&from=1&to=11    | Get quizzes created by a user (optionally by userId) with pagination   | ✅    |
+| GET    | /users/participated?from=1&to=11           | Get quizzes the user participated in with pagination                   | ✅    |
+| GET    | /users/top-creators                        | Get top quiz creators                                                  | ✅    |
+
+> 🔐 Authenticated routes require a valid JWT access or refresh token in the `Authorization` header.
+
+> ♻️ The `/token/update` route requires a valid **refresh token**, usually provided in a secure HTTP-only cookie.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+## ✨ Notes
+
+* This API is part of a larger platform. You can find the frontend implementation in the `quiz-web` folder.
+* Contributions and suggestions are welcome!
