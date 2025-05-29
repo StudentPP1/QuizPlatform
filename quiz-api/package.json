@@ -1,6 +1,6 @@
 {
   "name": "quiz-api",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "An API for Quiz application",
   "author": "Fererra",
   "private": true,
@@ -8,10 +8,9 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\"",
-    "start": "nest start",
     "start:dev": "cross-env NODE_ENV=development nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "cross-env NODE_ENV=production node dist/main",
     "lint": "eslint \"{src,apps,libs}/**/*.ts\" --fix"
   },
   "dependencies": {
