@@ -43,7 +43,7 @@ export function useCachedFetch<T>(
         console.log("Fetching data for key:", key);
         const result = await fetcher();
         const currentTime = Date.now();
-        globalCache.set(key, { data: result, timestamp: currentTime });
+        globalCache.set(key, { data: result, timestamp: ttl + currentTime });
         // Check if the component is still rendering before setting state
         if (isMounted.current) {
           setData(result);
@@ -56,7 +56,7 @@ export function useCachedFetch<T>(
       }
       // find all keys with ttl not valid and delete them
       for (const [key, cacheData] of globalCache.entries()) {
-        if (now - cacheData.timestamp >= ttl) {
+        if (now - cacheData.timestamp >= 0) {
           globalCache.delete(key);
         }
       }

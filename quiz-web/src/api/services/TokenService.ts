@@ -24,7 +24,7 @@ export async function refreshToken() {
     } else {
       globalCache.set(ACCESS_TOKEN_NAME, {
         data: token.accessToken,
-        timestamp: Number(ACCESS_TOKEN_EXPIRATION),
+        timestamp: Number(ACCESS_TOKEN_EXPIRATION) + Date.now()
       });
       console.log("globalCache: ", globalCache);
     }

@@ -23,7 +23,7 @@ const LoginPage: FC<{ setIsOpen: any }> = ({ setIsOpen }) => {
   const authenticate = (result: any) => {
     globalCache.set(ACCESS_TOKEN_NAME, {
       data: result.accessToken,
-      timestamp: Number(ACCESS_TOKEN_EXPIRATION)
+      timestamp: Number(ACCESS_TOKEN_EXPIRATION) + Date.now()
     });
     setIsOpen(false);
 
