@@ -82,8 +82,11 @@ export class AuthController {
   @Get('logout')
   @UseGuards(JwtGuard)
   @HttpCode(200)
-  logout(@Req() request: RequestWithUser, @Res() response: Response): void {
-    this.authService.logout(request.user.id);
+  async logout(
+    @Req() request: RequestWithUser,
+    @Res() response: Response,
+  ): Promise<void> {
+    await this.authService.logout(request.user.id);
 
     response.clearCookie('refresh_token', {
       httpOnly: true,
