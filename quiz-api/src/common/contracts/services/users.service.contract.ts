@@ -5,7 +5,6 @@ import { ProfileDto } from '@common/dto/profile.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { AuthProvider } from '@common/enums/auth-provider.enum';
 import { UpdateAuthorRatingOptions } from '@common/interfaces/update-author-rating-options.interface';
-import { Quiz } from '@quiz/entities/quiz.entity';
 import { User } from '@users/entities/user.entity';
 
 export interface IUsersService {
@@ -24,7 +23,6 @@ export interface IUsersService {
     userId: string,
     paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]>;
-  addQuizParticipation(user: User, quiz: Quiz): Promise<void>;
   getTopCreators(limit: number): Promise<ProfileDto[]>;
   updateAuthorRating(options: UpdateAuthorRatingOptions): Promise<void>;
 }

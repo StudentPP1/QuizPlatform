@@ -18,7 +18,6 @@ import { ProfileDto } from '@common/dto/profile.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { AuthProvider } from '@common/enums/auth-provider.enum';
 import { UpdateAuthorRatingOptions } from '@common/interfaces/update-author-rating-options.interface';
-import { Quiz } from '@quiz/entities/quiz.entity';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
@@ -71,11 +70,6 @@ export class RealUsersService implements IUsersService {
     paginationDto: BasePaginationDto,
   ): Promise<QuizPreviewDto[]> {
     return this.quizService.getParticipatedQuizzes(userId, paginationDto);
-  }
-
-  async addQuizParticipation(user: User, quiz: Quiz): Promise<void> {
-    user.participatedQuizzes.push(quiz);
-    await this.usersRepository.save(user);
   }
 
   async getTopCreators(limit: number): Promise<ProfileDto[]> {

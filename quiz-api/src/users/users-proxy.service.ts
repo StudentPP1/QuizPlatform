@@ -9,7 +9,6 @@ import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { AuthProvider } from '@common/enums/auth-provider.enum';
 import { UpdateAuthorRatingOptions } from '@common/interfaces/update-author-rating-options.interface';
 import { Queue } from '@common/queue/queue';
-import { Quiz } from '@quiz/entities/quiz.entity';
 import { User } from '@users/entities/user.entity';
 import { RealUsersService } from '@users/users.service';
 
@@ -63,12 +62,6 @@ export class ProxyUsersService implements IUsersService {
   ): Promise<QuizPreviewDto[]> {
     return this.queue.enqueue(() =>
       this.usersService.getParticipatedQuizzes(userId, paginationDto),
-    );
-  }
-
-  async addQuizParticipation(user: User, quiz: Quiz): Promise<void> {
-    await this.queue.enqueue(() =>
-      this.usersService.addQuizParticipation(user, quiz),
     );
   }
 
