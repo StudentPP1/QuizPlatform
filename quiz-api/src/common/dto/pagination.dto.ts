@@ -25,6 +25,6 @@ export class ReviewPaginationDto extends BasePaginationDto {
 
 export class UsersPaginationDto extends BasePaginationDto {
   @IsOptional()
-  @IsString()
+  @IsUUID()
   userId: string;
 }
