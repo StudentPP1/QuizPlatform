@@ -9,5 +9,5 @@ export interface IAuthService {
   googleLogin(user: User): Promise<Tokens>;
   validateUser(email: string, password: string): Promise<User>;
   validateGoogleUser(data: CreateGoogleUserDto): Promise<User>;
-  logout(userId: string): void;
+  logout(userId: string): Promise<void>;
 }

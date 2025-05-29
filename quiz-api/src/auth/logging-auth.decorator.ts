@@ -63,10 +63,9 @@ export class LoggingAuthDecorator implements IAuthService {
     );
   }
 
-  logout(userId: string): void {
-    this.logMethod(this.logout.name, [userId], () => {
-      this.wrapped.logout(userId);
-      return Promise.resolve();
-    });
+  logout(userId: string): Promise<void> {
+    return this.logMethod(this.logout.name, [userId], () =>
+      this.wrapped.logout(userId),
+    );
   }
 }
