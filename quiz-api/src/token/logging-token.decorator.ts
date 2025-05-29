@@ -1,6 +1,7 @@
 import { ITokenService } from '@common/contracts/services/token.service.contract';
 import { Tokens } from '@common/interfaces/tokens.payload';
 import { baseLogger } from '@common/logging/logger';
+import { RefreshToken } from '@token/entities/refresh-token.entity';
 import { User } from '@users/entities/user.entity';
 
 export class LoggingTokenDecorator implements ITokenService {
@@ -34,6 +35,27 @@ export class LoggingTokenDecorator implements ITokenService {
   generateTokens(user: User): Promise<Tokens> {
     return this.logMethod(this.generateTokens.name, [user], () =>
       this.wrapped.generateTokens(user),
+    );
+  }
+
+  validateRefreshTokenInDb(
+    tokenHash: string,
+    userId: string,
+  ): Promise<RefreshToken> {
+    return this.logMethod(this.generateTokens.name, [tokenHash, userId], () =>
+      this.wrapped.validateRefreshTokenInDb(tokenHash, userId),
+    );
+  }
+
+  invalidateUserRefreshToken(userId: string): Promise<void> {
+    return this.logMethod(this.invalidateUserRefreshToken.name, [userId], () =>
+      this.wrapped.invalidateUserRefreshToken(userId),
+    );
+  }
+
+  markTokenAsUsed(dbToken: RefreshToken): Promise<void> {
+    return this.logMethod(this.markTokenAsUsed.name, [dbToken], () =>
+      this.wrapped.markTokenAsUsed(dbToken),
     );
   }
 

@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import ms, { StringValue } from 'ms';
@@ -12,6 +12,7 @@ import { IRefreshTokenRepository } from '@common/contracts/repositories/refresh-
 import { ITokenService } from '@common/contracts/services/token.service.contract';
 import { Payload } from '@common/interfaces/payload.interface';
 import { Tokens } from '@common/interfaces/tokens.payload';
+import { RefreshToken } from '@token/entities/refresh-token.entity';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
@@ -89,6 +90,39 @@ export class TokenService implements ITokenService {
     );
 
     await this.refreshTokenRepository.save(refreshToken);
+  }
+
+  async validateRefreshTokenInDb(
+    tokenHash: string,
+    userId: string,
+  ): Promise<RefreshToken> {
+    const dbToken = await this.refreshTokenRepository.findRefreshToken(
+      userId,
+      tokenHash,
+    );
+
+    if (!dbToken) {
+      throw new UnauthorizedException(
+        'Refresh token is no longer valid (expired or already used)',
+      );
+    }
+
+    return dbToken;
+  }
+
+  async invalidateUserRefreshToken(userId: string): Promise<void> {
+    const dbToken = await this.refreshTokenRepository.findRefreshToken(userId);
+
+    if (!dbToken) {
+      throw new UnauthorizedException('Refresh token expired or reused');
+    }
+
+    await this.markTokenAsUsed(dbToken);
+  }
+
+  async markTokenAsUsed(dbToken: RefreshToken): Promise<void> {
+    dbToken.isUsed = true;
+    await this.refreshTokenRepository.save(dbToken);
   }
 
   removeTokenGenerator(userId: string): void {
