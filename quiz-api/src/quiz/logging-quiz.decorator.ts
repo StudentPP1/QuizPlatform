@@ -47,7 +47,7 @@ export class LoggingQuizDecorator implements IQuizService {
     user: User,
     files: Express.Multer.File[],
   ): Promise<QuizIdResponse> {
-    return this.logMethod(this.createQuiz.name, [dto, user, files], () =>
+    return this.logMethod(this.createQuiz.name, [dto, user], () =>
       this.wrapped.createQuiz(dto, user, files),
     );
   }
@@ -60,7 +60,7 @@ export class LoggingQuizDecorator implements IQuizService {
   ): Promise<QuizIdResponse> {
     return this.logMethod(
       this.updateQuiz.name,
-      [quizId, updateQuizDto, user, files],
+      [quizId, updateQuizDto, user],
       () => this.wrapped.updateQuiz(quizId, updateQuizDto, user, files),
     );
   }
