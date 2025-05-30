@@ -20,6 +20,6 @@ import { StorageModule } from '@storage/storage.module';
       inject: [BASE_IMAGE_SERVICE],
     },
   ],
-  exports: [ImageService],
+  exports: [IMAGE_SERVICE],
 })
 export class ImageModule {}
