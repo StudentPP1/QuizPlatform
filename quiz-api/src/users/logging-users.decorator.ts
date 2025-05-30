@@ -53,7 +53,10 @@ export class LoggingUsersDecorator implements IUsersService {
     userDto: CreateUserDto | CreateGoogleUserDto,
     authProvider: AuthProvider,
   ): Promise<User> {
-    return this.logMethod(this.createUser.name, [userDto, authProvider], () =>
+    const { password, ...rest } =
+      'password' in userDto ? userDto : { ...userDto, password: undefined };
+
+    return this.logMethod(this.createUser.name, [rest, authProvider], () =>
       this.wrapped.createUser(userDto, authProvider),
     );
   }

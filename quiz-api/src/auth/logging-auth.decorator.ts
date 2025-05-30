@@ -34,7 +34,8 @@ export class LoggingAuthDecorator implements IAuthService {
   }
 
   signUp(createUserDto: CreateUserDto): Promise<Tokens> {
-    return this.logMethod(this.signUp.name, [createUserDto], () =>
+    const { password, ...rest } = createUserDto;
+    return this.logMethod(this.signUp.name, [rest], () =>
       this.wrapped.signUp(createUserDto),
     );
   }
@@ -52,7 +53,7 @@ export class LoggingAuthDecorator implements IAuthService {
   }
 
   validateUser(email: string, password: string): Promise<User> {
-    return this.logMethod(this.validateUser.name, [email, password], () =>
+    return this.logMethod(this.validateUser.name, [email], () =>
       this.wrapped.validateUser(email, password),
     );
   }
