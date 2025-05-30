@@ -1,12 +1,12 @@
 FROM node:slim
 
-WORKDIR /app
+WORKDIR /quiz-api
 
 COPY package.json yarn.lock ./
 RUN yarn install
 
 COPY . .
 
-EXPOSE 5173
+EXPOSE 3000
 
-CMD ["yarn", "dev"]
+CMD ["yarn", "start:dev"]
