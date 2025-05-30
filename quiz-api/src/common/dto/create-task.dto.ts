@@ -30,4 +30,8 @@ export class CreateTaskDto {
   @IsOptional()
   @IsString()
   image?: string | null;
+
+  @IsOptional()
+  @IsString()
+  publicId?: string | null;
 }
