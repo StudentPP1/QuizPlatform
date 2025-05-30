@@ -32,6 +32,11 @@ export const configValidationSchema = Joi.object({
   MAIL_USER: Joi.string().required(),
   MAIL_PASS: Joi.string().required(),
 
+  // Cloudinary configuration
+  CLOUDINARY_CLOUD_NAME: Joi.string().required(),
+  CLOUDINARY_API_KEY: Joi.string().required(),
+  CLOUDINARY_API_SECRET: Joi.string().required(),
+
   // Client URL
   CLIENT_URL: Joi.string().uri().required(),
 });
