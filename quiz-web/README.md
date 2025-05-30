@@ -1,54 +1,75 @@
-# React + TypeScript + Vite
+<div align="center">
+  <h3 align="center">Web</h3>
+  <p align="center">
+    Frontend application for <a href="#">quizplatform.com</a>
+    <br />
+  </p>
+</div>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<details open="open">
+  <summary>Table of contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About the project</a>
+      <ul>
+        <li><a href="#built-with">Built with</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#license">License</a></li>
+  </ol>
+</details>
 
-Currently, two official plugins are available:
+## About the project
+This application displays and maintains the user interface for the Quizplatform website. 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Built with
 
-## Expanding the ESLint configuration
+* [React](https://react.dev/)
+* [SASS](https://github.com/sass/sass)
+* [Typescript](https://www.typescriptlang.org/)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting started
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+To get a local copy up and running follow these steps.
+
+### Prerequisites
+
+* yarn ([here](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable))
+* quiz-api ([here](https://github.com/StudentPP1/QuizPlatform/tree/master/quiz-api))
+* add `.env.local` in quiz-web dir with filled fields
+```env
+VITE_API_BASE_URL=
+VITE_FRONT_URL=
+VITE_ACCESS_TOKEN_EXPIRATION=
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Installation
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Clone the repository
+   ```sh
+   git clone https://github.com/StudentPP1/QuizPlatform.git
+   ```
+2. Install NPM packages
+   ```sh
+   cd quiz-web
+   yarn install
+   ```
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+## Usage
+
+To start the application locally: 
+```sh
+yarn dev
 ```
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
