@@ -1,6 +1,3 @@
-import { promises as fs } from 'fs';
-import { join } from 'path';
-
 import { Inject, Injectable } from '@nestjs/common';
 
 import { TASK_REPOSITORY } from '@common/constants/task.constants';
@@ -9,7 +6,6 @@ import { ITaskService } from '@common/contracts/services/task.service.contract';
 import { CreateTaskDto } from '@common/dto/create-task.dto';
 import { UpdateTaskDto } from '@common/dto/update-task.dto';
 import { Quiz } from '@quiz/entities/quiz.entity';
-import { Task } from '@task/entities/task.entity';
 
 @Injectable()
 export class TaskService implements ITaskService {
@@ -50,24 +46,5 @@ export class TaskService implements ITaskService {
       const toDelete = existingTasks.slice(updateTaskDtos.length);
       await this.taskRepository.remove(toDelete);
     }
-  }
-
-  async deleteTasks(tasks: Task[]): Promise<void> {
-    const tasksToDelete = tasks
-      .filter((task) => task.image)
-      .map(async (task) => {
-        const imagePath = join(process.cwd(), task.image);
-        try {
-          await fs.unlink(imagePath);
-          console.log(`Deleted: ${imagePath}`);
-        } catch (error) {
-          console.error(
-            `Failed to delete image: ${imagePath}`,
-            (error as Error).message,
-          );
-        }
-      });
-
-    await Promise.all(tasksToDelete);
   }
 }
