@@ -31,6 +31,7 @@ import {
   MessageResponse,
   QuizIdResponse,
 } from '@common/interfaces/response.interface';
+import { ImageService } from '@image/image.service';
 import { Quiz } from '@quiz/entities/quiz.entity';
 import { User } from '@users/entities/user.entity';
 
@@ -46,6 +47,7 @@ export class QuizService implements IQuizService {
     @Inject(TASK_SERVICE) private readonly taskService: ITaskService,
     @Inject(forwardRef(() => USERS_SERVICE))
     private readonly usersService: IUsersService,
+    private readonly imageService: ImageService,
   ) {}
 
   async createQuiz(
@@ -53,7 +55,10 @@ export class QuizService implements IQuizService {
     user: User,
     files: Express.Multer.File[],
   ): Promise<QuizIdResponse> {
-    createQuizDto.tasks = this.attachImagesToTasks(createQuizDto.tasks, files);
+    createQuizDto.tasks = await this.imageService.attachImagesToTasks(
+      createQuizDto.tasks,
+      files,
+    );
     const quiz = this.quizRepository.create(createQuizDto, user);
     await this.quizRepository.save(quiz);
 
@@ -71,7 +76,7 @@ export class QuizService implements IQuizService {
     user: User,
     files: Express.Multer.File[],
   ): Promise<QuizIdResponse> {
-    dto.tasks = this.attachImagesToTasks(dto.tasks, files);
+    dto.tasks = await this.imageService.attachImagesToTasks(dto.tasks, files);
     const quiz = await this.quizRepository.findOneByIdWithRelations(quizId, [
       'creator',
       'creator.createdQuizzes',
@@ -98,23 +103,6 @@ export class QuizService implements IQuizService {
     };
   }
 
-  private attachImagesToTasks<T extends { image?: string }>(
-    tasks: T[],
-    files: Express.Multer.File[],
-  ): T[] {
-    for (const file of files) {
-      const match = file.fieldname.match(/images\[(\d+)\]/);
-      if (match) {
-        const index = parseInt(match[1], 10);
-        if (tasks[index]) {
-          tasks[index].image = `/uploads/${file.filename}`;
-        }
-      }
-    }
-
-    return tasks;
-  }
-
   async deleteQuiz(id: string, user: User): Promise<MessageResponse> {
     const quiz = await this.quizRepository.findOneByIdWithRelations(id, [
       'creator',
@@ -132,7 +120,7 @@ export class QuizService implements IQuizService {
 
     if (this.cache.has(`quiz:${quiz.id}`)) this.cache.remove(`quiz:${quiz.id}`);
 
-    await this.taskService.deleteTasks(quiz.tasks);
+    await this.imageService.deleteImagesFromTasks(quiz.tasks);
     await this.quizRepository.remove(quiz);
 
     return { message: 'Quiz deleted successfully' };
