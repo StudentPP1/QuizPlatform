@@ -2,7 +2,6 @@ import { FC, useState } from "react";
 import styles from "../CreateQuizPage.module.scss";
 import { QuestionType } from "../../../models/QuestionType";
 import AnswerItem from "./AnswerItem";
-import { API_BASE_URL } from "../../../constants/constants";
 import { AnswerType } from "../../../models/AnswerType";
 
 const QuizItem: FC<{
@@ -12,7 +11,7 @@ const QuizItem: FC<{
 }> = ({ question, onQuestionChange, onDelete }) => {
 
     const [imagePreview, setImagePreview] = useState<string | null>(
-        question.image ? `${API_BASE_URL}${question.image}` : null
+        question.image ? question.image : null
     );
 
     const handleTextChange = (newText: string) => {

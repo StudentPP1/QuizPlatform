@@ -7,7 +7,6 @@ import { QuizNavigate } from "../../../models/QuizNavigate";
 import { QuizResultState } from "../../../models/QuizResultState";
 import useTimer from "../../../hooks/useTimer";
 import { QuizTask } from "../../../models/QuizTask";
-import { API_BASE_URL } from "../../../constants/constants";
 
 const QuizPage: React.FC = () => {
   const navigate = useNavigate();
@@ -125,7 +124,7 @@ const QuizPage: React.FC = () => {
         </h3>
         <h3 className={styles.timer}>Time: {timeLeft} seconds</h3>
         <h2 className={styles.questionText}>{question.question}</h2>
-        {question?.image && <img src={API_BASE_URL + question.image} className={styles.questionImage} />}
+        {question?.image && <img src={question.image} className={styles.questionImage} />}
         <div className={styles.optionsContainer}>
           {QuestionStrategy(question)}
         </div>
