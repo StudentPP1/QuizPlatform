@@ -31,8 +31,7 @@ import { UsersModule } from '@users/users.module';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env', `.env.${process.env.NODE_ENV}.local`],
-      ignoreEnvFile: false,
+      envFilePath: [`.env.${process.env.NODE_ENV}.local`],
       validationSchema: configValidationSchema,
     }),
     AuthModule,
