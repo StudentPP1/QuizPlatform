@@ -1,7 +1,7 @@
-import { UploadApiResponse } from 'cloudinary';
+import { UploadedImage } from '@common/interfaces/uploaded-image.interface';
 
 export interface IStorageService {
-  uploadTaskImage(buffer: Buffer): Promise<UploadApiResponse>;
+  uploadImage(buffer: Buffer): Promise<UploadedImage>;
 
-  deleteTaskImage(publicId: string): Promise<void>;
+  deleteImage(publicId: string): Promise<void>;
 }

@@ -1,6 +1,5 @@
-import { UploadApiResponse } from 'cloudinary';
-
 import { IStorageService } from '@common/contracts/services/storage.service.contract';
+import { UploadedImage } from '@common/interfaces/uploaded-image.interface';
 import { baseLogger } from '@common/logging/logger';
 
 export class LoggingStorageDecorator implements IStorageService {
@@ -31,15 +30,15 @@ export class LoggingStorageDecorator implements IStorageService {
     }
   }
 
-  uploadTaskImage(buffer: Buffer): Promise<UploadApiResponse> {
-    return this.logMethod(this.uploadTaskImage.name, [typeof buffer], () =>
-      this.wrapped.uploadTaskImage(buffer),
+  uploadImage(buffer: Buffer): Promise<UploadedImage> {
+    return this.logMethod(this.uploadImage.name, [typeof buffer], () =>
+      this.wrapped.uploadImage(buffer),
     );
   }
 
-  deleteTaskImage(publicId: string): Promise<void> {
-    return this.logMethod(this.deleteTaskImage.name, [publicId], () =>
-      this.wrapped.deleteTaskImage(publicId),
+  deleteImage(publicId: string): Promise<void> {
+    return this.logMethod(this.deleteImage.name, [publicId], () =>
+      this.wrapped.deleteImage(publicId),
     );
   }
 }

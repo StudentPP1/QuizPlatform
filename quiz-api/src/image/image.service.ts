@@ -17,13 +17,12 @@ export class ImageService implements IImageService {
   ): Promise<T[]> {
     const uploadTasks = files.map(async (file) => {
       const match = file.fieldname.match(/images\[(\d+)\]/);
-      if (match) {
-        const index = parseInt(match[1], 10);
-        if (tasks[index]) {
-          const result = await this.storageService.uploadTaskImage(file.buffer);
-          tasks[index].image = result.url;
-          tasks[index].publicId = result.public_id;
-        }
+      const index = match ? parseInt(match[1], 10) : -1;
+      if (index >= 0 && tasks[index]) {
+        const { url, public_id } = await this.storageService.uploadImage(
+          file.buffer,
+        );
+        Object.assign(tasks[index], { image: url, publicId: public_id });
       }
     });
 
@@ -34,10 +33,7 @@ export class ImageService implements IImageService {
   async deleteImagesFromTasks(tasks: Task[]): Promise<void> {
     const imagesTodelete = tasks
       .filter((task) => task.publicId)
-      .map(
-        async (task) =>
-          await this.storageService.deleteTaskImage(task.publicId),
-      );
+      .map((task) => this.storageService.deleteImage(task.publicId));
 
     await Promise.all(imagesTodelete);
   }

@@ -1,14 +1,15 @@
 import { Readable } from 'stream';
 
 import { Injectable } from '@nestjs/common';
-import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
 import { v4 as uuid } from 'uuid';
 
 import { IStorageService } from '@common/contracts/services/storage.service.contract';
+import { UploadedImage } from '@common/interfaces/uploaded-image.interface';
 
 @Injectable()
 export class CloudinaryService implements IStorageService {
-  async uploadTaskImage(buffer: Buffer): Promise<UploadApiResponse> {
+  async uploadImage(buffer: Buffer): Promise<UploadedImage> {
     return new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         {
@@ -17,14 +18,17 @@ export class CloudinaryService implements IStorageService {
         },
         (error, result) => {
           if (error) return reject(error as Error);
-          resolve(result);
+          resolve({
+            url: result?.secure_url ?? '',
+            public_id: result?.public_id ?? '',
+          });
         },
       );
       Readable.from(buffer).pipe(stream);
     });
   }
 
-  async deleteTaskImage(publicId: string): Promise<void> {
+  async deleteImage(publicId: string): Promise<void> {
     await cloudinary.uploader.destroy(publicId);
   }
 }
