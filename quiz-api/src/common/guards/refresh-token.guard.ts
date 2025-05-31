@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 
+import { TOKEN_SERVICE } from '@common/constants/token.constants';
 import {
   Injectable,
   CanActivate,
@@ -11,7 +12,6 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
-import { TOKEN_SERVICE } from '@common/constants/token.constants';
 import { ITokenService } from '@common/contracts/services/token.service.contract';
 import { Payload } from '@common/interfaces/payload.interface';
 

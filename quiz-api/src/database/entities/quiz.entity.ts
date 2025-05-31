@@ -11,10 +11,10 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { QuizResult } from '@quiz/entities/quiz-result.entity';
-import { Review } from '@review/entities/review.entity';
-import { Task } from '@task/entities/task.entity';
-import { User } from '@users/entities/user.entity';
+import { QuizResult } from '@database/entities/quiz-result.entity';
+import { Review } from '@database/entities/review.entity';
+import { Task } from '@database/entities/task.entity';
+import { User } from '@database/entities/user.entity';
 
 @Entity()
 export class Quiz {

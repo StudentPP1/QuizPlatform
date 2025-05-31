@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-
 import {
   BASE_MAIL_SERVICE,
   MAIL_SERVICE,
 } from '@common/constants/mail.constants';
+import { Module } from '@nestjs/common';
+
 import { IMailService } from '@common/contracts/services/mail.service.contract';
 import { LoggingMailDecorator } from '@mail/logging-mail.decorator';
 import { MailService } from '@mail/mail.service';

@@ -1,8 +1,8 @@
+import { TOKEN_SERVICE } from '@common/constants/token.constants';
 import { Controller, Inject, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 
-import { TOKEN_SERVICE } from '@common/constants/token.constants';
 import { ITokenService } from '@common/contracts/services/token.service.contract';
 import { RefreshTokenGuard } from '@common/guards/refresh-token.guard';
 import { RequestWithUser } from '@common/interfaces/request-with-user.interface';

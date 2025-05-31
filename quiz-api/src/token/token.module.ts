@@ -1,14 +1,14 @@
-import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-
 import {
   BASE_TOKEN_SERVICE,
   REFRESH_TOKEN_REPOSITORY,
   TOKEN_SERVICE,
 } from '@common/constants/token.constants';
+import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+
 import { ITokenService } from '@common/contracts/services/token.service.contract';
+import { RefreshTokenRepository } from '@database/repositories/refresh-token.repository';
 import { LoggingTokenDecorator } from '@token/logging-token.decorator';
-import { RefreshTokenRepository } from '@token/refresh-token.repository';
 import { TokenController } from '@token/token.controller';
 import { TokenService } from '@token/token.service';
 

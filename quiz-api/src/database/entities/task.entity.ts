@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 import { TaskType } from '@common/enums/task-type.enum';
-import { Quiz } from '@quiz/entities/quiz.entity';
+import { Quiz } from '@database/entities/quiz.entity';
 
 @Entity()
 export class Task {

@@ -1,7 +1,7 @@
 import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
 import { CreateUserDto } from '@common/dto/create-user.dto';
 import { AuthProvider } from '@common/enums/auth-provider.enum';
-import { User } from '@users/entities/user.entity';
+import { User } from '@database/entities/user.entity';
 
 export interface IUsersRepository {
   findOneById(id: string): Promise<User | null>;

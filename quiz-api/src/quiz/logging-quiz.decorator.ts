@@ -12,7 +12,7 @@ import {
   QuizIdResponse,
 } from '@common/interfaces/response.interface';
 import { baseLogger } from '@common/logging/logger';
-import { User } from '@users/entities/user.entity';
+import { User } from '@database/entities/user.entity';
 
 export class LoggingQuizDecorator implements IQuizService {
   private readonly logger = baseLogger.child({ service: 'Quiz Service' });

@@ -2,15 +2,16 @@ import { Inject, Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
 import { IQuizResultRepository } from '@common/contracts/repositories/quiz-result.repository.contract';
-import { QuizResult } from '@quiz/entities/quiz-result.entity';
-import { Quiz } from '@quiz/entities/quiz.entity';
-import { User } from '@users/entities/user.entity';
+import { QuizResult } from '@database/entities/quiz-result.entity';
+import { Quiz } from '@database/entities/quiz.entity';
+import { User } from '@database/entities/user.entity';
+import { DATA_SOURCE } from '@common/constants/repository.constants';
 
 @Injectable()
 export class QuizResultRepository implements IQuizResultRepository {
   private readonly repository: Repository<QuizResult>;
 
-  constructor(@Inject(DataSource) private readonly dataSource: DataSource) {
+  constructor(@Inject(DATA_SOURCE) private readonly dataSource: DataSource) {
     this.repository = this.dataSource.getRepository(QuizResult);
   }
 

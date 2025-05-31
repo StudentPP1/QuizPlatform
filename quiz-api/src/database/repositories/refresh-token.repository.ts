@@ -2,14 +2,15 @@ import { Inject, Injectable } from '@nestjs/common';
 import { DataSource, FindOptionsWhere, MoreThan, Repository } from 'typeorm';
 
 import { IRefreshTokenRepository } from '@common/contracts/repositories/refresh-token.repository.contract';
-import { RefreshToken } from '@token/entities/refresh-token.entity';
-import { User } from '@users/entities/user.entity';
+import { RefreshToken } from '@database/entities/refresh-token.entity';
+import { User } from '@database/entities/user.entity';
+import { DATA_SOURCE } from '@common/constants/repository.constants';
 
 @Injectable()
 export class RefreshTokenRepository implements IRefreshTokenRepository {
   private readonly repository: Repository<RefreshToken>;
 
-  constructor(@Inject(DataSource) private readonly dataSource: DataSource) {
+  constructor(@Inject(DATA_SOURCE) private readonly dataSource: DataSource) {
     this.repository = this.dataSource.getRepository(RefreshToken);
   }
 

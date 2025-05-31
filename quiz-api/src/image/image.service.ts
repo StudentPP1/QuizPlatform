@@ -1,9 +1,9 @@
+import { STORAGE_SERVICE } from '@common/constants/storage.constants';
 import { Inject, Injectable } from '@nestjs/common';
 
-import { STORAGE_SERVICE } from '@common/constants/storage.constants';
 import { IImageService } from '@common/contracts/services/image.service.contract';
 import { IStorageService } from '@common/contracts/services/storage.service.contract';
-import { Task } from '@task/entities/task.entity';
+import { Task } from '@database/entities/task.entity';
 
 @Injectable()
 export class ImageService implements IImageService {

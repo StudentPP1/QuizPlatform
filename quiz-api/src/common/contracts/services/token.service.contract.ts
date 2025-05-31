@@ -1,6 +1,6 @@
 import { Tokens } from '@common/interfaces/tokens.payload';
-import { RefreshToken } from '@token/entities/refresh-token.entity';
-import { User } from '@users/entities/user.entity';
+import { RefreshToken } from '@database/entities/refresh-token.entity';
+import { User } from '@database/entities/user.entity';
 
 export interface ITokenService {
   generateTokens(user: User): Promise<Tokens>;

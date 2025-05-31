@@ -2,7 +2,7 @@ import { ITaskService } from '@common/contracts/services/task.service.contract';
 import { CreateTaskDto } from '@common/dto/create-task.dto';
 import { UpdateTaskDto } from '@common/dto/update-task.dto';
 import { baseLogger } from '@common/logging/logger';
-import { Quiz } from '@quiz/entities/quiz.entity';
+import { Quiz } from '@database/entities/quiz.entity';
 
 export class LoggingTaskDecorator implements ITaskService {
   private readonly logger = baseLogger.child({ service: 'Task Service' });

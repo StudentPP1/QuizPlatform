@@ -7,7 +7,7 @@ import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { AuthProvider } from '@common/enums/auth-provider.enum';
 import { UpdateAuthorRatingOptions } from '@common/interfaces/update-author-rating-options.interface';
 import { baseLogger } from '@common/logging/logger';
-import { User } from '@users/entities/user.entity';
+import { User } from '@database/entities/user.entity';
 
 export class LoggingUsersDecorator implements IUsersService {
   private readonly logger = baseLogger.child({ service: 'Users Service' });

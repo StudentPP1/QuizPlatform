@@ -1,21 +1,21 @@
 import { extname } from 'path';
 
-import { BadRequestException, forwardRef, Module } from '@nestjs/common';
-import { MulterModule } from '@nestjs/platform-express';
-import { memoryStorage } from 'multer';
-
 import {
   BASE_QUIZ_SERVICE,
   QUIZ_SERVICE,
   QUIZ_REPOSITORY,
   QUIZ_RESULT_REPOSITORY,
 } from '@common/constants/quiz.constants';
+import { BadRequestException, forwardRef, Module } from '@nestjs/common';
+import { MulterModule } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
+
 import { IQuizService } from '@common/contracts/services/quiz.service.contract';
+import { QuizResultRepository } from '@database/repositories/quiz-result.repository';
+import { QuizRepository } from '@database/repositories/quiz.repository';
 import { ImageModule } from '@image/image.module';
 import { LoggingQuizDecorator } from '@quiz/logging-quiz.decorator';
-import { QuizResultRepository } from '@quiz/quiz-result.repository';
 import { QuizController } from '@quiz/quiz.controller';
-import { QuizRepository } from '@quiz/quiz.repository';
 import { QuizService } from '@quiz/quiz.service';
 import { TaskModule } from '@task/task.module';
 import { UsersModule } from '@users/users.module';

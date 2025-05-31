@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-
 import {
   BASE_IMAGE_SERVICE,
   IMAGE_SERVICE,
 } from '@common/constants/image.constants';
+import { Module } from '@nestjs/common';
+
 import { IImageService } from '@common/contracts/services/image.service.contract';
 import { ImageService } from '@image/image.service';
 import { LoggingImageDecorator } from '@image/logging-image.decorator';

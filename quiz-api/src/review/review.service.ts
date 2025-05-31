@@ -1,9 +1,9 @@
+import { QUIZ_REPOSITORY } from '@common/constants/quiz.constants';
+import { REVIEW_REPOSITORY } from '@common/constants/review.constants';
 import { Inject, Injectable } from '@nestjs/common';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
 import { LRUStrategy } from '@common/cache/strategies/lru.strategy';
-import { QUIZ_REPOSITORY } from '@common/constants/quiz.constants';
-import { REVIEW_REPOSITORY } from '@common/constants/review.constants';
 import { IQuizRepository } from '@common/contracts/repositories/quiz.repository.contract';
 import { IReviewRepository } from '@common/contracts/repositories/review.repository.contract';
 import { IReviewService } from '@common/contracts/services/review.service.contract';
@@ -12,9 +12,9 @@ import { ReviewPaginationDto } from '@common/dto/pagination.dto';
 import { ReviewDto } from '@common/dto/review.dto';
 import { eventEmitter } from '@common/events/event-emitter';
 import { UpdateAuthorRatingOptions } from '@common/interfaces/update-author-rating-options.interface';
-import { Quiz } from '@quiz/entities/quiz.entity';
-import { Review } from '@review/entities/review.entity';
-import { User } from '@users/entities/user.entity';
+import { Quiz } from '@database/entities/quiz.entity';
+import { Review } from '@database/entities/review.entity';
+import { User } from '@database/entities/user.entity';
 
 @Injectable()
 export class ReviewService implements IReviewService {

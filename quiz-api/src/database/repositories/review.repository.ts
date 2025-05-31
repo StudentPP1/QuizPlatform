@@ -3,15 +3,16 @@ import { DataSource, Repository } from 'typeorm';
 
 import { IReviewRepository } from '@common/contracts/repositories/review.repository.contract';
 import { CreateReviewDto } from '@common/dto/create-review.dto';
-import { Quiz } from '@quiz/entities/quiz.entity';
-import { Review } from '@review/entities/review.entity';
-import { User } from '@users/entities/user.entity';
+import { Quiz } from '@database/entities/quiz.entity';
+import { Review } from '@database/entities/review.entity';
+import { User } from '@database/entities/user.entity';
+import { DATA_SOURCE } from '@common/constants/repository.constants';
 
 @Injectable()
 export class ReviewRepository implements IReviewRepository {
   private readonly repository: Repository<Review>;
 
-  constructor(@Inject(DataSource) private readonly dataSource: DataSource) {
+  constructor(@Inject(DATA_SOURCE) private readonly dataSource: DataSource) {
     this.repository = this.dataSource.getRepository(Review);
   }
 

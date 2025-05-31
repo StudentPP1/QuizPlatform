@@ -1,19 +1,19 @@
-import { join, resolve } from 'path';
+import { join } from 'path';
 
-import { Inject, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { TypeOrmModule } from '@nestjs/typeorm';
-
-import { AuthModule } from '@auth/auth.module';
 import { MAIL_SERVICE } from '@common/constants/mail.constants';
 import { USERS_SERVICE } from '@common/constants/users.constants';
+import { Inject, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
+
+import { AuthModule } from '@auth/auth.module';
 import { IMailService } from '@common/contracts/services/mail.service.contract';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
 import {
   registerEventListeners,
   removeEventListeners,
 } from '@common/events/event-handlers';
+import { DatabaseModule } from '@database/database.module';
 import { MailModule } from '@mail/mail.module';
 import { QuizModule } from '@quiz/quiz.module';
 import { ReviewModule } from '@review/review.module';
@@ -29,23 +29,12 @@ import { UsersModule } from '@users/users.module';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: resolve(process.cwd(), `.env.${process.env.NODE_ENV}.local`),
+      envFilePath: ['.env', `.env.${process.env.NODE_ENV}.local`],
+      ignoreEnvFile: false,
       validationSchema: configValidationSchema,
     }),
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_NAME'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: configService.get<string>('NODE_ENV') !== 'production',
-      }),
-    }),
     AuthModule,
+    DatabaseModule,
     MailModule,
     TokenModule,
     ReviewModule,

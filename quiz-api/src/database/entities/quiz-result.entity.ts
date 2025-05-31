@@ -7,8 +7,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Quiz } from '@quiz/entities/quiz.entity';
-import { User } from '@users/entities/user.entity';
+import { Quiz } from '@database/entities/quiz.entity';
+import { User } from '@database/entities/user.entity';
 
 @Entity()
 export class QuizResult {

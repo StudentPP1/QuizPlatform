@@ -5,13 +5,14 @@ import { IUsersRepository } from '@common/contracts/repositories/users.repositor
 import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
 import { CreateUserDto } from '@common/dto/create-user.dto';
 import { AuthProvider } from '@common/enums/auth-provider.enum';
-import { User } from '@users/entities/user.entity';
+import { User } from '@database/entities/user.entity';
+import { DATA_SOURCE } from '@common/constants/repository.constants';
 
 @Injectable()
 export class UsersRepository implements IUsersRepository {
   private readonly repository: Repository<User>;
 
-  constructor(@Inject(DataSource) private readonly dataSource: DataSource) {
+  constructor(@Inject(DATA_SOURCE) private readonly dataSource: DataSource) {
     this.repository = this.dataSource.getRepository(User);
   }
 

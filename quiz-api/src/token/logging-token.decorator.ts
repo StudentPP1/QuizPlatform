@@ -1,8 +1,8 @@
 import { ITokenService } from '@common/contracts/services/token.service.contract';
 import { Tokens } from '@common/interfaces/tokens.payload';
 import { baseLogger } from '@common/logging/logger';
-import { RefreshToken } from '@token/entities/refresh-token.entity';
-import { User } from '@users/entities/user.entity';
+import { RefreshToken } from '@database/entities/refresh-token.entity';
+import { User } from '@database/entities/user.entity';
 
 export class LoggingTokenDecorator implements ITokenService {
   private readonly logger = baseLogger.child({ service: 'Token Service' });

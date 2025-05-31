@@ -3,13 +3,14 @@ import { DataSource, Repository } from 'typeorm';
 
 import { ITaskRepository } from '@common/contracts/repositories/task.repository.contract';
 import { CreateTaskDto } from '@common/dto/create-task.dto';
-import { Quiz } from '@quiz/entities/quiz.entity';
-import { Task } from '@task/entities/task.entity';
+import { Quiz } from '@database/entities/quiz.entity';
+import { Task } from '@database/entities/task.entity';
+import { DATA_SOURCE } from '@common/constants/repository.constants';
 
 export class TaskRepository implements ITaskRepository {
   private readonly repository: Repository<Task>;
 
-  constructor(@Inject(DataSource) private readonly dataSource: DataSource) {
+  constructor(@Inject(DATA_SOURCE) private readonly dataSource: DataSource) {
     this.repository = this.dataSource.getRepository(Task);
   }
 

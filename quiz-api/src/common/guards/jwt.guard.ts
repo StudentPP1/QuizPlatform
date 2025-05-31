@@ -1,3 +1,4 @@
+import { USERS_SERVICE } from '@common/constants/users.constants';
 import {
   Injectable,
   CanActivate,
@@ -9,7 +10,6 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
-import { USERS_SERVICE } from '@common/constants/users.constants';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
 import { Payload } from '@common/interfaces/payload.interface';
 

@@ -1,3 +1,5 @@
+import { QUIZ_SERVICE } from '@common/constants/quiz.constants';
+import { USERS_REPOSITORY } from '@common/constants/users.constants';
 import {
   Injectable,
   ConflictException,
@@ -6,8 +8,6 @@ import {
   forwardRef,
 } from '@nestjs/common';
 
-import { QUIZ_SERVICE } from '@common/constants/quiz.constants';
-import { USERS_REPOSITORY } from '@common/constants/users.constants';
 import { IUsersRepository } from '@common/contracts/repositories/users.repository.contract';
 import { IQuizService } from '@common/contracts/services/quiz.service.contract';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
@@ -18,7 +18,7 @@ import { ProfileDto } from '@common/dto/profile.dto';
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { AuthProvider } from '@common/enums/auth-provider.enum';
 import { UpdateAuthorRatingOptions } from '@common/interfaces/update-author-rating-options.interface';
-import { User } from '@users/entities/user.entity';
+import { User } from '@database/entities/user.entity';
 
 @Injectable()
 export class RealUsersService implements IUsersService {

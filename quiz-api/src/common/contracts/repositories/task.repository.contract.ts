@@ -1,7 +1,7 @@
 import { CreateTaskDto } from '@common/dto/create-task.dto';
 import { UpdateTaskDto } from '@common/dto/update-task.dto';
-import { Quiz } from '@quiz/entities/quiz.entity';
-import { Task } from '@task/entities/task.entity';
+import { Quiz } from '@database/entities/quiz.entity';
+import { Task } from '@database/entities/task.entity';
 
 export interface ITaskRepository {
   create(taskDto: CreateTaskDto | UpdateTaskDto, quiz: Quiz): Task;

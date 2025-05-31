@@ -1,4 +1,4 @@
-import { Task } from '@task/entities/task.entity';
+import { Task } from '@database/entities/task.entity';
 
 export interface IImageService {
   attachImagesToTasks<T extends Partial<Task>>(

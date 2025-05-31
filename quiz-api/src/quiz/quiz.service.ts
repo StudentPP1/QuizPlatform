@@ -1,3 +1,10 @@
+import { IMAGE_SERVICE } from '@common/constants/image.constants';
+import {
+  QUIZ_REPOSITORY,
+  QUIZ_RESULT_REPOSITORY,
+} from '@common/constants/quiz.constants';
+import { TASK_SERVICE } from '@common/constants/task.constants';
+import { USERS_SERVICE } from '@common/constants/users.constants';
 import {
   ForbiddenException,
   forwardRef,
@@ -8,13 +15,6 @@ import {
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
 import { TimeStrategy } from '@common/cache/strategies/ttl.strategy';
-import { IMAGE_SERVICE } from '@common/constants/image.constants';
-import {
-  QUIZ_REPOSITORY,
-  QUIZ_RESULT_REPOSITORY,
-} from '@common/constants/quiz.constants';
-import { TASK_SERVICE } from '@common/constants/task.constants';
-import { USERS_SERVICE } from '@common/constants/users.constants';
 import { IQuizResultRepository } from '@common/contracts/repositories/quiz-result.repository.contract';
 import { IQuizRepository } from '@common/contracts/repositories/quiz.repository.contract';
 import { IImageService } from '@common/contracts/services/image.service.contract';
@@ -33,8 +33,8 @@ import {
   MessageResponse,
   QuizIdResponse,
 } from '@common/interfaces/response.interface';
-import { Quiz } from '@quiz/entities/quiz.entity';
-import { User } from '@users/entities/user.entity';
+import { Quiz } from '@database/entities/quiz.entity';
+import { User } from '@database/entities/user.entity';
 
 @Injectable()
 export class QuizService implements IQuizService {

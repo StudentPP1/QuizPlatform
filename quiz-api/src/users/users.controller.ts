@@ -1,6 +1,6 @@
+import { USERS_SERVICE } from '@common/constants/users.constants';
 import { Controller, Get, Inject, Query, Req, UseGuards } from '@nestjs/common';
 
-import { USERS_SERVICE } from '@common/constants/users.constants';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
 import {
   BasePaginationDto,

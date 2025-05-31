@@ -1,3 +1,4 @@
+import { REVIEW_SERVICE } from '@common/constants/review.constants';
 import {
   Controller,
   Post,
@@ -10,14 +11,13 @@ import {
   Inject,
 } from '@nestjs/common';
 
-import { REVIEW_SERVICE } from '@common/constants/review.constants';
 import { IReviewService } from '@common/contracts/services/review.service.contract';
 import { CreateReviewDto } from '@common/dto/create-review.dto';
 import { ReviewPaginationDto } from '@common/dto/pagination.dto';
 import { ReviewDto } from '@common/dto/review.dto';
 import { JwtGuard } from '@common/guards/jwt.guard';
 import { RequestWithUser } from '@common/interfaces/request-with-user.interface';
-import { Review } from '@review/entities/review.entity';
+import { Review } from '@database/entities/review.entity';
 
 @UseGuards(JwtGuard)
 @Controller('review')

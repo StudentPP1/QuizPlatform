@@ -1,6 +1,6 @@
 import { IImageService } from '@common/contracts/services/image.service.contract';
 import { baseLogger } from '@common/logging/logger';
-import { Task } from '@task/entities/task.entity';
+import { Task } from '@database/entities/task.entity';
 
 export class LoggingImageDecorator implements IImageService {
   private readonly logger = baseLogger.child({ service: 'Image Service' });

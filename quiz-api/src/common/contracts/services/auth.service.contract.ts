@@ -1,7 +1,7 @@
 import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
 import { CreateUserDto } from '@common/dto/create-user.dto';
 import { Tokens } from '@common/interfaces/tokens.payload';
-import { User } from '@users/entities/user.entity';
+import { User } from '@database/entities/user.entity';
 
 export interface IAuthService {
   signUp(createUserDto: CreateUserDto): Promise<Tokens>;

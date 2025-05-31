@@ -3,8 +3,8 @@ import { CreateReviewDto } from '@common/dto/create-review.dto';
 import { ReviewPaginationDto } from '@common/dto/pagination.dto';
 import { ReviewDto } from '@common/dto/review.dto';
 import { baseLogger } from '@common/logging/logger';
-import { Review } from '@review/entities/review.entity';
-import { User } from '@users/entities/user.entity';
+import { Review } from '@database/entities/review.entity';
+import { User } from '@database/entities/user.entity';
 
 export class LoggingReviewDecorator implements IReviewService {
   private readonly logger = baseLogger.child({ service: 'Review Service' });

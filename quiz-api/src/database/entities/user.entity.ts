@@ -9,9 +9,9 @@ import {
 } from 'typeorm';
 
 import { AuthProvider } from '@common/enums/auth-provider.enum';
-import { QuizResult } from '@quiz/entities/quiz-result.entity';
-import { Quiz } from '@quiz/entities/quiz.entity';
-import { Review } from '@review/entities/review.entity';
+import { QuizResult } from '@database/entities/quiz-result.entity';
+import { Quiz } from '@database/entities/quiz.entity';
+import { Review } from '@database/entities/review.entity';
 
 @Entity('users')
 export class User {

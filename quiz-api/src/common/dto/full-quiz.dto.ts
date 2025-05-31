@@ -1,6 +1,6 @@
 import { QuizPreviewDto } from '@common/dto/quiz-preview.dto';
 import { TaskPreviewDto } from '@common/dto/task-preview.dto';
-import { Quiz } from '@quiz/entities/quiz.entity';
+import { Quiz } from '@database/entities/quiz.entity';
 
 export class FullQuizDto extends QuizPreviewDto {
   description: string;

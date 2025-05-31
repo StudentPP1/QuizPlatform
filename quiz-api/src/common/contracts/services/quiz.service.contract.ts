@@ -10,7 +10,7 @@ import {
   MessageResponse,
   QuizIdResponse,
 } from '@common/interfaces/response.interface';
-import { User } from '@users/entities/user.entity';
+import { User } from '@database/entities/user.entity';
 
 export interface IQuizService {
   createQuiz(

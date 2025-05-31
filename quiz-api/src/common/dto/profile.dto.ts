@@ -1,4 +1,4 @@
-import { User } from '@users/entities/user.entity';
+import { User } from '@database/entities/user.entity';
 
 export class ProfileDto {
   userId: string;

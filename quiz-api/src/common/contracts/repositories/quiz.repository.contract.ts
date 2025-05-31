@@ -1,6 +1,6 @@
 import { CreateQuizDto } from '@common/dto/create-quiz.dto';
-import { Quiz } from '@quiz/entities/quiz.entity';
-import { User } from '@users/entities/user.entity';
+import { Quiz } from '@database/entities/quiz.entity';
+import { User } from '@database/entities/user.entity';
 
 export interface IQuizRepository {
   findOneByIdWithRelations(

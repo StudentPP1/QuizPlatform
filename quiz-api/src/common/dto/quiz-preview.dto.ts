@@ -1,5 +1,5 @@
 import { ProfileDto } from '@common/dto/profile.dto';
-import { Quiz } from '@quiz/entities/quiz.entity';
+import { Quiz } from '@database/entities/quiz.entity';
 
 export class QuizPreviewDto {
   id: string;

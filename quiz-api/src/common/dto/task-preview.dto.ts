@@ -1,5 +1,5 @@
 import { TaskType } from '@common/enums/task-type.enum';
-import { Task } from '@task/entities/task.entity';
+import { Task } from '@database/entities/task.entity';
 
 export class TaskPreviewDto {
   id: string;
