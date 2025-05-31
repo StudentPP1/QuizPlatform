@@ -31,7 +31,7 @@ export const useQuizForm = (
     questions: initialQuiz?.questions || [],
   });
 
-  // generic function to update any field in the form state: 
+  // generic function to update any field in the form state:
   // example: updateField("title" (key of QuizFormState), "new title" (string value))
   const updateField = useCallback(
     <K extends keyof QuizFormState>(field: K, value: QuizFormState[K]) => {
@@ -90,13 +90,22 @@ export const useQuizForm = (
 
     for (const question of questions) {
       if (!question.text.trim()) return "Fill in all the fields!";
+
       if (!question.isOpenEnded) {
-        if (question.answers.some((a) => !a.text.trim()))
+        const trimmedAnswers = question.answers.map((a) => a.text.trim());
+
+        if (trimmedAnswers.some((text) => !text))
           return "Fill in all answer fields!";
+
         if (!question.answers.some((a) => a.isCorrect))
           return "Each question needs at least one correct answer!";
+
+        const uniqueAnswers = new Set(trimmedAnswers);
+        if (uniqueAnswers.size !== trimmedAnswers.length)
+          return "Answers must be unique!";
       }
     }
+
     return null;
   }, [formState]);
 
@@ -107,7 +116,9 @@ export const useQuizForm = (
     const tasks = questions.map((question) => {
       const type = question.isOpenEnded
         ? "text"
-        : question.answers.filter((a) => a.isCorrect).length === 1 ? "single" : "multiple";
+        : question.answers.filter((a) => a.isCorrect).length === 1
+        ? "single"
+        : "multiple";
 
       return {
         question: question.text,
@@ -138,7 +149,7 @@ export const useQuizForm = (
     return formData;
   }, [formState, initialQuiz]);
 
-  // Return actual state and actions 
+  // Return actual state and actions
   return [
     formState,
     {

@@ -28,6 +28,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
     "rollup": "3.29.4",
+    "sass": "^1.89.1",
     "sass-embedded": "^1.85.1",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
@@ -36,7 +37,7 @@
   "resolutions": {
     "rollup": "npm:@rollup/wasm-node"
   },
-   "optionalDependencies": {
+  "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.9.5"
   }
 }
