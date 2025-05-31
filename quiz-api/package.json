@@ -77,6 +77,7 @@
     "@src": "dist",
     "@auth": "dist/auth",
     "@common": "dist/common",
+    "@database": "dist/database",
     "@image": "dist/image",
     "@mail": "dist/mail",
     "@review": "dist/review",
