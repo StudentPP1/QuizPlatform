@@ -1,9 +1,11 @@
-import { QUIZ_REPOSITORY } from '@common/constants/quiz.constants';
-import { REVIEW_REPOSITORY } from '@common/constants/review.constants';
 import { Inject, Injectable } from '@nestjs/common';
 
 import { MemoizationCache } from '@common/cache/memoization-cache';
 import { LRUStrategy } from '@common/cache/strategies/lru.strategy';
+import {
+  QUIZ_REPOSITORY,
+  REVIEW_REPOSITORY,
+} from '@common/constants/repository.constants';
 import { IQuizRepository } from '@common/contracts/repositories/quiz.repository.contract';
 import { IReviewRepository } from '@common/contracts/repositories/review.repository.contract';
 import { IReviewService } from '@common/contracts/services/review.service.contract';

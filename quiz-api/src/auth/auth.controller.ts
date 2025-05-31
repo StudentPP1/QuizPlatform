@@ -13,7 +13,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 
-import { AUTH_SERVICE } from '@common/constants/auth.constants';
+import { AUTH_SERVICE } from '@common/constants/service.constants';
 import { IAuthService } from '@common/contracts/services/auth.service.contract';
 import { CreateUserDto } from '@common/dto/create-user.dto';
 import { GoogleOAuthGuard } from '@common/guards/google-oauth.guard';

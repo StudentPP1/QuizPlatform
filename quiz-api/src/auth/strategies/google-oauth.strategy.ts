@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy, VerifyCallback } from 'passport-google-oauth20';
 
-import { AUTH_SERVICE } from '@common/constants/auth.constants';
+import { AUTH_SERVICE } from '@common/constants/service.constants';
 import { IAuthService } from '@common/contracts/services/auth.service.contract';
 
 @Injectable()

@@ -1,10 +1,10 @@
-import {
-  BASE_REVIEW_SERVICE,
-  REVIEW_REPOSITORY,
-  REVIEW_SERVICE,
-} from '@common/constants/review.constants';
 import { Module } from '@nestjs/common';
 
+import { REVIEW_REPOSITORY } from '@common/constants/repository.constants';
+import {
+  BASE_REVIEW_SERVICE,
+  REVIEW_SERVICE,
+} from '@common/constants/service.constants';
 import { IReviewService } from '@common/contracts/services/review.service.contract';
 import { ReviewRepository } from '@database/repositories/review.repository';
 import { QuizModule } from '@quiz/quiz.module';

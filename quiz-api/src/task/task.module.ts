@@ -1,10 +1,10 @@
-import {
-  BASE_TASK_SERVICE,
-  TASK_REPOSITORY,
-  TASK_SERVICE,
-} from '@common/constants/task.constants';
 import { Module } from '@nestjs/common';
 
+import { TASK_REPOSITORY } from '@common/constants/repository.constants';
+import {
+  BASE_TASK_SERVICE,
+  TASK_SERVICE,
+} from '@common/constants/service.constants';
 import { ITaskService } from '@common/contracts/services/task.service.contract';
 import { TaskRepository } from '@database/repositories/task.repository';
 import { LoggingTaskDecorator } from '@task/logging-task.decorator';

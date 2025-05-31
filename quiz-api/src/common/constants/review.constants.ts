@@ -1,4 +1,0 @@
-export const BASE_REVIEW_SERVICE = Symbol('BASE_REVIEW_SERVICE');
-export const REVIEW_SERVICE = Symbol('REVIEW_SERVICE');
-
-export const REVIEW_REPOSITORY = Symbol('REVIEW_REPOSITORY');

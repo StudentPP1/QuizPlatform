@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
+import { DATA_SOURCE } from '@common/constants/repository.constants';
 import { IQuizResultRepository } from '@common/contracts/repositories/quiz-result.repository.contract';
 import { QuizResult } from '@database/entities/quiz-result.entity';
 import { Quiz } from '@database/entities/quiz.entity';
 import { User } from '@database/entities/user.entity';
-import { DATA_SOURCE } from '@common/constants/repository.constants';
 
 @Injectable()
 export class QuizResultRepository implements IQuizResultRepository {

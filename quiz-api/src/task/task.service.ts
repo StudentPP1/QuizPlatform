@@ -1,6 +1,6 @@
-import { TASK_REPOSITORY } from '@common/constants/task.constants';
 import { Inject, Injectable } from '@nestjs/common';
 
+import { TASK_REPOSITORY } from '@common/constants/repository.constants';
 import { ITaskRepository } from '@common/contracts/repositories/task.repository.contract';
 import { ITaskService } from '@common/contracts/services/task.service.contract';
 import { CreateTaskDto } from '@common/dto/create-task.dto';

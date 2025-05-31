@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DataSource, FindOptionsWhere, MoreThan, Repository } from 'typeorm';
 
+import { DATA_SOURCE } from '@common/constants/repository.constants';
 import { IRefreshTokenRepository } from '@common/contracts/repositories/refresh-token.repository.contract';
 import { RefreshToken } from '@database/entities/refresh-token.entity';
 import { User } from '@database/entities/user.entity';
-import { DATA_SOURCE } from '@common/constants/repository.constants';
 
 @Injectable()
 export class RefreshTokenRepository implements IRefreshTokenRepository {

@@ -1,12 +1,14 @@
 import { join } from 'path';
 
-import { MAIL_SERVICE } from '@common/constants/mail.constants';
-import { USERS_SERVICE } from '@common/constants/users.constants';
 import { Inject, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 
 import { AuthModule } from '@auth/auth.module';
+import {
+  MAIL_SERVICE,
+  USERS_SERVICE,
+} from '@common/constants/service.constants';
 import { IMailService } from '@common/contracts/services/mail.service.contract';
 import { IUsersService } from '@common/contracts/services/users.service.contract';
 import {

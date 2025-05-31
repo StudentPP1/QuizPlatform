@@ -1,8 +1,10 @@
-import { TOKEN_SERVICE } from '@common/constants/token.constants';
-import { USERS_SERVICE } from '@common/constants/users.constants';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 
+import {
+  USERS_SERVICE,
+  TOKEN_SERVICE,
+} from '@common/constants/service.constants';
 import { IAuthService } from '@common/contracts/services/auth.service.contract';
 import { ITokenService } from '@common/contracts/services/token.service.contract';
 import { IUsersService } from '@common/contracts/services/users.service.contract';

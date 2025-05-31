@@ -3,7 +3,7 @@ import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
 import { CreateUserDto } from '@common/dto/create-user.dto';
 import { Tokens } from '@common/interfaces/tokens.payload';
 import { baseLogger } from '@common/logging/logger';
-import { User } from '@users/entities/user.entity';
+import { User } from '@database/entities/user.entity';
 
 export class LoggingAuthDecorator implements IAuthService {
   private readonly logger = baseLogger.child({ service: 'Auth Service' });

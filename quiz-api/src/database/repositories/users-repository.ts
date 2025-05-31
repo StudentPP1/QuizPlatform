@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DataSource, MoreThan, Repository } from 'typeorm';
 
+import { DATA_SOURCE } from '@common/constants/repository.constants';
 import { IUsersRepository } from '@common/contracts/repositories/users.repository.contract';
 import { CreateGoogleUserDto } from '@common/dto/create-google-user.dto';
 import { CreateUserDto } from '@common/dto/create-user.dto';
 import { AuthProvider } from '@common/enums/auth-provider.enum';
 import { User } from '@database/entities/user.entity';
-import { DATA_SOURCE } from '@common/constants/repository.constants';
 
 @Injectable()
 export class UsersRepository implements IUsersRepository {

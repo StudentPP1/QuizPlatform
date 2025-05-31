@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
+import { DATA_SOURCE } from '@common/constants/repository.constants';
 import { IReviewRepository } from '@common/contracts/repositories/review.repository.contract';
 import { CreateReviewDto } from '@common/dto/create-review.dto';
 import { Quiz } from '@database/entities/quiz.entity';
 import { Review } from '@database/entities/review.entity';
 import { User } from '@database/entities/user.entity';
-import { DATA_SOURCE } from '@common/constants/repository.constants';
 
 @Injectable()
 export class ReviewRepository implements IReviewRepository {

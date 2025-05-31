@@ -9,7 +9,7 @@ import { LocalStrategy } from '@auth/strategies/local.strategy';
 import {
   AUTH_SERVICE,
   BASE_AUTH_SERVICE,
-} from '@common/constants/auth.constants';
+} from '@common/constants/service.constants';
 import { IAuthService } from '@common/contracts/services/auth.service.contract';
 import { JwtGuard } from '@common/guards/jwt.guard';
 import { TokenModule } from '@token/token.module';

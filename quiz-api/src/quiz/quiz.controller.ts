@@ -1,4 +1,3 @@
-import { QUIZ_SERVICE } from '@common/constants/quiz.constants';
 import {
   Controller,
   Post,
@@ -19,6 +18,7 @@ import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { plainToInstance } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
 
+import { QUIZ_SERVICE } from '@common/constants/service.constants';
 import { IQuizService } from '@common/contracts/services/quiz.service.contract';
 import { CreateQuizDto } from '@common/dto/create-quiz.dto';
 import { FullQuizDto } from '@common/dto/full-quiz.dto';

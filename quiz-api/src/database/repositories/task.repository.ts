@@ -1,11 +1,11 @@
 import { Inject } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
+import { DATA_SOURCE } from '@common/constants/repository.constants';
 import { ITaskRepository } from '@common/contracts/repositories/task.repository.contract';
 import { CreateTaskDto } from '@common/dto/create-task.dto';
 import { Quiz } from '@database/entities/quiz.entity';
 import { Task } from '@database/entities/task.entity';
-import { DATA_SOURCE } from '@common/constants/repository.constants';
 
 export class TaskRepository implements ITaskRepository {
   private readonly repository: Repository<Task>;

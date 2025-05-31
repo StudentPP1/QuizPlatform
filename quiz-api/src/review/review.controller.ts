@@ -1,4 +1,3 @@
-import { REVIEW_SERVICE } from '@common/constants/review.constants';
 import {
   Controller,
   Post,
@@ -11,6 +10,7 @@ import {
   Inject,
 } from '@nestjs/common';
 
+import { REVIEW_SERVICE } from '@common/constants/service.constants';
 import { IReviewService } from '@common/contracts/services/review.service.contract';
 import { CreateReviewDto } from '@common/dto/create-review.dto';
 import { ReviewPaginationDto } from '@common/dto/pagination.dto';

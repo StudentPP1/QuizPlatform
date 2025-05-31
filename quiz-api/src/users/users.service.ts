@@ -1,5 +1,3 @@
-import { QUIZ_SERVICE } from '@common/constants/quiz.constants';
-import { USERS_REPOSITORY } from '@common/constants/users.constants';
 import {
   Injectable,
   ConflictException,
@@ -8,6 +6,8 @@ import {
   forwardRef,
 } from '@nestjs/common';
 
+import { USERS_REPOSITORY } from '@common/constants/repository.constants';
+import { QUIZ_SERVICE } from '@common/constants/service.constants';
 import { IUsersRepository } from '@common/contracts/repositories/users.repository.contract';
 import { IQuizService } from '@common/contracts/services/quiz.service.contract';
 import { IUsersService } from '@common/contracts/services/users.service.contract';

@@ -1,10 +1,10 @@
-import {
-  USERS_SERVICE,
-  USERS_REPOSITORY,
-  BASE_USERS_SERVICE,
-} from '@common/constants/users.constants';
 import { forwardRef, Module } from '@nestjs/common';
 
+import { USERS_REPOSITORY } from '@common/constants/repository.constants';
+import {
+  BASE_USERS_SERVICE,
+  USERS_SERVICE,
+} from '@common/constants/service.constants';
 import { UsersRepository } from '@database/repositories/users-repository';
 import { QuizModule } from '@quiz/quiz.module';
 import { LoggingUsersDecorator } from '@users/logging-users.decorator';

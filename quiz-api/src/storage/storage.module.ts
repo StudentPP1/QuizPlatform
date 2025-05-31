@@ -1,9 +1,9 @@
+import { Module } from '@nestjs/common';
+
 import {
   BASE_STORAGE_SERVICE,
   STORAGE_SERVICE,
-} from '@common/constants/storage.constants';
-import { Module } from '@nestjs/common';
-
+} from '@common/constants/service.constants';
 import { IStorageService } from '@common/contracts/services/storage.service.contract';
 import { CloudinaryProvider } from '@storage/cloudinary.provider';
 import { LoggingStorageDecorator } from '@storage/logging-storage.decorator';
