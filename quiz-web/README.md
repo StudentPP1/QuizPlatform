@@ -76,7 +76,7 @@ To get a local copy up and running follow these steps.
 ### Prerequisites
 
 * yarn ([here](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable))
-* quiz-api ([here](https://github.com/StudentPP1/QuizPlatform/tree/master/quiz-api))
+* quiz-api ([here](../quiz-api/README.md#-installation))
 * add `.env.local` in `QuizPlatform/quiz-web` dir with fields:
 
   ```env
