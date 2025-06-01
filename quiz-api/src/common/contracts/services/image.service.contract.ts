@@ -5,6 +5,5 @@ export interface IImageService {
     tasks: T[],
     files: Express.Multer.File[],
   ): Promise<T[]>;
-
   deleteImagesFromTasks(tasks: Task[]): Promise<void>;
 }
