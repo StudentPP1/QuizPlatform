@@ -90,11 +90,13 @@ export class QuizService implements IQuizService {
     if (quiz.creator.id !== user.id)
       throw new ForbiddenException('You are not the creator of this quiz');
 
-    Object.assign(quiz, dto);
+    const { tasks, ...quizData } = dto;
+    Object.assign(quiz, quizData);
+
     await this.quizRepository.save(quiz);
 
-    if (dto.tasks) {
-      await this.taskService.updateTasks(quiz, dto.tasks);
+    if (tasks && tasks.length > 0) {
+      await this.taskService.updateTasks(quiz, tasks);
     }
 
     if (this.cache.has(`quiz:${quiz.id}`))

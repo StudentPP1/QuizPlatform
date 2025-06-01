@@ -4,6 +4,7 @@ import { DataSource, Repository } from 'typeorm';
 import { DATA_SOURCE } from '@common/constants/repository.constants';
 import { ITaskRepository } from '@common/contracts/repositories/task.repository.contract';
 import { CreateTaskDto } from '@common/dto/create-task.dto';
+import { UpdateTaskDto } from '@common/dto/update-task.dto';
 import { Quiz } from '@database/entities/quiz.entity';
 import { Task } from '@database/entities/task.entity';
 
@@ -14,8 +15,8 @@ export class TaskRepository implements ITaskRepository {
     this.repository = this.dataSource.getRepository(Task);
   }
 
-  create(createTaskDto: CreateTaskDto, quiz: Quiz): Task {
-    const task = this.repository.create({ ...createTaskDto, quiz });
+  create(dto: CreateTaskDto | UpdateTaskDto, quiz: Quiz): Task {
+    const task = this.repository.create({ ...dto, quiz });
 
     return task;
   }
@@ -27,6 +28,7 @@ export class TaskRepository implements ITaskRepository {
   async findByQuizId(quizId: string): Promise<Task[]> {
     return this.repository.find({
       where: { quiz: { id: quizId } },
+      relations: ['quiz'],
     });
   }
 
