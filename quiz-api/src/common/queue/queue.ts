@@ -1,6 +1,8 @@
+import { setTimeout } from 'node:timers/promises';
+
 import { InternalServerErrorException } from '@nestjs/common';
 
-type Task<T = any> = () => Promise<T>;
+type Task<T = unknown> = () => Promise<T>;
 
 export class Queue {
   private queue: Task[] = [];
@@ -47,14 +49,10 @@ export class Queue {
       this.activeTasks--;
 
       if (this.delayBetweenQueriesMs > 0) {
-        await this.delay(this.delayBetweenQueriesMs);
+        await setTimeout(this.delayBetweenQueriesMs);
       }
 
-      this.processQueue();
+      void this.processQueue();
     }
-  }
-
-  private delay(ms: number): Promise<unknown> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
