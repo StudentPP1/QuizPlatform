@@ -12,11 +12,8 @@ import {
   Inject,
   Put,
   Delete,
-  BadRequestException,
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
-import { plainToInstance } from 'class-transformer';
-import { validateOrReject } from 'class-validator';
 
 import { QUIZ_SERVICE } from '@common/constants/service.constants';
 import { IQuizService } from '@common/contracts/services/quiz.service.contract';
@@ -31,6 +28,7 @@ import {
   MessageResponse,
   QuizIdResponse,
 } from '@common/interfaces/response.interface';
+import { createValidationPipe } from '@common/utils/parse-and-validate-json.factory';
 
 @UseGuards(JwtGuard)
 @Controller('quiz')
@@ -43,17 +41,11 @@ export class QuizController {
   @UseInterceptors(AnyFilesInterceptor())
   async createQuiz(
     @Req() request: RequestWithUser,
-    @Body('quiz') quizRaw: string,
+    @Body('quiz', createValidationPipe(CreateQuizDto))
+    createQuizDto: CreateQuizDto,
     @UploadedFiles() files: Express.Multer.File[],
   ): Promise<QuizIdResponse> {
-    try {
-      const createQuizDto = plainToInstance(CreateQuizDto, JSON.parse(quizRaw));
-      await validateOrReject(createQuizDto);
-
-      return this.quizService.createQuiz(createQuizDto, request.user, files);
-    } catch {
-      throw new BadRequestException('Invalid quiz data');
-    }
+    return this.quizService.createQuiz(createQuizDto, request.user, files);
   }
 
   @Put('update/:id')
@@ -61,22 +53,11 @@ export class QuizController {
   async updateQuiz(
     @Param('id') id: string,
     @Req() request: RequestWithUser,
-    @Body('quiz') quizRaw: string,
+    @Body('quiz', createValidationPipe(UpdateQuizDto))
+    updateQuizDto: UpdateQuizDto,
     @UploadedFiles() files: Express.Multer.File[],
   ): Promise<QuizIdResponse> {
-    try {
-      const updateQuizDto = plainToInstance(UpdateQuizDto, JSON.parse(quizRaw));
-      await validateOrReject(updateQuizDto);
-
-      return this.quizService.updateQuiz(
-        id,
-        updateQuizDto,
-        request.user,
-        files,
-      );
-    } catch {
-      throw new BadRequestException('Invalid quiz data');
-    }
+    return this.quizService.updateQuiz(id, updateQuizDto, request.user, files);
   }
 
   @Delete('delete/:id')
