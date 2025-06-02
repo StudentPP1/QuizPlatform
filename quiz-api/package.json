@@ -11,7 +11,12 @@
     "start:dev": "cross-env NODE_ENV=development nest start --watch",
     "start:debug": "cross-env NODE_ENV=development nest start --debug --watch",
     "start:prod": "cross-env NODE_ENV=production node dist/main",
-    "lint": "eslint \"src/**/*.ts\" --fix"
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "migration:create": "typeorm migration:create",
+    "migration:generate": "cross-env NODE_ENV=production yarn typeorm migration:generate -d src/database/dataSource.ts",
+    "migration:run": "cross-env NODE_ENV=production yarn typeorm migration:run -d src/database/dataSource.ts",
+    "migration:revert": "cross-env NODE_ENV=production yarn typeorm migration:revert -d src/database/dataSource.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.2",
