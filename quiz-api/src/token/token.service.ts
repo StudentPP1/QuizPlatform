@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { setTimeout } from 'node:timers/promises';
 
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -60,7 +61,7 @@ export class TokenService implements ITokenService {
         expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRATION'),
       });
 
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await setTimeout(100);
     }
   }
 
