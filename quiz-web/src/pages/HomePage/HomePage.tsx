@@ -18,7 +18,7 @@ const HomePage: FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const strategy = new ParticipatedQuizzesStrategy();
     const FROM = 1;
-    const TO = 2;
+    const TO = 3;
 
     useEffect(() => {
         const fetchQuizzes = async () => {
