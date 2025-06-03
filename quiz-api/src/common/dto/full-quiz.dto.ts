@@ -3,7 +3,7 @@ import { TaskPreviewDto } from '@common/dto/task-preview.dto';
 import { Quiz } from '@database/entities/quiz.entity';
 
 export class FullQuizDto extends QuizPreviewDto {
-  description: string;
+  description?: string | null;
   timeLimit: number;
   tasks: TaskPreviewDto[];
 
