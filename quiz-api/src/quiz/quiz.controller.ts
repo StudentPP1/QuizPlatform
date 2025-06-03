@@ -41,10 +41,12 @@ export class QuizController {
   @UseInterceptors(AnyFilesInterceptor())
   async createQuiz(
     @Req() request: RequestWithUser,
-    @Body('quiz', createValidationPipe(CreateQuizDto))
-    createQuizDto: CreateQuizDto,
+    @Body('quiz') quizRaw: string,
     @UploadedFiles() files: Express.Multer.File[],
   ): Promise<QuizIdResponse> {
+    const pipe = createValidationPipe(CreateQuizDto);
+    const createQuizDto = await pipe.transform(quizRaw);
+
     return this.quizService.createQuiz(createQuizDto, request.user, files);
   }
 
@@ -53,10 +55,12 @@ export class QuizController {
   async updateQuiz(
     @Param('id') id: string,
     @Req() request: RequestWithUser,
-    @Body('quiz', createValidationPipe(UpdateQuizDto))
-    updateQuizDto: UpdateQuizDto,
+    @Body('quiz') quizRaw: string,
     @UploadedFiles() files: Express.Multer.File[],
   ): Promise<QuizIdResponse> {
+    const pipe = createValidationPipe(UpdateQuizDto);
+    const updateQuizDto = await pipe.transform(quizRaw);
+
     return this.quizService.updateQuiz(id, updateQuizDto, request.user, files);
   }
 
