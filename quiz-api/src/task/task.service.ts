@@ -8,6 +8,7 @@ import { ITaskService } from '@common/contracts/services/task.service.contract';
 import { CreateTaskDto } from '@common/dto/create-task.dto';
 import { UpdateTaskDto } from '@common/dto/update-task.dto';
 import { Quiz } from '@database/entities/quiz.entity';
+import { Task } from '@database/entities/task.entity';
 
 @Injectable()
 export class TaskService implements ITaskService {
@@ -21,19 +22,22 @@ export class TaskService implements ITaskService {
     createTaskDtos: CreateTaskDto[],
     quiz: Quiz,
   ): Promise<void> {
-    for (const taskDto of createTaskDtos) {
-      const task = this.taskRepository.create(taskDto, quiz);
-      await this.taskRepository.save(task);
-    }
+    const tasks = createTaskDtos.map((dto) =>
+      this.taskRepository.create(dto, quiz),
+    );
+
+    await Promise.all(tasks.map((task) => this.taskRepository.save(task)));
   }
 
   async updateTasks(
     quiz: Quiz,
     updateTaskDtos: UpdateTaskDto[],
-  ): Promise<void> {
+  ): Promise<Task[]> {
     const existingTasks = await this.taskRepository.findByQuizId(quiz.id);
 
     await this.imageService.deleteImagesFromTasks(existingTasks);
+
+    const updatedTasks: Task[] = [];
 
     for (let i = 0; i < updateTaskDtos.length; i++) {
       const dto = updateTaskDtos[i];
@@ -41,16 +45,20 @@ export class TaskService implements ITaskService {
       if (task) {
         Object.assign(task, dto);
         task.quiz = quiz;
-
         await this.taskRepository.save(task);
+        updatedTasks.push(task);
       } else {
         const newTask = this.taskRepository.create(dto, quiz);
         await this.taskRepository.save(newTask);
+        updatedTasks.push(newTask);
       }
     }
+
     if (existingTasks.length > updateTaskDtos.length) {
       const toDelete = existingTasks.slice(updateTaskDtos.length);
       await this.taskRepository.remove(toDelete);
     }
+
+    return updatedTasks;
   }
 }

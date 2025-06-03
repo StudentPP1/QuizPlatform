@@ -58,14 +58,15 @@ export class QuizService implements IQuizService {
     user: User,
     files: Express.Multer.File[],
   ): Promise<QuizIdResponse> {
-    createQuizDto.tasks = await this.imageService.attachImagesToTasks(
+    const tasksWithImages = await this.imageService.attachImagesToTasks(
       createQuizDto.tasks,
       files,
     );
+
     const quiz = this.quizRepository.create(createQuizDto, user);
     await this.quizRepository.save(quiz);
 
-    await this.taskService.createTasks(createQuizDto.tasks, quiz);
+    await this.taskService.createTasks(tasksWithImages, quiz);
 
     return {
       quizId: quiz.id,
@@ -79,7 +80,11 @@ export class QuizService implements IQuizService {
     user: User,
     files: Express.Multer.File[],
   ): Promise<QuizIdResponse> {
-    dto.tasks = await this.imageService.attachImagesToTasks(dto.tasks, files);
+    const tasksWithImages = await this.imageService.attachImagesToTasks(
+      dto.tasks,
+      files,
+    );
+
     const quiz = await this.quizRepository.findOneByIdWithRelations(quizId, [
       'creator',
       'creator.createdQuizzes',
@@ -95,12 +100,11 @@ export class QuizService implements IQuizService {
 
     await this.quizRepository.save(quiz);
 
-    if (tasks && tasks.length > 0) {
-      await this.taskService.updateTasks(quiz, tasks);
-    }
+    quiz.tasks = await this.taskService.updateTasks(quiz, tasksWithImages);
 
-    if (this.cache.has(`quiz:${quiz.id}`))
+    if (this.cache.has(`quiz:${quiz.id}`)) {
       this.cache.set(`quiz:${quiz.id}`, quiz);
+    }
 
     return {
       quizId: quiz.id,

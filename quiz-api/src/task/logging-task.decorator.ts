@@ -3,6 +3,7 @@ import { CreateTaskDto } from '@common/dto/create-task.dto';
 import { UpdateTaskDto } from '@common/dto/update-task.dto';
 import { baseLogger } from '@common/logging/logger';
 import { Quiz } from '@database/entities/quiz.entity';
+import { Task } from '@database/entities/task.entity';
 
 export class LoggingTaskDecorator implements ITaskService {
   private readonly logger = baseLogger.child({ service: 'Task Service' });
@@ -38,7 +39,7 @@ export class LoggingTaskDecorator implements ITaskService {
     );
   }
 
-  updateTasks(quiz: Quiz, updateTaskDtos: UpdateTaskDto[]): Promise<void> {
+  updateTasks(quiz: Quiz, updateTaskDtos: UpdateTaskDto[]): Promise<Task[]> {
     return this.logMethod('updateTasks', [quiz, updateTaskDtos], () =>
       this.wrapped.updateTasks(quiz, updateTaskDtos),
     );
