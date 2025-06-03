@@ -25,7 +25,7 @@ export class Quiz {
   title: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description?: string | null;
 
   @Column({ type: 'int' })
   timeLimit: number;
