@@ -1,5 +1,6 @@
+import { QuestionType } from './../models/QuestionType';
 import { useState, useCallback } from "react";
-import { QuestionType } from "../models/QuestionType";
+import { QUESTION_TYPES } from '../constants/constants';
 
 type QuizFormState = {
   title: string;
@@ -115,10 +116,10 @@ export const useQuizForm = (
 
     const tasks = questions.map((question) => {
       const type = question.isOpenEnded
-        ? "text"
+        ? QUESTION_TYPES.TEXT
         : question.answers.filter((a) => a.isCorrect).length === 1
-        ? "single"
-        : "multiple";
+        ? QUESTION_TYPES.SINGLE
+        : QUESTION_TYPES.MULTIPLE;
 
       return {
         question: question.text,
@@ -144,7 +145,7 @@ export const useQuizForm = (
       timeLimit: parseInt(timeLimit, 10),
       tasks,
     };
-
+    console.log("Prepared quiz data:", quizData);
     formData.append("quiz", JSON.stringify(quizData));
     return formData;
   }, [formState, initialQuiz]);

@@ -33,6 +33,7 @@ const QuizInfoPage: FC = () => {
                 QuizService.getQuiz(id),
                 QuizService.getReviews(from, from + DEFAULT_PAGINATION_SIZE, id)
             ])
+            console.log("QuizInfoPage: quizResult", quizResult);
             setQuiz(quizResult as Quiz);
             setReviews(reviewsResult as Review[]);
             setFrom(from + DEFAULT_PAGINATION_SIZE);

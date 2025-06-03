@@ -7,6 +7,7 @@ import { QuizNavigate } from "../../../models/QuizNavigate";
 import { QuizResultState } from "../../../models/QuizResultState";
 import useTimer from "../../../hooks/useTimer";
 import { QuizTask } from "../../../models/QuizTask";
+import { QUESTION_TYPES } from "../../../constants/constants";
 
 const QuizPage: React.FC = () => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const QuizPage: React.FC = () => {
 
   const handleAnswerSelection = (question: QuizTask, value: string, checked?: boolean) => {
     setAnswers((prev) => {
-      if (question.type === "multiple-choice") {
+      if (question.type === QUESTION_TYPES.MULTIPLE) {
         const selected = (prev[currentQuestionIndex.toString()] as string[]) || [];
         return {
           ...prev,
@@ -104,12 +105,13 @@ const QuizPage: React.FC = () => {
   }
 
   const strategies = new Map<string, (question: QuizTask) => any>([
-    ['single', (question) => SingleChoiceStrategy(question)],
-    ['multiple-choice', (question) => MultipleChoiceStrategy(question)],
-    ['text', (question) => TextStrategy(question)],
+    [QUESTION_TYPES.SINGLE, (question) => SingleChoiceStrategy(question)],
+    [QUESTION_TYPES.MULTIPLE, (question) => MultipleChoiceStrategy(question)],
+    [QUESTION_TYPES.TEXT, (question) => TextStrategy(question)],
   ]);
 
   const QuestionStrategy = (question: QuizTask) => {
+    console.log("Question", question);
     return strategies.get(question.type)?.(question);
   };
 
@@ -124,7 +126,7 @@ const QuizPage: React.FC = () => {
         </h3>
         <h3 className={styles.timer}>Time: {timeLeft} seconds</h3>
         <h2 className={styles.questionText}>{question.question}</h2>
-        {question?.image && <img src={question.image} className={styles.questionImage} />}
+        {question.image && <img src={question.image} className={styles.questionImage} />}
         <div className={styles.optionsContainer}>
           {QuestionStrategy(question)}
         </div>

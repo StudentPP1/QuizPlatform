@@ -24,6 +24,8 @@ const CreateQuizPage: FC = () => {
         }
 
         const formData = formActions.prepareFormData();
+        console.log("Form Data:", formData);
+        console.log("Update:", !!quiz);
         // checks if quiz exists, if it does, true, otherwise false => !!quiz
         await QuizService.createQuiz(formData, !!quiz, quiz?.id).then((result) => {
             globalCache.delete("topQuizzes");

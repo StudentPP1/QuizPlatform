@@ -38,13 +38,16 @@ const EditQuizPage: FC = () => {
     }
 
     function mapToQuizEdit(quiz: Quiz): QuizEdit {
-        return {
+        console.log("Mapping quiz to edit format:", quiz);
+        const mappedQuiz = {
             id: quiz.id,
             questions: quiz.tasks.map(mapToQuestionType),
             title: quiz.title,
             description: quiz.description,
             timeLimit: quiz.timeLimit
         }
+        console.log("Mapped quiz:", mappedQuiz);
+        return mappedQuiz;
     }
 
     return (

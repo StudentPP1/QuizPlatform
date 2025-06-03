@@ -10,9 +10,9 @@ const useQuizResults = (quizTasks: QuizTask[], userAnswers: UserAnswers) => {
     for (const question of quizTasks) {
       const userAnswer = userAnswers[quizTasks.indexOf(question).toString()];
       console.log("_______")
-      console.log(userAnswer)
+      console.log("your answer", userAnswer)
       const correctAnswer = question.correctAnswers;
-      console.log(correctAnswer)
+      console.log("correct answer", correctAnswer)
       correctAnswers += correctAnswer.length;
 
       for (const answer of userAnswer) {
