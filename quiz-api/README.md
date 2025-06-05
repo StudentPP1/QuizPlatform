@@ -52,6 +52,7 @@ src/
 - **Google OAuth 2.0**
 - **Nodemailer**
 - **Cloudinary** (Image storage)
+- **Docker** + **Docker Compose** 🐳
 - **Yarn** as package manager
 
 ---
@@ -85,17 +86,58 @@ Edit the corresponding files and fill in the required variables:
 - `env.development.local` for development
 - `env.production.local` for production
 
-4. **Run the development server**
+4. **Run the development server (with Docker Compose)**
+
+> 🐳 Make sure you have Docker and Docker Compose installed.  
+> ⚙️ Ensure `.env.development.local` is configured with the required environment variables.
 
 ```bash
-yarn start:dev
+# Start the development environment
+docker-compose -f docker-compose.development.yml up --build
+
+This will:
+
+- Start the PostgreSQL container
+- Start the NestJS app in development mode
+- Watch for file changes thanks to the volume mount
+
+To stop the containers:
+
+```bash
+docker-compose -f docker-compose.development.yml down
 ```
 
-5. **Run the production server**
+5. **Run the production server (with Docker Compose)**
 
-Build the project and run it:
+> 🐳 Make sure you have Docker and Docker Compose installed.  
+> ⚙️ Ensure `.env.production.local` is configured with the required environment variables.
 
 ```bash
+# Build and run the production container
+docker-compose -f docker-compose.production.yml up --build -d
+```
+
+This will:
+
+- Build the app using multi-stage Dockerfile
+- Start the container with production-ready settings
+- Serve the app on port 80 of your host machine
+
+To stop the container:
+
+```bash
+docker-compose -f docker-compose.production.yml down
+```
+
+6. **Manual start**
+
+> 📝 The original Yarn-based commands still work when running the app directly on your machine:
+
+```bash
+# Development
+yarn start:dev
+
+# Production
 yarn build
 yarn start:prod
 ```
