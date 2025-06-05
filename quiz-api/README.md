@@ -94,6 +94,7 @@ Edit the corresponding files and fill in the required variables:
 ```bash
 # Start the development environment
 docker-compose -f docker-compose.development.yml up --build
+```
 
 This will:
 
