@@ -4,7 +4,8 @@ import { User } from '@database/entities/user.entity';
 
 export interface IQuizResultRepository {
   create(user: User, quiz: Quiz): QuizResult;
-  save(quizResult: QuizResult): Promise<void>;
+  insert(quizResult: QuizResult): Promise<void>;
+  update(id: string, data: Partial<QuizResult>): Promise<void>;
   findByQuizAndUserId(
     quizId: string,
     userId: string,

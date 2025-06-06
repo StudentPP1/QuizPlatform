@@ -26,7 +26,7 @@ export class TaskService implements ITaskService {
       this.taskRepository.create(dto, quiz),
     );
 
-    await Promise.all(tasks.map((task) => this.taskRepository.save(task)));
+    await Promise.all(tasks.map((task) => this.taskRepository.insert(task)));
   }
 
   async updateTasks(
@@ -49,7 +49,7 @@ export class TaskService implements ITaskService {
         updatedTasks.push(task);
       } else {
         const newTask = this.taskRepository.create(dto, quiz);
-        await this.taskRepository.save(newTask);
+        await this.taskRepository.insert(newTask);
         updatedTasks.push(newTask);
       }
     }

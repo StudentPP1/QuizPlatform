@@ -44,7 +44,7 @@ export class RealUsersService implements IUsersService {
 
     const user = this.usersRepository.create(userDto, authProvider);
 
-    await this.usersRepository.save(user);
+    await this.usersRepository.insert(user);
     return user;
   }
 

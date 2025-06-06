@@ -26,8 +26,8 @@ export class ReviewRepository implements IReviewRepository {
     return review;
   }
 
-  async save(review: Review): Promise<void> {
-    await this.repository.save(review);
+  async insert(review: Review): Promise<void> {
+    await this.repository.insert(review);
   }
 
   findByQuizId(quizId: string, from?: number, to?: number): Promise<Review[]> {

@@ -21,6 +21,10 @@ export class TaskRepository implements ITaskRepository {
     return task;
   }
 
+  async insert(task: Task): Promise<void> {
+    await this.repository.insert(task);
+  }
+
   async save(task: Task): Promise<void> {
     await this.repository.save(task);
   }

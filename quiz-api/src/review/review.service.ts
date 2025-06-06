@@ -47,7 +47,7 @@ export class ReviewService implements IReviewService {
     this.cache.deleteByPrefix(`reviews:${quizId}`);
 
     await Promise.all([
-      this.reviewRepository.save(review),
+      this.reviewRepository.insert(review),
       this.updateQuizRating(quiz),
     ]);
 
@@ -80,8 +80,9 @@ export class ReviewService implements IReviewService {
     const averageRating =
       reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length;
 
-    quiz.rating = Math.round(averageRating);
-    await this.quizRepository.save(quiz);
+    await this.quizRepository.update(quiz.id, {
+      rating: Math.round(averageRating),
+    });
   }
 
   async getReviewsForQuiz(dto: ReviewPaginationDto): Promise<ReviewDto[]> {

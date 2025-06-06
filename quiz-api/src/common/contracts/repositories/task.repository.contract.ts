@@ -5,7 +5,8 @@ import { Task } from '@database/entities/task.entity';
 
 export interface ITaskRepository {
   create(taskDto: CreateTaskDto | UpdateTaskDto, quiz: Quiz): Task;
-  save(tasks: Task): Promise<void>;
+  insert(task: Task): Promise<void>;
+  save(task: Task): Promise<void>;
   findByQuizId(quizId: string): Promise<Task[]>;
   remove(tasks: Task[]): Promise<void>;
 }

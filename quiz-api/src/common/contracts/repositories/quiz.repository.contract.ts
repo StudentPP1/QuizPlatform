@@ -8,6 +8,8 @@ export interface IQuizRepository {
     relations?: string[],
   ): Promise<Quiz | null>;
   create(createQuizDto: CreateQuizDto, creator: User): Quiz;
+  insert(quiz: Quiz): Promise<void>;
+  update(id: string, data: Partial<Quiz>): Promise<void>;
   save(quiz: Quiz): Promise<void>;
   remove(quiz: Quiz): Promise<void>;
   findByName(name: string, from: number, to: number): Promise<Quiz[]>;

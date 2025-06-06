@@ -24,8 +24,12 @@ export class QuizResultRepository implements IQuizResultRepository {
     return quizResult;
   }
 
-  async save(quizResult: QuizResult): Promise<void> {
-    await this.repository.save(quizResult);
+  async insert(quizResult: QuizResult): Promise<void> {
+    await this.repository.insert(quizResult);
+  }
+
+  async update(id: string, data: Partial<QuizResult>): Promise<void> {
+    await this.repository.update(id, data);
   }
 
   findByQuizAndUserId(

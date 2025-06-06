@@ -90,7 +90,7 @@ export class TokenService implements ITokenService {
       expiresAt,
     );
 
-    await this.refreshTokenRepository.save(refreshToken);
+    await this.refreshTokenRepository.insert(refreshToken);
   }
 
   async validateRefreshTokenInDb(
@@ -122,8 +122,7 @@ export class TokenService implements ITokenService {
   }
 
   async markTokenAsUsed(dbToken: RefreshToken): Promise<void> {
-    dbToken.isUsed = true;
-    await this.refreshTokenRepository.save(dbToken);
+    await this.refreshTokenRepository.update(dbToken.id, { isUsed: true });
   }
 
   removeTokenGenerator(userId: string): void {

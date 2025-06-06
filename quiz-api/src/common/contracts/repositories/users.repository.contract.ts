@@ -10,6 +10,7 @@ export interface IUsersRepository {
     userDto: CreateUserDto | CreateGoogleUserDto,
     authProvider: AuthProvider,
   ): User;
+  insert(user: User): Promise<void>;
   save(user: User): Promise<void>;
   findTopCreators(limit: number): Promise<User[]>;
 }

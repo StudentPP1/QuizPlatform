@@ -64,7 +64,7 @@ export class QuizService implements IQuizService {
     );
 
     const quiz = this.quizRepository.create(createQuizDto, user);
-    await this.quizRepository.save(quiz);
+    await this.quizRepository.insert(quiz);
 
     await this.taskService.createTasks(tasksWithImages, quiz);
 
@@ -156,8 +156,12 @@ export class QuizService implements IQuizService {
 
       await Promise.all([
         this.quizRepository.save(quiz),
-        this.quizResultRepository.save(quizResult),
+        this.quizResultRepository.insert(quizResult),
       ]);
+    } else {
+      await this.quizResultRepository.update(existingResult.id, {
+        updatedAt: new Date(),
+      });
     }
 
     return {

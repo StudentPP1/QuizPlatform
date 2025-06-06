@@ -38,7 +38,11 @@ export class RefreshTokenRepository implements IRefreshTokenRepository {
     return this.repository.create({ user, tokenHash, expiresAt });
   }
 
-  async save(data: RefreshToken): Promise<void> {
-    await this.repository.save(data);
+  async insert(token: RefreshToken): Promise<void> {
+    await this.repository.insert(token);
+  }
+
+  async update(id: string, data: Partial<RefreshToken>): Promise<void> {
+    await this.repository.update(id, data);
   }
 }
