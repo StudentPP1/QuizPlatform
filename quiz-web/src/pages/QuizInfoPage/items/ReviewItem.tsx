@@ -8,18 +8,24 @@ const ReviewItem: FC<{ review: Review }> = ({ review }) => {
     const navigate = useNavigate();
     return (
         <div className={styles.review}>
-            <div className={styles.userProfile} onClick={() => {
-                navigate(`/authorInfo/${review.creator.userId}`)
-            }}>
+            <div
+                className={styles.userProfile}
+                onClick={() => navigate(`/authorInfo/${review.creator.userId}`)}
+            >
                 <Avatar avatarUrl={review.creator.avatarUrl} />
-                <p className={styles.username}>{review.creator.username}</p>
+                <div className={styles.userInfo}>
+                    <p className={styles.username}>{review.creator.username}</p>
+                    <p className={styles.stars}>{"⭐".repeat(review.rating)}</p>
+                </div>
             </div>
-            <p>{"⭐".repeat(review.rating)}</p>
-            {review.text !== null
-                ? <p className={styles.reviewText}>{review.text}</p>
-                : <></>
-            }
+
+            {review.text && (
+                <p className={styles.reviewText}>
+                    {review.text}
+                </p>
+            )}
         </div>
+
     )
 }
 
