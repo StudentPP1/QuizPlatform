@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./QuizPage.module.scss";
-import { UserAnswers } from "../../../models/UserAnswers";
-import { QuizNavigate } from "../../../models/QuizNavigate";
-import { QuizResultState } from "../../../models/QuizResultState";
+import { UserAnswers } from "../../../models/user/UserAnswers";
+import { QuizNavigate } from "../../../models/quiz/QuizNavigate";
+import { QuizResultState } from "../../../models/quiz/QuizResultState";
 import useTimer from "../../../hooks/useTimer";
-import { QuizTask } from "../../../models/QuizTask";
+import { QuizTask } from "../../../models/quiz/QuizTask";
 import { QUESTION_TYPES } from "../../../constants/constants";
 
 const QuizPage: React.FC = () => {

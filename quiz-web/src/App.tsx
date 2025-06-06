@@ -4,7 +4,7 @@ import { ToastContainer } from "react-toastify";
 import { AuthContext } from "./context/context";
 import Router from "./router/Router";
 import { ACCESS_TOKEN_NAME } from "./constants/constants";
-import { Creator } from "./models/Creator";
+import { Creator } from "./models/user/Creator";
 import { refreshToken } from "./api/services/TokenService";
 import { UserService } from "./api/services/UserService";
 import { globalCache } from "./hooks/useCachedFetch";

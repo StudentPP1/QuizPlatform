@@ -1,11 +1,11 @@
 import { FC } from "react"
 import { Quiz } from "../../models/Quiz"
-import { QuizEdit } from "../../models/QuizEdit"
+import { QuizEdit } from "../../models/quiz/QuizEdit"
 import { QuestionType } from "../../models/QuestionType"
-import { QuizTask } from "../../models/QuizTask"
-import { AnswerType } from "../../models/AnswerType"
+import { QuizTask } from "../../models/quiz/QuizTask"
+import { AnswerType } from "../../models/enums/AnswerType"
 import { Navigate, useLocation } from "react-router-dom"
-import { QuizNavigate } from "../../models/QuizNavigate"
+import { QuizNavigate } from "../../models/quiz/QuizNavigate"
 import { QuizNavigateEdit } from "../../models/QuizNavigateEdit"
 
 const EditQuizPage: FC = () => {

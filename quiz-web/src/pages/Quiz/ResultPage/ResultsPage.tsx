@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./ResultsPage.module.scss";
 import { FaStar, FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { QuizResultState } from "../../../models/QuizResultState";
+import { QuizResultState } from "../../../models/quiz/QuizResultState";
 import { QuizService } from "../../../api/services/QuizService";
 import useQuizResults from "../../../hooks/useQuizResults";
 import { globalCache } from "../../../hooks/useCachedFetch";

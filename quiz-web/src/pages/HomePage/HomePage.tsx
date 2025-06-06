@@ -5,7 +5,7 @@ import { RecentQuiz } from "../../components/card/card/RecentQuizCard";
 import QuizCard from "../../components/card/card/QuizCard";
 import AuthorCard from "../../components/card/author/AuthorCard";
 import { QuizDTO } from "../../models/QuizDTO";
-import { Creator } from "../../models/Creator";
+import { Creator } from "../../models/user/Creator";
 import { QuizService } from "../../api/services/QuizService";
 import { useCachedFetch } from "../../hooks/useCachedFetch";
 import Loading from "../../components/loading/Loader";

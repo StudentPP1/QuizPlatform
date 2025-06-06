@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Creator } from "../models/Creator";
+import { Creator } from "../models/user/Creator";
 
 export interface AuthState {
     user: Creator | null;

@@ -1,4 +1,4 @@
-import { Creator } from "./Creator"
+import { Creator } from "../user/Creator"
 
 export type QuizDTO = {
     id: string,

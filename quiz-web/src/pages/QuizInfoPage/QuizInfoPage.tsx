@@ -7,7 +7,7 @@ import { Quiz } from "../../models/Quiz";
 import { Review } from "../../models/Review";
 import Avatar from "../../components/avatar/Avatar";
 import { QuizService } from "../../api/services/QuizService";
-import { QuizNavigate } from "../../models/QuizNavigate";
+import { QuizNavigate } from "../../models/quiz/QuizNavigate";
 import { AuthContext } from "../../context/context";
 import { DEFAULT_PAGINATION_FROM, DEFAULT_PAGINATION_SIZE } from "../../constants/constants";
 import Loading from "../../components/loading/Loader";

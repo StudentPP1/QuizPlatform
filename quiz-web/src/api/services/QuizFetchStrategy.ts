@@ -1,4 +1,5 @@
-import { QuizDTO } from "../../models/QuizDTO";
+
+import { QuizDTO } from "../../models/quiz/QuizDTO";
 import { QuizService } from "./QuizService";
 
 export interface QuizFetchStrategy {

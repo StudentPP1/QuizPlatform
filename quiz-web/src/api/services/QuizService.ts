@@ -1,13 +1,13 @@
-import { QuizCreatedResult } from "../../models/QuizCreatedResult";
-import { Creator } from "../../models/Creator";
-import { Quiz } from "../../models/Quiz";
-import { QuizDTO } from "../../models/QuizDTO";
-import { Review } from "../../models/Review";
+import { QuizCreatedResult } from "../../models/quiz/QuizCreatedResult";
+import { Creator } from "../../models/user/Creator";
 import { apiFetch } from "../utils/ApiUtils";
 import { RequestAttributes } from "../utils/RequestAttributes";
-import { DoneApiResult } from "../../models/DoneApiResult";
+import { DoneApiResult } from "../../models/common/DoneApiResult";
 import { log } from "../../utils/Logger";
 import { HttpMethod } from "../utils/HttpMethod";
+import { QuizDTO } from "../../models/quiz/QuizDTO";
+import { Quiz } from "../../models/quiz/Quiz";
+import { Review } from "../../models/review/Review";
 
 export class QuizService {
   @log

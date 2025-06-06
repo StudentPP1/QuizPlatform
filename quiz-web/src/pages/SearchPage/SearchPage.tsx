@@ -4,10 +4,10 @@ import Wrapper from "../../components/wrapper/Wrapper";
 import styles from "./SearchPage.module.scss"
 import Avatar from "../../components/avatar/Avatar";
 import { QuizService } from "../../api/services/QuizService";
-import { QuizDTO } from "../../models/QuizDTO";
 import { useObserver } from "../../hooks/useObserver";
 import Loading from "../../components/loading/Loader";
 import { usePaginatedData } from "../../hooks/usePaginatedFetch";
+import { QuizDTO } from "../../models/quiz/QuizDTO";
 
 const SearchPage: FC = () => {
   localStorage.setItem("index", "0");

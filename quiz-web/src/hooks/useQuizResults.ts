@@ -1,5 +1,5 @@
-import { QuizTask } from "./../models/QuizTask";
-import { UserAnswers } from "../models/UserAnswers";
+import { QuizTask } from "../models/quiz/QuizTask";
+import { UserAnswers } from "../models/user/UserAnswers";
 
 const useQuizResults = (quizTasks: QuizTask[], userAnswers: UserAnswers) => {
   return () => {
@@ -9,7 +9,6 @@ const useQuizResults = (quizTasks: QuizTask[], userAnswers: UserAnswers) => {
     // TODO: + Task 1 => implement for ... of loop to iterate over quizTasks 
     for (const question of quizTasks) {
       const userAnswer = userAnswers[quizTasks.indexOf(question).toString()];
-      console.log("_______")
       console.log("your answer", userAnswer)
       const correctAnswer = question.correctAnswers;
       console.log("correct answer", correctAnswer)

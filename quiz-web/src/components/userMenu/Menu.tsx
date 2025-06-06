@@ -1,7 +1,7 @@
 import { FC, useContext } from "react";
 import styles from "./Menu.module.scss";
 import { AuthService } from "../../api/services/AuthService";
-import { Creator } from "../../models/Creator";
+import { Creator } from "../../models/user/Creator";
 import Avatar from "../avatar/Avatar";
 import { AuthContext } from "../../context/context";
 import { globalCache } from "../../hooks/useCachedFetch";

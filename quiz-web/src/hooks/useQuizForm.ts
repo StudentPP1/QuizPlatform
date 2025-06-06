@@ -1,6 +1,7 @@
-import { QuestionType } from './../models/QuestionType';
+
 import { useState, useCallback } from "react";
 import { QUESTION_TYPES } from '../constants/constants';
+import { QuestionType } from "../models/enums/QuestionType";
 
 type QuizFormState = {
   title: string;

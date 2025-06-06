@@ -1,4 +1,4 @@
-import { Creator } from "../../models/Creator";
+import { Creator } from "../../models/user/Creator";
 import { log } from "../../utils/Logger";
 import { apiFetch } from "../utils/ApiUtils";
 import { RequestAttributes } from "../utils/RequestAttributes";

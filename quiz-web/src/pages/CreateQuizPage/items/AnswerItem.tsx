@@ -1,6 +1,6 @@
 import { FC } from "react";
 import styles from "../CreateQuizPage.module.scss";
-import { AnswerType } from "../../../models/AnswerType";
+import { AnswerType } from "../../../models/enums/AnswerType";
 
 const AnswerItem: FC<{
     answer: AnswerType;

@@ -1,4 +1,4 @@
-import { QuestionType } from "./QuestionType";
+import { QuestionType } from "../enums/QuestionType";
 
 export type QuizEdit = {
     id: string;

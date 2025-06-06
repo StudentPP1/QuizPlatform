@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import styles from "../CreateQuizPage.module.scss";
 import { QuestionType } from "../../../models/QuestionType";
 import AnswerItem from "./AnswerItem";
-import { AnswerType } from "../../../models/AnswerType";
+import { AnswerType } from "../../../models/enums/AnswerType";
 
 const QuizItem: FC<{
     question: QuestionType,

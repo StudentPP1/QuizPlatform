@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./AuthorPage.module.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
-import { Creator } from "../../models/Creator";
+import { Creator } from "../../models/user/Creator";
 import Avatar from "../../components/avatar/Avatar";
 import { UserService } from "../../api/services/UserService";
 import { CreatedQuizzesStrategy } from "../../api/services/QuizFetchStrategy";
