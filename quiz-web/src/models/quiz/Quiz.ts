@@ -1,7 +1,6 @@
 import { Creator } from "../user/Creator"
 import { QuizTask } from "./QuizTask"
 
-
 export type Quiz = {
     id: string,
     title: string,

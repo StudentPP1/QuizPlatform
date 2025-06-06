@@ -1,0 +1,36 @@
+@use "../../../scss/variables" as v;
+
+.review {
+    background-color: v.$second_background;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    text-align: left;
+}
+.userProfile {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 0;
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid v.$white;
+        transition: transform 0.2s;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+
+    .username {
+        font-size: 16px;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

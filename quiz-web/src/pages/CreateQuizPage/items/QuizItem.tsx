@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 import styles from "../CreateQuizPage.module.scss";
-import { QuestionType } from "../../../models/QuestionType";
 import AnswerItem from "./AnswerItem";
 import { AnswerType } from "../../../models/enums/AnswerType";
+import { QuestionType } from "../../../models/enums/QuestionType";
 
 const QuizItem: FC<{
     question: QuestionType,
@@ -69,8 +69,7 @@ const QuizItem: FC<{
                     type="button"
                     className={styles.deleteQuestion}
                     onClick={onDelete}
-                    aria-label="Delete question"
-                >
+                    aria-label="Delete question">
                     🗑️ Delete
                 </button>
             </div>
@@ -83,9 +82,11 @@ const QuizItem: FC<{
                     onChange={handleImageUpload} />
             </label>
 
-            {imagePreview != null ? <img src={imagePreview} className={styles.imagePreview} /> : <></>}
-            {imagePreview != null ?
-                <button
+            {imagePreview != null
+                ? <img src={imagePreview} className={styles.imagePreview} />
+                : <></>}
+            {imagePreview != null
+                ? <button
                     className={styles.deleteImage}
                     onClick={handleImageRemove}>
                     🗑️ Delete
@@ -100,10 +101,7 @@ const QuizItem: FC<{
                         isOpenEnded={question.isOpenEnded}
                         onAnswerChange={(newData) => updateAnswer(answer.id, newData)}
                         onRemove={() => removeAnswer(answer.id)}
-                        canDelete={
-                            !question.isOpenEnded &&
-                            question.answers.length > 2
-                        }
+                        canDelete={!question.isOpenEnded && question.answers.length > 2}
                     />
                 ))}
 

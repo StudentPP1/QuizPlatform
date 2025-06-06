@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./ResultsPage.module.scss";
-import { FaStar, FaTimes } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { QuizResultState } from "../../../models/quiz/QuizResultState";
 import { QuizService } from "../../../api/services/QuizService";
 import useQuizResults from "../../../hooks/useQuizResults";
 import { globalCache } from "../../../hooks/useCachedFetch";
+import RatingStars from "../../../components/ratingStars/RatingStars";
 
 const ResultsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -50,17 +51,7 @@ const ResultsPage: React.FC = () => {
 
         <div className={styles.ratingSection_container}>
           <div className={styles.ratingSection}>
-            <div className={styles.stars}>
-              {[1, 2, 3, 4, 5].map((star) => (
-                <span
-                  key={star}
-                  className={star <= quizRating ? styles.filledStar : styles.emptyStar}
-                  onClick={() => setQuizRating(star)}
-                >
-                  <FaStar/>
-                </span>
-              ))}
-            </div>
+            <RatingStars setRating={setQuizRating} rating={quizRating} />
           </div>
 
           <textarea

@@ -5,9 +5,9 @@ import Wrapper from "../../components/wrapper/Wrapper";
 import Avatar from "../../components/avatar/Avatar";
 import { useObserver } from "../../hooks/useObserver";
 import { CreatedQuizzesStrategy, ParticipatedQuizzesStrategy, QuizFetchStrategy } from "../../api/services/QuizFetchStrategy";
-import { QuizDTO } from "../../models/QuizDTO";
 import Loading from "../../components/loading/Loader";
 import { usePaginatedData } from "../../hooks/usePaginatedFetch";
+import { QuizDTO } from "../../models/quiz/QuizDTO";
 
 const LibraryPage: FC = () => {
   const lastElement = useRef<HTMLDivElement | null>(null);

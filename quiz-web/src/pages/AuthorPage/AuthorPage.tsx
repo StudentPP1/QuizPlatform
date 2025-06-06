@@ -7,9 +7,9 @@ import Avatar from "../../components/avatar/Avatar";
 import { UserService } from "../../api/services/UserService";
 import { CreatedQuizzesStrategy } from "../../api/services/QuizFetchStrategy";
 import { useObserver } from "../../hooks/useObserver";
-import { QuizDTO } from "../../models/QuizDTO";
 import { usePaginatedData } from "../../hooks/usePaginatedFetch";
 import Loading from "../../components/loading/Loader";
+import { QuizDTO } from "../../models/quiz/QuizDTO";
 
 const AuthorPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();

@@ -1,12 +1,12 @@
 import { FC } from "react"
-import { Quiz } from "../../models/Quiz"
 import { QuizEdit } from "../../models/quiz/QuizEdit"
-import { QuestionType } from "../../models/QuestionType"
 import { QuizTask } from "../../models/quiz/QuizTask"
 import { AnswerType } from "../../models/enums/AnswerType"
 import { Navigate, useLocation } from "react-router-dom"
 import { QuizNavigate } from "../../models/quiz/QuizNavigate"
-import { QuizNavigateEdit } from "../../models/QuizNavigateEdit"
+import { QuestionType } from "../../models/enums/QuestionType"
+import { Quiz } from "../../models/quiz/Quiz"
+import { QuizNavigateEdit } from "../../models/quiz/QuizNavigateEdit"
 
 const EditQuizPage: FC = () => {
     const location = useLocation();

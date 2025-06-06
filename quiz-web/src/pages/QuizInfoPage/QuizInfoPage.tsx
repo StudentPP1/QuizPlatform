@@ -3,8 +3,6 @@ import styles from "./QuizInfoPage.module.scss";
 import { FC, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Wrapper from "../../components/wrapper/Wrapper";
-import { Quiz } from "../../models/Quiz";
-import { Review } from "../../models/Review";
 import Avatar from "../../components/avatar/Avatar";
 import { QuizService } from "../../api/services/QuizService";
 import { QuizNavigate } from "../../models/quiz/QuizNavigate";
@@ -13,6 +11,9 @@ import { DEFAULT_PAGINATION_FROM, DEFAULT_PAGINATION_SIZE } from "../../constant
 import Loading from "../../components/loading/Loader";
 import { useObserver } from "../../hooks/useObserver";
 import { usePaginatedData } from "../../hooks/usePaginatedFetch";
+import { Quiz } from "../../models/quiz/Quiz";
+import { Review } from "../../models/review/Review";
+import ReviewItem from "./items/ReviewItem";
 
 const QuizInfoPage: FC = () => {
     const { user } = useContext(AuthContext);
@@ -107,19 +108,7 @@ const QuizInfoPage: FC = () => {
                     {isLoading ? <Loading /> :
                         <div className={styles.reviewList}>
                             {reviews.map((review, index) => (
-                                <div className={styles.review} key={index}>
-                                    <div className={styles.userProfile} onClick={() => {
-                                        navigate(`/authorInfo/${review.creator.userId}`)
-                                    }}>
-                                        <Avatar avatarUrl={review.creator.avatarUrl} />
-                                        <p className={styles.username}>{review.creator.username}</p>
-                                    </div>
-                                    <p>{"⭐".repeat(review.rating)}</p>
-                                    {review.text !== null
-                                        ? <p className={styles.reviewText}>{review.text}</p>
-                                        : <></>
-                                    }
-                                </div>
+                                <ReviewItem key={index} review={review} />
                             ))}
                         </div>}
                 </div>

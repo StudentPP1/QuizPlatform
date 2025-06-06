@@ -5,9 +5,9 @@ import styles from "./CreateQuizPage.module.scss";
 import Wrapper from '../../components/wrapper/Wrapper';
 import { QuizService } from '../../api/services/QuizService';
 import QuizItem from './items/QuizItem';
-import { QuizNavigateEdit } from '../../models/QuizNavigateEdit';
 import { globalCache } from '../../hooks/useCachedFetch';
 import { useQuizForm } from '../../hooks/useQuizForm';
+import { QuizNavigateEdit } from '../../models/quiz/QuizNavigateEdit';
 
 const CreateQuizPage: FC = () => {
     const navigate = useNavigate();
