@@ -21,7 +21,7 @@ const AuthorCard: FC<{ author: Creator }> = ({ author }) => {
             <span className={styles.name}>{author.username}</span>
           </div>
           <div className={styles.author_stats}>
-            <span> {author.numberOfQuizzes} tests </span>
+            <span> {author.numberOfQuizzes} quizzes </span>
           </div>
         </div>
       </div>

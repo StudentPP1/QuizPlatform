@@ -10,7 +10,7 @@ const QuizCard: FC<{ title: string, count: number, avatarUrl: string | null, use
     return (
       <div className={styles.card} onClick={() => navigate(`/quizInfo/${quizId}`)}>
         <h3 className={styles.title}>{title}</h3>
-        <span className={styles.terms}>{count} questions</span>
+        <span className={styles.questions}>{count} questions</span>
         <div className={styles.footer}>
           <div className={styles.author}>
             <Avatar avatarUrl={avatarUrl} />

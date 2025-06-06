@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./RatingStars.module.scss";
+import { FaStar } from "react-icons/fa";
 
 interface RatingStarsProps {
     rating: number;
@@ -7,18 +8,17 @@ interface RatingStarsProps {
 }
 
 const RatingStars: React.FC<RatingStarsProps> = ({ rating, setRating }) => {
+    const ratingStars = [1, 2, 3, 4, 5];
     return (
         <div className={styles.ratingSection}>
             <p>Rate the quiz:</p>
             <div className={styles.stars}>
-                {[1, 2, 3, 4, 5].map((star) => (
-                    <span
+                {ratingStars.map((star) => (
+                    <FaStar
                         key={star}
                         className={star <= rating ? styles.filledStar : styles.emptyStar}
                         onClick={() => setRating(star)}
-                    >
-                        ★
-                    </span>
+                    />
                 ))}
             </div>
         </div>
