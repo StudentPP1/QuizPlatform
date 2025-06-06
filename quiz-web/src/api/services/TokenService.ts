@@ -15,7 +15,7 @@ export async function refreshToken() {
   ).then(async (result) => {
     const token = await result.json();
     if (!result.ok) {
-      sessionStorage.clear();
+      globalCache.delete(ACCESS_TOKEN_NAME);
       fetchErrorEvent.dispatchEvent(
         new CustomEvent("api-fetch-error", {
           detail: { status: result.status, messages: token.message },
@@ -24,7 +24,7 @@ export async function refreshToken() {
     } else {
       globalCache.set(ACCESS_TOKEN_NAME, {
         data: token.accessToken,
-        timestamp: Number(ACCESS_TOKEN_EXPIRATION) + Date.now()
+        timestamp: Number(ACCESS_TOKEN_EXPIRATION) + Date.now(),
       });
       console.log("globalCache: ", globalCache);
     }
