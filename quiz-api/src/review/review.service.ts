@@ -46,10 +46,8 @@ export class ReviewService implements IReviewService {
 
     this.cache.deleteByPrefix(`reviews:${quizId}`);
 
-    await Promise.all([
-      this.reviewRepository.insert(review),
-      this.updateQuizRating(quiz),
-    ]);
+    await this.reviewRepository.insert(review);
+    await this.updateQuizRating(quiz);
 
     eventEmitter.emit<UpdateAuthorRatingOptions>('user.rating_updated', {
       userId: quiz.creator.id,
