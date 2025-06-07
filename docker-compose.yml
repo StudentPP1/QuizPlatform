@@ -18,30 +18,11 @@ services:
     container_name: quiz-api
     build:
       context: ./quiz-api
+      target: production
     ports:
-      - "3000:3000"
-    depends_on:
-      - db
-    environment:
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - CLIENT_URL=${CLIENT_URL}
-
-  db:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: quizplatformdb
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+      - "80:3000"
+    env_file:
+      - ./quiz-api/.env.production.local
 
 volumes:
-  db_data:
   node_modules:
