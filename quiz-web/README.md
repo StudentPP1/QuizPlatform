@@ -1,7 +1,7 @@
 <div align="center">
   <h3 align="center">Web</h3>
   <p align="center">
-    Frontend application for <a href="#">quizplatform.com</a>
+    Frontend application for <a href="https://quizplatform-ha47.onrender.com/">quizplatform</a>
     <br />
   </p>
 </div>
