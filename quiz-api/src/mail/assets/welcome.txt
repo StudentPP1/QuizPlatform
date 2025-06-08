@@ -8,7 +8,7 @@ With QuizApp, you can:
 - Track your progress and achievements 📈
 
 Click the link below to get started:
-https://quizapp.example.com
+https://quizplatform-tyn3.onrender.com/
 
 If you didn’t register for QuizApp, just ignore this message.
 
