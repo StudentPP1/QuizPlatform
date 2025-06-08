@@ -40,13 +40,12 @@ export class ReviewService implements IReviewService {
 
     const review = this.reviewRepository.create(user, quiz, createReviewDto);
 
-    const newAuthorRating = await this.calculateAuthorAverageRating(
-      quiz.creator.id,
-    );
-
     this.cache.deleteByPrefix(`reviews:${quizId}`);
 
     await this.reviewRepository.insert(review);
+    const newAuthorRating = await this.calculateAuthorAverageRating(
+      quiz.creator.id,
+    );
     await this.updateQuizRating(quiz);
 
     eventEmitter.emit<UpdateAuthorRatingOptions>('user.rating_updated', {
