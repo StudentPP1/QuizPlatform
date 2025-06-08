@@ -6,7 +6,8 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "nest build",
+    "copy:assets": "copyfiles -u 2 src/mail/assets/**/* dist/mail/assets",
+    "build": "nest build && yarn copy:assets",
     "format": "prettier --write \"src/**/*.ts\"",
     "start:dev": "cross-env NODE_ENV=development nest start --watch",
     "start:debug": "cross-env NODE_ENV=development nest start --debug --watch",
@@ -64,6 +65,7 @@
     "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.33.0",
     "@typescript-eslint/parser": "^8.33.0",
+    "copyfiles": "^2.4.1",
     "cross-env": "^7.0.3",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.5",
