@@ -1,3 +1,4 @@
+# Development stage
 FROM node:22-alpine AS base
 WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
@@ -15,6 +16,7 @@ COPY . .
 
 CMD ["yarn", "start:dev"]
 
+# Production stage
 FROM node:22-alpine AS production
 ENV NODE_ENV=production
 WORKDIR /usr/src/app

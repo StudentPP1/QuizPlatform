@@ -6,7 +6,7 @@ enum LogLevel {
 }
 
 export function log(
-  target: Object, // the class with the method being decorated
+  _target: Object, // the class with the method being decorated
   propertyKey: string | symbol, // The name of the method being decorated
   descriptor: TypedPropertyDescriptor<any> // contains the method being decorated
 ): TypedPropertyDescriptor<any> | void {
