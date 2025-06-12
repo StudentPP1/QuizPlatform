@@ -1,0 +1,204 @@
+@use "../../scss/variables" as v;
+
+.container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    background: v.$background;
+    font-family: "Arial", sans-serif;
+}
+.left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: url("https://retirementessentials.com.au/wp-content/uploads/2022/12/five-question-financial-literacy-quiz-for-retirees.jpg") no-repeat center center; 
+    background-size: cover; 
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    color: v.$white;
+}
+.close_button_container {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.close_button {
+    background-color: transparent;
+    width: 20px;
+    padding-right: 8%;
+    font-size: 20px;
+    height: 20px;
+    text-align: center;
+    color: v.$orange;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.2);
+        transition: all 0.1s ease;
+    }
+}
+.right {
+    height: 100%;
+    width: 50%;
+    min-width: 300px;       
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transform: scale(0.95);
+    animation: fadeIn 0.3s ease forwards;
+}
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+.login_buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+
+    span {
+        font-size: 25px;
+        padding: 10px;
+        cursor: pointer;
+
+        &:hover {
+            transform: scale(1.1);
+            transition: all 0.1s ease;
+            color: v.$orange;
+        }
+    }
+}
+.password_container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    input {
+        height: 100%;
+        display: block;
+        width: 80%;
+    }
+    div {
+        border-radius: 5px;
+        width: 10%;
+        display: block;
+        cursor: pointer;
+
+        button {
+            background-color: v.$orange;
+        }
+
+        img {
+            background-color: v.$orange;
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+.eye_button {
+    width: 100%;
+    height: 80%;
+}
+.img {
+    width: 20px;
+    height: 20px;
+}
+.google {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid v.$background;
+    border-radius: 10px;
+    background-color: v.$second_background;
+    color: v.$yellow;
+    width: 100%;
+    height: 50px;
+    cursor: pointer;
+
+    span {
+        padding-left: 10px;
+    }
+
+    &:hover {
+        transform: scale(1.1);
+        transition: all 0.1s ease;
+    }
+}
+.social_container {
+    padding-bottom: 20px;
+    border-bottom: 1px solid v.$orange;
+}
+.form_container {
+    padding-top: 20px;
+    border-top: 1px solid v.$orange;
+
+    input {
+        background-color: v.$background;
+        color: v.$yellow;
+    }
+    input:focus {
+        outline: none !important;
+        border-color: v.$yellow;
+        box-shadow: 0 0 10px v.$yellow;
+    }
+}
+.input_container {
+    padding-top: 10px;
+}
+.right_content {
+    width: 80%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 10px;
+        border: 1px solid v.$white;
+        border-radius: 5px;
+    }
+
+    .login {
+        border: 1px solid v.$white;
+        background: v.$background;
+        color: v.$white;
+
+        &:hover {
+            transform: scale(1.1);
+            transition: all 0.1s ease;
+        }
+    }
+}

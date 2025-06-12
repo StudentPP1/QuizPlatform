@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      target: production
+    container_name: nest-api-prod
+    env_file:
+      - .env.production.local
+    ports:
+      - '80:3000'
+    networks:
+      - nest-net
+
+networks:
+  nest-net:

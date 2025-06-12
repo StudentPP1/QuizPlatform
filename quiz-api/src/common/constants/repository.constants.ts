@@ -1,0 +1,12 @@
+export const DATA_SOURCE = Symbol('DATA_SOURCE');
+
+export const QUIZ_REPOSITORY = Symbol('QUIZ_REPOSITORY');
+export const QUIZ_RESULT_REPOSITORY = Symbol('QUIZ_RESULT_REPOSITORY');
+
+export const REVIEW_REPOSITORY = Symbol('REVIEW_REPOSITORY');
+
+export const TASK_REPOSITORY = Symbol('TASK_REPOSITORY');
+
+export const REFRESH_TOKEN_REPOSITORY = Symbol('REFRESH_TOKEN_REPOSITORY');
+
+export const USERS_REPOSITORY = Symbol('USERS_REPOSITORY');

@@ -1,0 +1,16 @@
+Hello {{name}}!
+
+Welcome to QuizApp — we're thrilled to have you on board! 🎉
+
+With QuizApp, you can:
+- Challenge yourself with engaging quizzes 🧠
+- Compete with friends and climb the leaderboard 🏆
+- Track your progress and achievements 📈
+
+Click the link below to get started:
+quizplatform-ha47.onrender.com/
+
+If you didn’t register for QuizApp, just ignore this message.
+
+Have fun and good luck,
+— The QuizApp Team

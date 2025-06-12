@@ -1,0 +1,41 @@
+@use "../../scss/variables" as v;
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: v.$background;
+    color: v.$white;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 3;
+
+    .logo {
+        pointer-events: none;
+        font-size: 22px;
+        font-weight: bold;
+        color: v.$orange;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .search_box {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+
+        input {
+            caret-shape: bar;
+            caret-color: v.$white;
+            background-color: v.$second_background;
+            color: v.$white;
+            width: 40%;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+        }
+    }
+}

@@ -1,0 +1,49 @@
+@use "../../scss/variables" as v;
+
+.userMenu {
+    z-index: 1000;
+    position: fixed;
+    right: 5px;
+    top: 65px;
+    background: v.$background;
+    color: v.$white;
+    outline: 1px solid v.$white;
+    width: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+
+    .header {
+        display: flex;
+        width: fit-content;
+        padding: 15px;
+        background: v.$background;
+
+        .userInfo {
+            margin-left: 10px;
+            h3 {
+                text-align: left;
+                margin: 0;
+                font-size: 16px;
+            }
+            p {
+                text-align: left;
+                margin: 0;
+                font-size: 12px;
+                color: v.$white;
+            }
+        }
+    }
+
+    .logout {
+        padding: 10px 15px;
+        text-align: center;
+        cursor: pointer;
+        color: v.$red;
+        font-weight: bold;
+
+        &:hover {
+            background: v.$second_background;
+        }
+    }
+}

@@ -1,0 +1,130 @@
+@use "../../scss/variables" as v;
+
+.library_container {
+  background-color: v.$background;
+  color: v.$white;
+  font-family: Arial, sans-serif;
+}
+.content_container {
+  min-height: 100vw;
+}
+.nav_bar {
+  background-color: v.$second_background;
+  padding: 10px 10px 10px 10px;
+  border-radius: 20px;
+
+  ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    li {
+      color: v.$white;
+      cursor: pointer;
+      font-size: 22px;
+      font-weight: bold;
+
+      &.active {
+        pointer-events: none;
+        cursor: pointer;
+        box-shadow: 0 2px v.$orange;
+      }
+    }
+  }
+}
+
+.hot_bar {
+  padding: 10px 10px 15px 10px;
+}
+
+.modules {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.name_quest {
+  color: v.$orange;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: left;
+  order: -1;
+}
+.module_card {
+  height: 150px;
+  pointer-events: auto;
+  border-radius: 8px;
+  background-color: v.$second_background;
+  padding: 16px 16px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  text-align: left;
+  border: none;
+  width: 100%;
+  color: v.$white;
+}
+
+.module_card:hover {
+  background-color: v.$second_background;
+  transform: scale(1.01);
+}
+
+.module_card:active,
+.module_card[aria-pressed="true"] {
+  background-color: v.$second_background;
+  transform: scale(0.97);
+}
+
+.card_content {
+  display: flex;
+  flex-direction: column;
+}
+
+.top_info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user_info {
+  display: flex;
+  align-items: center;
+  color: v.$white;
+  margin-top: auto;
+}
+
+.user_avatar_small {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.user_name {
+  margin-top: auto;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.term_count {
+  font-size: 14px;
+  font-weight: bold;
+  color: v.$white;
+}
+
+.author {
+  padding-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.name {
+  padding-left: 10px;
+  font-size: 15px;
+  font-weight: 500;
+}

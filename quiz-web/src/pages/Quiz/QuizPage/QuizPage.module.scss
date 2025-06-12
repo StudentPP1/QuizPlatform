@@ -1,0 +1,154 @@
+@use "../../../scss/variables" as v;
+
+.quizContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: v.$background;
+}
+
+.quizCard {
+    background-color: v.$second_background;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px v.$background;
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+}
+
+.questionNumber,
+.timer {
+    color: v.$orange;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.questionText {
+    color: v.$white;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.questionImage {
+    max-width: 100%;
+    height: auto;
+    max-height: 250px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.optionsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.option {
+    color: v.$white;
+    background-color: transparent;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.option_text {
+    background-color: transparent;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.option:hover {
+    background-color: v.$orange;
+    color: v.$background;
+
+    & > .checkBox {
+        background-color: v.$background;
+    }
+}
+
+.radioButton,
+.checkBox {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid v.$white;
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+}
+
+.radioButton:checked::before,
+.checkBox:checked::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: v.$orange;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.checkBox {
+    border-radius: 4px;
+}
+
+.checkBox:checked::before {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.textInput {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: transparent;
+    color: v.$white;
+    font-size: 18px;
+}
+
+.nextButton {
+    width: 30%;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    padding: 10px 10px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px v.$background;
+    background: v.$orange;
+    color: v.$background;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: all 0.1s ease-out;
+    }
+}
+
+.nextButton:hover {
+    background-color: v.$orange;
+}
+
+.exitButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: v.$orange;
+    cursor: pointer;
+}

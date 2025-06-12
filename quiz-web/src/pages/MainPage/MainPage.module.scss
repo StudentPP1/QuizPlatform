@@ -1,0 +1,179 @@
+@use "../../scss/variables" as v;
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: v.$background;
+    color: v.$white;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 3;
+
+     .logo {
+        pointer-events: none;
+        font-size: 22px;
+        font-weight: bold;
+        color: v.$orange;
+        user-select: none;
+    }
+
+
+    .empty_box {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+}
+.container {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: v.$background;
+    color: v.$white;
+    min-width: 320px;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+.actions {
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px v.$background;
+    background: v.$orange;
+    color: v.$background;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: all 0.1s ease-out;
+    }
+}
+.main {
+    background-color: transparent;
+    margin-top: 50px;
+
+    h1 {
+        font-size: 28px;
+    }
+
+    p {
+        max-width: 600px;
+        margin: 10px auto;
+    }
+}
+.register {
+    background: v.$yellow;
+
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: all 0.1s ease-out;
+    }
+}
+.header_title {
+    margin: auto;
+    padding: 0 2rem 2rem;
+}
+.roadmap__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 80px;
+}
+.roadmap__description {
+    max-width: 480px;
+}
+.roadmap__title {
+    font-weight: 700;
+    font-size: 40px;
+    margin-bottom: 30px;
+    line-height: 120%;
+}
+.roadmap__text_block {
+    font-size: 18px;
+    line-height: 150%;
+    padding: 0 1rem 1rem;
+}
+.roadmap__picture {
+    width: 600px;
+    height: auto;
+    border-radius: 30px;
+    box-shadow: 0 18px 50px -15px v.$background;
+}
+.wrapper {
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+    min-width: 320px;
+    max-width: 1180px;
+    box-sizing: border-box;
+    margin: 0 auto;
+
+    h2 {
+        text-align: center;
+    }
+}
+.roadmap__wrapper {
+    min-width: 320px;
+    max-width: 1180px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+.modules_grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(250px, 1fr));
+    gap: 20px;
+    padding-top: 3rem;
+}
+
+.module_card {
+    background: v.$second_background;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px v.$yellow;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: all 0.1s ease-out;
+    }
+}
+
+.terms {
+    display: block;
+    color: v.$orange;
+    margin-top: 5px;
+}
+
+.user_info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.icon {
+    display: flex;
+    margin-right: 8px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+.footer_wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    text-align: left;
+}

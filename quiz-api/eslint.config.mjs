@@ -3,6 +3,8 @@ import eslint from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import eslintPluginImport from 'eslint-plugin-import';
+import tsParser from '@typescript-eslint/parser';
 
 export default tseslint.config(
   {
@@ -16,15 +18,19 @@ export default tseslint.config(
       globals: {
         ...globals.node,
       },
-      ecmaVersion: 5,
+      ecmaVersion: 2022,
       sourceType: 'module',
       parserOptions: {
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
+      parser: tsParser,
     },
   },
   {
+    plugins: {
+      import: eslintPluginImport,
+    },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
@@ -36,6 +42,29 @@ export default tseslint.config(
       '@typescript-eslint/no-unsafe-member-access': 'warn',
       '@typescript-eslint/require-await': 'warn',
       '@typescript-eslint/no-unused-vars': 'warn',
+
+      'import/order': [
+        'error',
+        {
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            ['parent', 'sibling', 'index'],
+          ],
+          'newlines-between': 'always',
+          alphabetize: { order: 'asc', caseInsensitive: true },
+        },
+      ],
+      'import/no-default-export': 'error',
+    },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+          project: './tsconfig.json',
+        },
+      },
     },
   },
 );

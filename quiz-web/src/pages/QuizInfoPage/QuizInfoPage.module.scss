@@ -1,0 +1,78 @@
+@use "../../scss/variables" as v;
+
+.content_container {
+  min-height: 100vw;
+}
+.quizPage {
+    background-color: v.$background;
+    color: v.$white;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.quizHeader {
+    text-align: left;
+    background-color: v.$second_background;
+    padding: 20px;
+    border-radius: 10px;
+
+    h1 {
+        color: v.$orange;
+    }
+
+    p {
+        padding: 10px 0;
+    }
+}
+
+.quizDescription {
+    background-color: v.$second_background;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.buttonContainer {
+    background-color: v.$background;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.controlButton {
+    display: inline-block;
+    background-color: v.$orange;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin: 0 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+    box-shadow: 0 2px 5px v.$background;
+    background: v.$orange;
+    color: v.$background;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: all 0.1s ease-out;
+    }
+}
+
+.quizReviews {
+    background-color: v.$second_background;
+    padding: 15px;
+    border-radius: 10px;
+
+    h2 {
+        color: v.$orange;
+        text-align: left;
+    }
+}
+.reviewList {
+    overflow-y: auto;
+}

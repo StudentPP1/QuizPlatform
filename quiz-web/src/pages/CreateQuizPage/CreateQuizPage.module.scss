@@ -1,0 +1,183 @@
+@use "../../scss/variables" as v;
+
+.button {
+    width: 30%;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px v.$background;
+    background: v.$orange;
+    color: v.$background;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: all 0.1s ease-out;
+    }
+}
+.container {
+    z-index: 0;
+    padding: 60px 80px 0 100px;
+    margin: 0 auto;
+}
+.creating_content {
+    padding: 10px;
+}
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    padding: 20px;
+
+    h1 {
+        font-size: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        background: v.$second_background;
+        border: none;
+        color: v.$white;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+    }
+    input:focus,
+    textarea:focus {
+        outline: none !important;
+        border-color: v.$yellow;
+        box-shadow: 0 0 10px v.$yellow;
+    }
+}
+.questionBlock {
+    background: v.$second_background;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+
+    .questionHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+
+        input[type="text"] {
+            width: 90%;
+            color: v.$yellow;
+            border: none;
+            color: v.$white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        input[type="text"]:focus {
+            outline: none !important;
+            border-color: v.$yellow;
+            box-shadow: 0 0 10px v.$yellow;
+        }
+
+        .deleteQuestion {
+            background: v.$second_background;
+            color: v.$white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+
+            &:hover {
+                background: v.$red;
+            }
+        }
+    }
+
+    .answers {
+        margin-top: 10px;
+
+        .answerItem {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px;
+
+            input[type="checkbox"] {
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+            }
+
+            .answerInput:focus {
+                outline: none !important;
+                border-color: v.$yellow;
+                box-shadow: 0 0 10px v.$yellow;
+            }
+        }
+
+        button {
+            background: v.$second_background;
+            color: v.$white;
+            border: none;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px;
+
+            &:hover {
+                background: v.$background;
+            }
+        }
+    }
+}
+.imageUpload {
+    display: inline-block;
+    background: v.$second_background;
+    color: v.$white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    margin-top: 10px;
+    font-size: 16px;
+    border: 2px dashed v.$orange;
+
+    input[type="file"] {
+        display: none;
+    }
+
+    &:hover {
+        background: v.$background;
+        border-color: v.$orange;
+    }
+}
+
+.imagePreview {
+    margin-top: 10px;
+    width: 100%;
+    max-width: 300px;
+    border-radius: 5px;
+}
+.button_wrapper {
+    margin: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+.deleteImage {
+    background: v.$second_background;
+    color: v.$white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+
+    &:hover {
+        background: v.$red;
+    }
+}

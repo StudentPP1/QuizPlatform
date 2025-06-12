@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "moduleResolution": "node",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -16,6 +17,23 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "types": ["node"],
+    "paths": {
+      "@src/*": ["src/*"],
+      "@auth/*": ["src/auth/*"],
+      "@common/*": ["src/common/*"],
+      "@database/*": ["src/database/*"],
+      "@image/*": ["src/image/*"],
+      "@mail/*": ["src/mail/*"],
+      "@review/*": ["src/review/*"],
+      "@storage/*": ["src/storage/*"],
+      "@task/*": ["src/task/*"],
+      "@token/*": ["src/token/*"],
+      "@users/*": ["src/users/*"],
+      "@quiz/*": ["src/quiz/*"]
+    }
   }
 }

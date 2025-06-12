@@ -1,0 +1,22 @@
+@use "../../scss/variables" as v;
+
+.ratingSection {
+    color: v.$white;
+    padding-bottom: 20px;
+}
+
+.stars {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.filledStar {
+    color: v.$orange;
+}
+
+.emptyStar {
+    color: v.$white;
+}
